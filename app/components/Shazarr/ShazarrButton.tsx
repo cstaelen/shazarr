@@ -22,6 +22,7 @@ import {
 } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import NotesAnimate from "./NotesAnimate";
+import useLidarr from "../Lidarr/useLidarr";
 
 export default function ShazarrButton() {
   const {
@@ -30,6 +31,10 @@ export default function ShazarrButton() {
     recordingStatus,
     actions: { setRecordingStatus, resetSearch },
   } = useShazarr();
+
+  const {
+    actions: { searchAlbum },
+  } = useLidarr();
 
   function openTidar() {
     window.open(
@@ -109,7 +114,7 @@ export default function ShazarrButton() {
                 <Button
                   variant="contained"
                   startIcon={<Album />}
-                  onClick={() => openTidar()}
+                  onClick={() => searchAlbum(`${shazarrResponse?.track.title}+${shazarrResponse?.track.subtitle}`)}
                 >
                   Download with Lidarr
                 </Button>

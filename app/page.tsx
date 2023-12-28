@@ -4,9 +4,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import Shazarr from "./components/ShazarrButton";
+import Shazarr from "./components/Shazarr/ShazarrButton";
 import { Container } from "@mui/material";
-import ShazarrButton from "./components/ShazarrButton";
+import ShazarrButton from "./components/Shazarr/ShazarrButton";
 
 const darkTheme = createTheme({
   palette: {
@@ -28,7 +28,7 @@ export default function Home() {
         <div className="relative">
           <Content>
             <H1>Shazarr</H1>
-            - Shazamio web UI -
+            - ShazamIO web UI -
             <ShazarrButton />
           </Content>
         </div>

@@ -29,8 +29,8 @@ app.post('/recognize', async (req: Request, res: Response) => {
     if(err) {
       console.log("err", err);
     } else {
-      const command = `python ${ROOT_PATH}/api/scripts/shazarr.py ${filePath}`;
-      // const command = `python ${ROOT_PATH}/api/scripts/shazarr.py /home/app/standalone/api/scripts/test.m4a`;
+      // const command = `python ${ROOT_PATH}/api/scripts/shazarr.py ${filePath}`;
+      const command = `python ${ROOT_PATH}/api/scripts/shazarr.py /home/app/standalone/api/scripts/test.m4a`;
       console.log(`Executing: ${command}`);
 
       const response = await execSync(
