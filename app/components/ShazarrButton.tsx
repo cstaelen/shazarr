@@ -33,7 +33,7 @@ export default function ShazarrButton() {
 
   function openTidar() {
     window.open(
-      `http://tidarr.nas.docker/?query=${shazarrResponse?.track.title}+${shazarrResponse?.track.subtitle}`,
+      `${process.env.NEXT_PUBLIC_TIDARR_URL}/?query=${shazarrResponse?.track.title}+${shazarrResponse?.track.subtitle}`,
       "_blank"
     );
   }
