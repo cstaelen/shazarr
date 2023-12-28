@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  shazarr:
+    build: './docker'
+    container_name: 'shazarr'
+    ports:
+      - 12358:12358
+    restart: 'unless-stopped'
+    volumes:
+      - .:/home/app/standalone
+    environment:
+      - PUID=
+      - PGID=
+      - TZ=Etc/UTC
+      
+
+     
+

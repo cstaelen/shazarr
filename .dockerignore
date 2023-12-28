@@ -1,0 +1,15 @@
+node_modules
+.gitignore
+Dockerfile
+builder.Dockerfile
+.dockerignore
+Makefile
+*.log*
+.next
+.nitro
+.cache
+dist
+compose.override.yml
+CHANGELOG.md
+README.md
+.git
