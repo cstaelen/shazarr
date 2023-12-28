@@ -81,6 +81,7 @@ export default function ShazarrButton() {
               <IconButton
                 disabled={recordingStatus === "recording" || shazarrLoading}
                 onClick={() => {
+                  resetSearch();
                   setRecordingStatus("start");
                 }}
               >
@@ -104,6 +105,13 @@ export default function ShazarrButton() {
                   onClick={() => openTidar()}
                 >
                   Download with Tidarr
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<Album />}
+                  onClick={() => openTidar()}
+                >
+                  Download with Lidarr
                 </Button>
                 <Divider />
                 <Button onClick={() => resetSearch()} variant="outlined">

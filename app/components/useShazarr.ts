@@ -75,16 +75,12 @@ export default function useShazarr() {
         const response = await recognize(base64);
         if ((response as ApiReturnType).error) {
           console.log('error', response);
+          resetSearch();
         } else {
-          const formatted = JSON.parse(
-            response.replaceAll("False", "false").replaceAll("'", '"')
-          ) as ShazamioResponseType;
+          const formatted = JSON.parse(response) as ShazamioResponseType;
           setShazarrResponse(formatted);
-          setAudio(undefined);
-          setStream(undefined);
-          setAudioChunks([]);
+          setShazarrLoading(false);
         }
-        setShazarrLoading(false);
         setRecordingStatus("inactive");
       });
     }
@@ -92,6 +88,9 @@ export default function useShazarr() {
 
   const resetSearch = () => {
     setShazarrResponse(undefined);
+    setAudio(undefined);
+    setStream(undefined);
+    setAudioChunks([]);
     setRecordingStatus("inactive");
   };
 
@@ -110,12 +109,12 @@ export default function useShazarr() {
 
     switch (recordingStatus) {
       case "start":
-          getMicrophonePermission() 
+        getMicrophonePermission() 
         break;
-        case "granted":
-          startRecording();
-          break;
-        case "recording":
+      case "granted":
+        startRecording();
+        break;
+      case "recording":
         setTimeout(() => stopRecording(), 5000);
         break;
       case "searching":
