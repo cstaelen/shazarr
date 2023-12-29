@@ -16,13 +16,13 @@ import {
   Album,
   Check,
   MicOutlined,
-  MoreHoriz,
   MoreHorizOutlined,
-  MusicNote,
 } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import NotesAnimate from "./NotesAnimate";
 import useLidarr from "../Lidarr/useLidarr";
+import AlbumCard from "../Lidarr/AlbumCard";
+import { AlbumsLoader } from "../Skeletons/AlbumsLoader";
 
 export default function ShazarrButton() {
   const {
@@ -33,6 +33,8 @@ export default function ShazarrButton() {
   } = useShazarr();
 
   const {
+    loading: lidarrLoading,
+    results: lidarrResults,
     actions: { searchAlbum },
   } = useLidarr();
 
@@ -77,7 +79,7 @@ export default function ShazarrButton() {
           variant="outlined"
         />
       </Box>
-      <Box marginY={3}>
+      <Box marginBottom={10}>
         {shazarrResponse?.track && <CardResult data={shazarrResponse.track} />}
         <br />
         <main>
@@ -114,10 +116,18 @@ export default function ShazarrButton() {
                 <Button
                   variant="contained"
                   startIcon={<Album />}
-                  onClick={() => searchAlbum(`${shazarrResponse?.track.title}+${shazarrResponse?.track.subtitle}`)}
+                  onClick={() =>
+                    searchAlbum(
+                      `${shazarrResponse?.track.title}  ${shazarrResponse?.track.subtitle}`
+                    )
+                  }
                 >
                   Download with Lidarr
                 </Button>
+                {lidarrLoading && <AlbumsLoader />}
+                {lidarrResults?.map((album) => (
+                  <AlbumCard album={album} key={album.foreignAlbumId} />
+                ))}
                 <Divider />
                 <Button onClick={() => resetSearch()} variant="outlined">
                   Reset

@@ -66,3 +66,34 @@ type ShazamSectionType = {
   metapages?: [];
   youtubeurl?: string;
 }
+
+export type LidarrResultType = {
+  albumType: string;
+  anyReleaseOk: boolean;
+  artist: LidarrArtistType;
+  artistId: number;
+  disambiguation: string;
+  duration: number;
+  foreignAlbumId: string;
+  images: {
+    coverType: string;
+    extension: string;
+    remoteUrl: string;
+    url: string;
+  }[];
+  mediumCount: number;
+  releaseDate: string;
+  title: string;
+}
+
+type LidarrArtistType = {
+  added: string;
+  artistMetadataId: number;
+  artistName: string;
+  artistType: string;
+  disambiguation: string;
+  discogsId: number;
+  ended: boolean;
+  foreignArtistId: string;
+  title: string;
+}

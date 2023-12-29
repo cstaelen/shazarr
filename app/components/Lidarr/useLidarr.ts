@@ -1,27 +1,23 @@
 "use client";
 
+import { queryLidarr } from "@/app/server/queryApi";
+import { LidarrResultType } from "@/app/types";
 import { useState, useEffect } from "react";
 
 export default function useLidarr() {
-  const [loading, isLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState<LidarrResultType[]>();
 
   const searchAlbum = async (terms: string) => {
-    console.log("lidarr search terms", terms);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_LIDARR_URL}/api/v1/album/lookup?term=${terms}`, {
-        headers: {
-            "X-Api-Key": process.env.NEXT_PUBLIC_LIDARR_API_KEY || "",
-            "accept": "*/*",
-        }
-    });
-    console.log("lidarr search response", response);
+    setLoading(true);
+    const response = await queryLidarr(terms);
+    setResults(response);
+    setLoading(false);
   }
-
-  useEffect(() => {
-    
-  }, []);
 
   return {
     loading,
+    results,
     actions: {
         searchAlbum,
     }

@@ -22,6 +22,20 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server !');
 });
 
+
+app.get('/search_lidarr', async (req: Request, res: Response) => {
+  if (!req.query.term) {
+    res.send("error");
+    return;
+  }
+
+  const response = await execSync(
+    `curl "${process.env.LIDARR_URL}/api/v1/album/lookup?term=${encodeURIComponent(req.query.term as string)}&apikey=${process.env.LIDARR_API_KEY}"`,
+    { encoding: "utf-8" }
+  );
+  res.send(response);
+});
+
 app.post('/recognize', async (req: Request, res: Response) => {
   const buf = Buffer.from(req.body.file, 'base64'); // decode
   const filePath = '/home/app/standalone/data.mp3';
@@ -29,8 +43,8 @@ app.post('/recognize', async (req: Request, res: Response) => {
     if(err) {
       console.log("err", err);
     } else {
-      // const command = `python ${ROOT_PATH}/api/scripts/shazarr.py ${filePath}`;
-      const command = `python ${ROOT_PATH}/api/scripts/shazarr.py /home/app/standalone/api/scripts/test.m4a`;
+      const command = `python ${ROOT_PATH}/api/scripts/shazarr.py ${filePath}`;
+      // const command = `python ${ROOT_PATH}/api/scripts/shazarr.py /home/app/standalone/api/scripts/test.m4a`;
       console.log(`Executing: ${command}`);
 
       const response = await execSync(

@@ -13,8 +13,8 @@ services:
       - PUID=
       - PGID=
       - TZ=Etc/UTC
-      - NEXT_PUBLIC_LIDARR_API_KEY=
-      - NEXT_PUBLIC_LIDARR_URL=
+      - LIDARR_API_KEY=
+      - LIDARR_URL=
       - NEXT_PUBLIC_TIDARR_URL=
       
 
