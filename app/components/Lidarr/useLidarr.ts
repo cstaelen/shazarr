@@ -1,6 +1,6 @@
 "use client";
 
-import { queryLidarr } from "@/app/server/queryApi";
+import { monitorAlbumLidarr, queryLidarr } from "@/app/server/queryApi";
 import { LidarrResultType } from "@/app/types";
 import { useState, useEffect } from "react";
 
@@ -15,11 +15,19 @@ export default function useLidarr() {
     setLoading(false);
   }
 
+  const monitorAlbum = async (albumId: string) => {
+    // setLoading(true);
+    const response = await monitorAlbumLidarr(albumId);
+    console.log(response);
+    // setLoading(false);
+  }
+
   return {
     loading,
     results,
     actions: {
         searchAlbum,
+        monitorAlbum,
     }
   }
 }

@@ -82,6 +82,7 @@ export type LidarrResultType = {
     url: string;
   }[];
   mediumCount: number;
+  releases: LidarrAlbumRelease[];
   releaseDate: string;
   title: string;
 }
@@ -96,4 +97,12 @@ type LidarrArtistType = {
   ended: boolean;
   foreignArtistId: string;
   title: string;
+}
+
+export type LidarrAlbumRelease = {
+  foreignReleaseId: string;
+  duration: number;
+  format: string;
+  title: string;
+  trackCount: number;
 }

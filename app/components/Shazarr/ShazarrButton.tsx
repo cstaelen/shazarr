@@ -126,7 +126,15 @@ export default function ShazarrButton() {
                 </Button>
                 {lidarrLoading && <AlbumsLoader />}
                 {lidarrResults?.map((album) => (
-                  <AlbumCard album={album} key={album.foreignAlbumId} />
+                  <>
+                    {album?.releases?.map((release) => (
+                      <AlbumCard
+                        release={release}
+                        album={album}
+                        key={album.foreignAlbumId}
+                      />
+                    ))}
+                  </>
                 ))}
                 <Divider />
                 <Button onClick={() => resetSearch()} variant="outlined">

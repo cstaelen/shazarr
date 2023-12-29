@@ -6,9 +6,15 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Avatar, Box, Button, Chip, Link, Stack } from "@mui/material";
 import Image from "next/image";
 import useLidarr from "./useLidarr";
-import { LidarrResultType } from "@/app/types";
+import { LidarrAlbumRelease, LidarrResultType } from "@/app/types";
 
-export default function AlbumCard({ album }: { album: LidarrResultType }) {
+export default function AlbumCard({
+  album,
+  release,
+}: {
+  album: LidarrResultType;
+  release: LidarrAlbumRelease;
+}) {
   const { actions } = useLidarr();
 
   return (
@@ -29,19 +35,25 @@ export default function AlbumCard({ album }: { album: LidarrResultType }) {
           }}
         >
           <CardContent
-            sx={{ flex: "0 0 auto", textAlign: "left", paddingBottom: "0 !important" }}
+            sx={{
+              flex: "0 0 auto",
+              textAlign: "left",
+              paddingBottom: "0 !important",
+            }}
           >
             <Box lineHeight={1} marginBottom={1}>
               <Link
-                href={`https://musicbrainz.org/release/${album.foreignAlbumId}`}
+                href={`https://musicbrainz.org/release/${release.foreignReleaseId}`}
                 target="_blank"
                 underline="none"
               >
                 <Typography component="span" fontSize="small" fontWeight="bold">
-                  {album.title}
+                  {release.title}
                 </Typography>
+                {` `}
+                <small>({release.format})</small>
                 <br />
-                by{` `}
+                <small>by{` `}</small>
                 <Typography component="span" fontSize="small" fontWeight="bold">
                   {album.artist?.artistName}
                 </Typography>
@@ -61,13 +73,13 @@ export default function AlbumCard({ album }: { album: LidarrResultType }) {
               style={{ marginBottom: "0.5rem" }}
             >
               <Chip
-                label={`${Math.round(album.duration / 3600)} min`}
+                label={`${Math.round((release.duration /1000)/60)} min`}
                 color="success"
                 size="small"
                 style={{ margin: "0.2rem" }}
               />
               <Chip
-                label={`${album.mediumCount} tracks`}
+                label={`${release.trackCount} tracks`}
                 color="info"
                 size="small"
                 variant="outlined"
@@ -85,7 +97,14 @@ export default function AlbumCard({ album }: { album: LidarrResultType }) {
         </Box>
       </Stack>
       <Box>
-        <Button variant="outlined" color="primary" fullWidth>Add to Lidarr</Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          fullWidth
+          onClick={() => actions.monitorAlbum(release.foreignReleaseId)}
+        >
+          Add to Lidarr
+        </Button>
       </Box>
     </Card>
   );

@@ -26,9 +26,12 @@ export async function recognize(base64: string) {
   });
 }
 
-
 export async function queryLidarr(term: string) {
   return await queryExpressJS(`/search_lidarr?term=${term}`);
+}
+
+export async function monitorAlbumLidarr(albumId: string) {
+  return await queryExpressJS(`/monitor_lidarr?albumId=${albumId}`);
 }
 
 
