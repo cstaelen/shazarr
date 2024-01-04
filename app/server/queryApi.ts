@@ -1,6 +1,6 @@
 "use server"
 
-import { ApiReturnType } from "../types";
+import { ApiReturnType, LidarrAlbumRelease } from "../types";
 
 async function queryExpressJS(url: string, options?: any) {
   try {
@@ -30,8 +30,6 @@ export async function queryLidarr(term: string) {
   return await queryExpressJS(`/search_lidarr?term=${term}`);
 }
 
-export async function monitorAlbumLidarr(albumId: string) {
-  return await queryExpressJS(`/monitor_lidarr?albumId=${albumId}`);
+export async function monitorAlbumLidarr(albumData: string) {
+  return await queryExpressJS(`/monitor_lidarr?albumData=${albumData}`);
 }
-
-

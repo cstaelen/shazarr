@@ -15,6 +15,7 @@ services:
       - TZ=Etc/UTC
       - LIDARR_API_KEY=
       - LIDARR_URL=
+      - LIDARR_LIBRARY_PATH=
       - NEXT_PUBLIC_TIDARR_URL=
       
 

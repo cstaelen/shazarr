@@ -101,7 +101,7 @@ export default function AlbumCard({
           variant="outlined"
           color="primary"
           fullWidth
-          onClick={() => actions.monitorAlbum(release.foreignReleaseId)}
+          onClick={() => actions.monitorAlbum(album)}
         >
           Add to Lidarr
         </Button>

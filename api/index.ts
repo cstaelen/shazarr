@@ -22,7 +22,6 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server !');
 });
 
-
 app.get('/search_lidarr', async (req: Request, res: Response) => {
   if (!req.query.term) {
     res.send("error");
@@ -38,15 +37,37 @@ app.get('/search_lidarr', async (req: Request, res: Response) => {
 });
 
 app.get('/monitor_lidarr', async (req: Request, res: Response) => {
-  const command = `curl -X PUT "${process.env.LIDARR_URL}/api/v1/album/monitor?apikey=${process.env.LIDARR_API_KEY}" -d '{"albumIds": [\"${req.query.albumId}\"], "monitored": true }'`;
-  // const command = `curl -X POST "${process.env.LIDARR_URL}/api/v1/queue/grab/${req.query.albumId}?apikey=${process.env.LIDARR_API_KEY}"`;
-  console.log(req.query.albumId);
-  console.log("command", command);
-
-  if (!req.query.albumId) {
+  if (!req.query.albumData) {
     res.send("error");
     return;
   }
+
+  const jsonReqData = JSON.parse(req.query.albumData as string);
+
+  const data = {
+    ...jsonReqData,
+    "artist": {
+      ...jsonReqData.artist,
+      "qualityProfileId": 3,
+      "rootFolderPath": process.env.LIDARR_LIBRARY_PATH,
+      "addOptions": {
+        "monitor": "none",
+        "albumsToMonitor": [
+          jsonReqData.releases[0].foreignReleaseId
+        ],
+        "monitored": false,
+        "searchForMissingAlbums": false
+      }
+    },
+    "addOptions": {
+      "addType": "automatic",
+      "searchForNewAlbum": false
+    },
+  }; 
+  
+  const command = `curl -0 -v ${process.env.LIDARR_URL}/api/v1/album?apikey=${process.env.LIDARR_API_KEY} \
+  -H 'Content-Type: application/json; charset=utf-8' \
+  -d '${JSON.stringify(data)}'`;
 
   const response = await execSync(
     command,

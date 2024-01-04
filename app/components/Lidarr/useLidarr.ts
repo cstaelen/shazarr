@@ -2,7 +2,7 @@
 
 import { monitorAlbumLidarr, queryLidarr } from "@/app/server/queryApi";
 import { LidarrResultType } from "@/app/types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function useLidarr() {
   const [loading, setLoading] = useState(false);
@@ -15,11 +15,11 @@ export default function useLidarr() {
     setLoading(false);
   }
 
-  const monitorAlbum = async (albumId: string) => {
-    // setLoading(true);
-    const response = await monitorAlbumLidarr(albumId);
+  const monitorAlbum = async (albumData: LidarrResultType) => {
+    setLoading(true);
+    const response = await monitorAlbumLidarr(JSON.stringify(albumData));
     console.log(response);
-    // setLoading(false);
+    setLoading(false);
   }
 
   return {
