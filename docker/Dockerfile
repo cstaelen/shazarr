@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-alpine:3.18
+FROM alpine:3.18
 WORKDIR /home/app/standalone
 
 ENV SHELL bash

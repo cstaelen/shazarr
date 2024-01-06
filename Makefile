@@ -1,12 +1,16 @@
 IMAGE=cstaelen/shazarr
-VERSION=0.0.1
+VERSION_AMD=0.0.1-amd64
+VERSION_ARM=0.0.1-armv7
 DOCKERFILE=./docker/builder.Dockerfile
 
 dev:
 	docker compose up --build
 
-build-docker:
-	docker build --platform=linux/amd64 -f ${DOCKERFILE} -t ${IMAGE}:${VERSION} -t ${IMAGE}:latest .
+build-docker-arm:
+	docker build --platform linux/arm64 -f ${DOCKERFILE} -t ${IMAGE}:${VERSION_AMD} .
+
+build-docker-amd:
+	docker build --platform linux/amd64 -f ${DOCKERFILE} -t ${IMAGE}:${VERSION_ARM} .
 
 run-docker:
 	docker run \
@@ -14,6 +18,4 @@ run-docker:
 		--name shazarr \
 		--platform=linux/amd64 \
 		-p 12358:12358 \
-		-e PUID=501 \
-		-e PGID=501 \
 	${IMAGE}

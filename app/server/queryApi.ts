@@ -26,6 +26,10 @@ export async function recognize(base64: string) {
   });
 }
 
+export async function getConfig() {
+  return await queryExpressJS(`/config`);
+}
+
 export async function queryLidarr(term: string) {
   return await queryExpressJS(`/search_lidarr?term=${term}`);
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { SHAZARR_MIME_TYPE } from "@/app/constants";
-import { recognize } from "@/app/server/queryApi";
-import { ApiReturnType, ShazamioResponseType } from "@/app/types";
+import { getConfig, recognize } from "@/app/server/queryApi";
+import { APIConfigType, ApiReturnType, ShazamioResponseType } from "@/app/types";
 import { useState, useRef, useEffect } from "react";
 
 export type RecordingStatusType = "start" | "granted" | "recording" | "searching" | "inactive";
@@ -15,13 +15,14 @@ export default function useShazarr() {
   const [shazarrResponse, setShazarrResponse] = useState<ShazamioResponseType>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatusType>("inactive");
+  const [config, setConfig] = useState<APIConfigType>();
 
   const mediaRecorder = useRef<MediaRecorder | null>(null);
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
       try {
-        const streamData = await navigator?.mediaDevices?.getUserMedia({
+        const streamData = await navigator.mediaDevices.getUserMedia({
           audio: true,
           video: false,
         });
@@ -104,9 +105,14 @@ export default function useShazarr() {
     reader.readAsDataURL(blob);
   };
 
+  const fetchConfig = async () => {
+    const response = await getConfig();
+    setConfig(response);
+  }
+
   useEffect(() => {
     if (shazarrResponse) return;
-
+    
     switch (recordingStatus) {
       case "start":
         getMicrophonePermission() 
@@ -119,10 +125,17 @@ export default function useShazarr() {
         break;
       case "searching":
         if (audio) recognizeRecording();
+        break;
     }
   }, [recordingStatus]);
 
+  useEffect(() => {
+    if (config) return;
+    fetchConfig();
+  }, []);
+
   return {
+    config,
     shazarrLoading,
     shazarrResponse,
     recordingStatus,

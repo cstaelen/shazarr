@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-alpine:3.18 AS dependencies
+FROM alpine:3.18 AS dependencies
 
 # update and install dependency
 RUN apk update && apk upgrade
@@ -22,7 +22,7 @@ RUN pnpm install
 
 # BUILDER
 
-FROM ghcr.io/linuxserver/baseimage-alpine:3.18 AS builder
+FROM alpine:3.18 AS builder
 WORKDIR /home/app
 
 ARG NODE_ENV
@@ -49,7 +49,7 @@ RUN pnpm run api-build
 
 # RUNNER
 
-FROM ghcr.io/linuxserver/baseimage-alpine:3.18 AS runner
+FROM alpine:3.18 AS runner
 WORKDIR /home/app
 
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -64,20 +64,18 @@ RUN pnpm setup
 RUN pnpm add -g concurrently 
 RUN pnpm add express dotenv
 
-RUN echo "*** install tidal-dl ***"
-
+RUN echo "*** install Shazamio ***"
 RUN apk add --update --no-cache python3 py3-pip && ln -sf python3 /usr/bin/python
-RUN python3 -m pip install --no-cache --upgrade pip wheel setuptools chardet tidal-dl
+RUN python3 -m pip install --no-cache --upgrade pip wheel setuptools chardet
 
-RUN echo "*** install beets ***"
-RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community beets
+RUN apk add --update --no-cache ffmpeg
+RUN python3 -m pip install --no-cache --upgrade shazamio
 
 COPY --from=builder /home/app/.env /home/app/standalone/.env
 COPY --from=builder /home/app/package.json /home/app/standalone/package.json
 COPY --from=builder /home/app/pnpm-lock.yaml /home/app/standalone/pnpm-lock.yaml
 
 COPY --from=builder /home/app/docker /home/app/standalone/docker
-COPY --from=builder /home/app/settings /home/app/standalone/settings
 
 COPY --from=builder /home/app/.next/standalone /home/app/standalone
 COPY --from=builder /home/app/.next/static /home/app/standalone/.next/static
@@ -88,7 +86,7 @@ COPY --from=builder /home/app/api/scripts /home/app/standalone/api/scripts
 
 WORKDIR /home/app/standalone
 
-EXPOSE 8484
+EXPOSE 12358
 EXPOSE 8585
 
 ENTRYPOINT ["sh", "/home/app/standalone/docker/run-prod.sh"]

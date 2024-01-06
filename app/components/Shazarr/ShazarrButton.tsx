@@ -26,6 +26,7 @@ import StreamProviderButton from "./StreamProviderButton";
 
 export default function ShazarrButton() {
   const {
+    config,
     shazarrLoading,
     shazarrResponse,
     recordingStatus,
@@ -79,12 +80,16 @@ export default function ShazarrButton() {
           ) : (
             <>
               <Stack spacing={2}>
-                <TidarrButton
-                  searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
-                />
-                <LidarrDownload
-                  searchTerms={`${albumName} ${shazarrResponse?.track.subtitle}`}
-                />
+                {config?.TIDARR_URL && (
+                  <TidarrButton
+                    searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
+                  />
+                )}
+                {config?.LIDARR_ENABLED && (
+                  <LidarrDownload
+                    searchTerms={`${albumName} ${shazarrResponse?.track.subtitle}`}
+                  />
+                )}
 
                 <Divider />
 
@@ -189,7 +194,7 @@ const Round = styled.div<{ isAnimate: boolean }>`
       transform: scale(1.3);
     }
     50% {
-      transform: scale(1.2), rotate(30deg);;
+      transform: scale(1.2), rotate(30deg);
     }
     60% {
       transform: scale(1.2);

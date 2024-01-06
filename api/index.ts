@@ -22,6 +22,14 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server !');
 });
 
+app.get('/config', (req: Request, res: Response) => {
+  const config = {
+    LIDARR_ENABLED: !!(process.env.LIDARR_API_KEY && process.env.LIDARR_URL && process.env.LIDARR_LIBRARY_PATH),
+    TIDARR_URL: process.env.TIDARR_URL,
+  }
+  res.send(config);
+});
+
 app.get('/search_lidarr', async (req: Request, res: Response) => {
   if (!req.query.term) {
     res.send("error");
@@ -83,7 +91,7 @@ app.get('/monitor_lidarr', async (req: Request, res: Response) => {
 
 app.post('/recognize', async (req: Request, res: Response) => {
   const buf = Buffer.from(req.body.file, 'base64'); // decode
-  const filePath = '/home/app/standalone/data.mp3';
+  const filePath = `/tmp/data-${new Date('YmdHis')}.mp3`;
   fs.writeFile(filePath, buf, async function(err: any) {
     if(err) {
       console.log("err", err);

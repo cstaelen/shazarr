@@ -110,3 +110,8 @@ export type LidarrAlbumRelease = {
   title: string;
   trackCount: number;
 }
+
+export type APIConfigType = {
+  LIDARR_ENABLED: string | boolean | undefined;
+  TIDARR_URL: string | boolean | undefined;
+}
