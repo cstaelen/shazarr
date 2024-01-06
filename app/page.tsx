@@ -4,13 +4,15 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import Shazarr from "./components/Shazarr/ShazarrButton";
-import { Container } from "@mui/material";
 import ShazarrButton from "./components/Shazarr/ShazarrButton";
 
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+    background: {
+      default: "#153b50",
+      paper: "#0a1d28",
+    },
   },
 });
 
@@ -24,17 +26,15 @@ export default function Home() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <main className="flex min-h-screen flex-col items-center justify-between">
-        <div className="relative">
-          <Content>
-            <H1>Shazarr</H1>
-            - ShazamIO web UI -
-            <ShazarrButton />
-          </Content>
-        </div>
-      </main>
+      <Main>
+        <H1>Shazarr</H1>
+        - ShazamIO web UI -
+        <ShazarrButton />
+      </Main>
       <Support>
-        👋 Private use only.<br />Do not forget to support your local artists 🙏❤️
+        👋 Private use only.
+        <br />
+        Do not forget to support your local artists 🙏❤️
       </Support>
     </ThemeProvider>
   );
@@ -62,7 +62,15 @@ const H1 = styled.h1`
   text-transform: uppercase;
 `;
 
-const Content = styled.div`
+const Main = styled.main`
+  background-image: linear-gradient(180deg, #153b50 0%, #0a1d28 100%);
   margin: 0 0 3rem 0;
   text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  overflow: auto;
 `;

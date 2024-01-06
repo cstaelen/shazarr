@@ -17,7 +17,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
-  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -141,7 +140,7 @@ export default function CardResult({
             {data?.sections?.[0]?.metadata?.map((row, index) => (
               <TableRow key={`metadata-${index}`}>
                 <TableCell component="th" scope="row">
-                  {row.title}
+                  <strong>{row.title}</strong>
                 </TableCell>
                 <TableCell align="right">{row.text}</TableCell>
               </TableRow>

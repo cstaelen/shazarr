@@ -66,7 +66,12 @@ export default function ShazarrButton() {
                   {shazarrLoading ? (
                     <MoreHorizOutlined fontSize="large" />
                   ) : (
-                    <MicOutlined fontSize="large" />
+                    <img
+                      src="/skull.png"
+                      alt=""
+                      width="35"
+                      style={{ transform: "scale(1.8)" }}
+                    />
                   )}
                 </Round>
               </IconButton>
@@ -162,12 +167,17 @@ const Round = styled.div<{ isAnimate: boolean }>`
     transition: transform 300ms ease;
   }
 
+  img {
+    animation: ${({ isAnimate }) =>
+      isAnimate ? "button-animate 2s infinite linear" : "none"};
+  }
+
   @keyframes button-animate {
     0% {
       transform: scale(1.2);
     }
     10% {
-      transform: scale(1.4);
+      transform: scale(1.4), rotate(-30deg);
     }
     20% {
       transform: scale(1.3);
@@ -179,7 +189,7 @@ const Round = styled.div<{ isAnimate: boolean }>`
       transform: scale(1.3);
     }
     50% {
-      transform: scale(1.2);
+      transform: scale(1.2), rotate(30deg);;
     }
     60% {
       transform: scale(1.2);
