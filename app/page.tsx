@@ -34,7 +34,7 @@ export default function Home() {
         </div>
       </main>
       <Support>
-        👋 Private use only. Do not forget to support your local artists 🙏❤️
+        👋 Private use only.<br />Do not forget to support your local artists 🙏❤️
       </Support>
     </ThemeProvider>
   );
@@ -43,7 +43,10 @@ export default function Home() {
 const Support = styled.div`
   background-color: rgb(144, 202, 249);
   color: #393939;
+  display: none;
+  font-size: 0.725rem;
   font-weight: bold;
+  line-height: 0.825rem;
   padding: 0.3rem;
   position: fixed;
   text-align: center;

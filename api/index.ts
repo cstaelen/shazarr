@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { execSync } from "child_process";
-import { ROOT_PATH } from "./constants";
+import { ROOT_PATH, replaceAll } from "./constants";
 const fs = require('fs');
 
 dotenv.config({ path: ".env", override: false });
@@ -46,8 +46,10 @@ app.get('/monitor_lidarr', async (req: Request, res: Response) => {
 
   const data = {
     ...jsonReqData,
+    "overview": "",
     "artist": {
       ...jsonReqData.artist,
+      "overview": "",
       "qualityProfileId": 3,
       "rootFolderPath": process.env.LIDARR_LIBRARY_PATH,
       "addOptions": {
@@ -56,24 +58,27 @@ app.get('/monitor_lidarr', async (req: Request, res: Response) => {
           jsonReqData.releases[0].foreignReleaseId
         ],
         "monitored": false,
-        "searchForMissingAlbums": false
+        "searchForMissingAlbums": false,
       }
     },
     "addOptions": {
       "addType": "automatic",
-      "searchForNewAlbum": false
+      "searchForNewAlbum": false,
     },
   }; 
   
   const command = `curl -0 -v ${process.env.LIDARR_URL}/api/v1/album?apikey=${process.env.LIDARR_API_KEY} \
-  -H 'Content-Type: application/json; charset=utf-8' \
+  -H 'Content-Type: application/json' \
   -d '${JSON.stringify(data)}'`;
 
-  const response = await execSync(
-    command,
-    { encoding: "utf-8" }
-  );
-  res.send(response);
+  try {
+    const response = await execSync(
+      command,
+    );
+    res.send(response);
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 app.post('/recognize', async (req: Request, res: Response) => {
@@ -83,8 +88,8 @@ app.post('/recognize', async (req: Request, res: Response) => {
     if(err) {
       console.log("err", err);
     } else {
-      // const command = `python ${ROOT_PATH}/api/scripts/shazarr.py ${filePath}`;
-      const command = `python ${ROOT_PATH}/api/scripts/shazarr.py /home/app/standalone/api/scripts/test.m4a`;
+      const command = `python ${ROOT_PATH}/api/scripts/shazarr.py ${filePath}`;
+      // const command = `python ${ROOT_PATH}/api/scripts/shazarr.py /home/app/standalone/api/scripts/test.m4a`;
       console.log(`Executing: ${command}`);
 
       const response = await execSync(

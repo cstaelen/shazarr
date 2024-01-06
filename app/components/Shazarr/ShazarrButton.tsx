@@ -5,24 +5,24 @@ import CardResult from "./CardResult";
 import {
   Box,
   Button,
-  Chip,
-  CircularProgress,
   Container,
   Divider,
   IconButton,
   Stack,
 } from "@mui/material";
 import {
-  Album,
-  Check,
+  Delete,
+  DeleteSweep,
   MicOutlined,
   MoreHorizOutlined,
+  Refresh,
+  Rule,
 } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import NotesAnimate from "./NotesAnimate";
-import useLidarr from "../Lidarr/useLidarr";
-import AlbumCard from "../Lidarr/AlbumCard";
-import { AlbumsLoader } from "../Skeletons/AlbumsLoader";
+import LidarrDownload from "../Lidarr/LidarrDownload";
+import TidarrButton from "../Tidarr/TidarrButton";
+import StatusChip from "./StatusChip";
+import StreamProviderButton from "./StreamProviderButton";
 
 export default function ShazarrButton() {
   const {
@@ -32,59 +32,27 @@ export default function ShazarrButton() {
     actions: { setRecordingStatus, resetSearch },
   } = useShazarr();
 
-  const {
-    loading: lidarrLoading,
-    results: lidarrResults,
-    actions: { searchAlbum },
-  } = useLidarr();
-
-  function openTidar() {
-    window.open(
-      `${process.env.NEXT_PUBLIC_TIDARR_URL}/?query=${shazarrResponse?.track.title}+${shazarrResponse?.track.subtitle}`,
-      "_blank"
-    );
-  }
+  const albumName = shazarrResponse?.track?.sections?.[0]?.metadata?.filter(
+    (m) => m?.title === "Album"
+  )?.[0].text;
 
   return (
     <Container maxWidth="xs">
       <Box marginY={3}>
-        <Chip
-          color={
-            shazarrResponse?.track
-              ? "success"
-              : shazarrLoading || recordingStatus === "recording"
-              ? "default"
-              : shazarrResponse && !shazarrResponse?.track
-              ? "warning"
-              : "info"
-          }
-          icon={
-            recordingStatus && recordingStatus !== "inactive" ? (
-              <CircularProgress size={16} style={{ margin: "0 5px 0 10px" }} />
-            ) : shazarrResponse?.track ? (
-              <Check fontSize="small" />
-            ) : (
-              <MicOutlined fontSize="small" />
-            )
-          }
-          label={
-            recordingStatus && recordingStatus !== "inactive"
-              ? `${recordingStatus}...`
-              : shazarrResponse?.track
-              ? "Found !"
-              : shazarrResponse && !shazarrResponse?.track
-              ? "Not found."
-              : "Ready"
-          }
-          variant="outlined"
+        <StatusChip
+          recordingStatus={recordingStatus}
+          loading={shazarrLoading}
+          shazarrResponse={shazarrResponse}
         />
       </Box>
       <Box marginBottom={10}>
-        {shazarrResponse?.track && <CardResult data={shazarrResponse.track} />}
+        {shazarrResponse?.track && (
+          <CardResult data={shazarrResponse.track} reset={resetSearch} />
+        )}
         <br />
         <main>
           {!shazarrResponse?.track ? (
-            <Box marginTop={10}>
+            <ListenButton>
               <IconButton
                 disabled={recordingStatus === "recording" || shazarrLoading}
                 onClick={() => {
@@ -102,42 +70,52 @@ export default function ShazarrButton() {
                   )}
                 </Round>
               </IconButton>
-            </Box>
+            </ListenButton>
           ) : (
             <>
               <Stack spacing={2}>
-                <Button
-                  variant="contained"
-                  startIcon={<Album />}
-                  onClick={() => openTidar()}
-                >
-                  Download with Tidarr
-                </Button>
-                <Button
-                  variant="contained"
-                  startIcon={<Album />}
-                  onClick={() =>
-                    searchAlbum(
-                      `${shazarrResponse?.track.title}  ${shazarrResponse?.track.subtitle}`
+                <TidarrButton
+                  searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
+                />
+                <LidarrDownload
+                  searchTerms={`${albumName} ${shazarrResponse?.track.subtitle}`}
+                />
+
+                <Divider />
+
+                <Box>
+                  {shazarrResponse?.track?.hub?.providers?.map(
+                    (provider, index) => (
+                      <StreamProviderButton
+                        key={`provider-${index}`}
+                        uri={provider.actions?.[0]?.uri}
+                        caption={provider.caption}
+                        type={provider.type}
+                      />
                     )
+                  )}
+
+                  {shazarrResponse?.track?.myshazam?.apple?.actions?.[0]
+                    ?.uri && (
+                    <StreamProviderButton
+                      uri={
+                        shazarrResponse.track.myshazam.apple.actions?.[0]?.uri
+                      }
+                      caption="Open with Apple Music"
+                      type="APPLE"
+                    />
+                  )}
+                </Box>
+
+                <Divider />
+
+                <Button
+                  onClick={() => resetSearch()}
+                  variant="outlined"
+                  startIcon={
+                    <Refresh style={{ transform: "rotate(-180deg)" }} />
                   }
                 >
-                  Download with Lidarr
-                </Button>
-                {lidarrLoading && <AlbumsLoader />}
-                {lidarrResults?.map((album) => (
-                  <>
-                    {album?.releases?.map((release) => (
-                      <AlbumCard
-                        release={release}
-                        album={album}
-                        key={album.foreignAlbumId}
-                      />
-                    ))}
-                  </>
-                ))}
-                <Divider />
-                <Button onClick={() => resetSearch()} variant="outlined">
                   Reset
                 </Button>
               </Stack>
@@ -148,6 +126,13 @@ export default function ShazarrButton() {
     </Container>
   );
 }
+
+const ListenButton = styled.div`
+  bottom: 20vh;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+`;
 
 const Round = styled.div<{ isAnimate: boolean }>`
   background: #fff;

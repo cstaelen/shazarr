@@ -18,7 +18,7 @@ export type ShazamioTrackType = {
     coverarthq: string;
     joecolor: string;
   };
-  mysahazam: {
+  myshazam: {
     apple: {
       actions: ShazamActionType[];
     };
@@ -49,7 +49,7 @@ type ShazamOptionType = {
   providername: string;
 }
 
-type ShazamProviderType = {
+export type ShazamProviderType = {
   actions: ShazamActionType[];
   caption: string;
   images: {
@@ -62,9 +62,13 @@ type ShazamProviderType = {
 type ShazamSectionType = {
   tabname: string;
   type: string;
-  metadata?: [];
+  metadata?: {
+    title: string; 
+    text: string;
+  }[];
   metapages?: [];
   youtubeurl?: string;
+  text?: string[];
 }
 
 export type LidarrResultType = {

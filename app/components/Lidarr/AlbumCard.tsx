@@ -3,10 +3,20 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Avatar, Box, Button, Chip, Link, Stack } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Link,
+  Stack,
+} from "@mui/material";
 import Image from "next/image";
 import useLidarr from "./useLidarr";
 import { LidarrAlbumRelease, LidarrResultType } from "@/app/types";
+import { ImageWithFallback } from "../Common/ImageWithFallback";
+import { Add, PlusOneRounded } from "@mui/icons-material";
 
 export default function AlbumCard({
   album,
@@ -15,12 +25,12 @@ export default function AlbumCard({
   album: LidarrResultType;
   release: LidarrAlbumRelease;
 }) {
-  const { actions } = useLidarr();
+  const { loading, monitorResponse, actions } = useLidarr();
 
   return (
     <Card sx={{ position: "relative" }}>
       <Stack direction="row">
-        <Image
+        <ImageWithFallback
           width={120}
           height={120}
           src={album.images?.[0]?.remoteUrl}
@@ -73,7 +83,7 @@ export default function AlbumCard({
               style={{ marginBottom: "0.5rem" }}
             >
               <Chip
-                label={`${Math.round((release.duration /1000)/60)} min`}
+                label={`${Math.round(release.duration / 1000 / 60)} min`}
                 color="success"
                 size="small"
                 style={{ margin: "0.2rem" }}
@@ -96,16 +106,30 @@ export default function AlbumCard({
           </CardContent>
         </Box>
       </Stack>
-      <Box>
-        <Button
-          variant="outlined"
-          color="primary"
-          fullWidth
-          onClick={() => actions.monitorAlbum(album)}
-        >
-          Add to Lidarr
-        </Button>
-      </Box>
+      {monitorResponse?.status !== "success" && (
+        <Box padding={1}>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            onClick={() => actions.monitorAlbum(album)}
+            startIcon={loading ? <CircularProgress size={20} /> : <Add />}
+            disabled={loading}
+          >
+            Add to Lidarr
+          </Button>
+        </Box>
+      )}
+      {monitorResponse && (
+        <Box padding={1}>
+          <Alert
+            severity={monitorResponse.status || "error"}
+            variant="outlined"
+          >
+            {monitorResponse.message}
+          </Alert>
+        </Box>
+      )}
     </Card>
   );
 }

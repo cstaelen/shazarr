@@ -14,8 +14,8 @@ export const AlbumsLoader = () => {
         <Grid xs={12} md={6} lg={4} item>
           <Skeleton
             variant="rectangular"
-            width={380}
-            height={160}
+            width={360}
+            height={150}
             animation="wave"
           />
         </Grid>
