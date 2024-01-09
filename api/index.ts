@@ -4,7 +4,7 @@ import { execSync } from "child_process";
 import { ROOT_PATH, replaceAll } from "./constants";
 const fs = require('fs');
 
-dotenv.config({ path: ".env", override: false });
+dotenv.config({ path: ".env", override: true });
 
 const port = process.env.API_PORT;
 const hostname = process.env.HOSTNAME;
@@ -91,13 +91,13 @@ app.get('/monitor_lidarr', async (req: Request, res: Response) => {
 
 app.post('/recognize', async (req: Request, res: Response) => {
   const buf = Buffer.from(req.body.file, 'base64'); // decode
-  const filePath = `/tmp/data-${new Date('YmdHis')}.mp3`;
+  const filePath = `/tmp/data-${Date.now()}.mp3`;
   fs.writeFile(filePath, buf, async function(err: any) {
     if(err) {
       console.log("err", err);
     } else {
-      const command = `python ${ROOT_PATH}/api/scripts/shazarr.py ${filePath}`;
-      // const command = `python ${ROOT_PATH}/api/scripts/shazarr.py /home/app/standalone/api/scripts/test.m4a`;
+      const command = `python ${ROOT_PATH}/scripts/shazarr.py ${filePath}`;
+      // const command = `python ${ROOT_PATH}/scripts/shazarr.py /home/app/standalone/api/scripts/test.m4a`;
       console.log(`Executing: ${command}`);
 
       const response = await execSync(

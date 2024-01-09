@@ -6,6 +6,7 @@ services:
     container_name: "shazarr"
     ports:
       - 12358:12358
+      - 35813:35813
     restart: "unless-stopped"
     volumes:
       - .:/home/app/standalone
