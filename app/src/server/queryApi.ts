@@ -1,18 +1,27 @@
+"use server";
+
 import { ApiReturnType } from "../types";
+import { Storage as Store } from "@ionic/storage";
 
 async function queryExpressJS(url: string, options?: any) {
   try {
-    let baseUrl = "http://localhost:12358";
-    if (process.env.REACT_APP_HOSTNAME && process.env.REACT_APP_API_PORT) {
-      baseUrl = `${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_API_PORT}`;
+    const storage = new Store();
+    await storage.create();
+    const storeUrl = await storage.get("shazarr_api_url");
+
+    let baseUrl = "http://127.0.0.1:12358";
+    if (storeUrl) {
+      baseUrl = storeUrl;
     }
 
-    console.log(baseUrl);
-    // const baseUrl = window.electron.store.get("shazarr_api_url");
-    const data = await fetch(`${baseUrl}${url}`, { ...options, cache: "no-cache" })
+    const data = await fetch(`${baseUrl}${url}`, {
+      ...options,
+      cache: "no-cache",
+    })
       .then(function (response) {
         return response.json();
-      }).then(function (data) {
+      })
+      .then(function (data) {
         return data;
       });
     return data;
@@ -23,11 +32,11 @@ async function queryExpressJS(url: string, options?: any) {
 
 export async function recognize(base64: string) {
   return await queryExpressJS(`/recognize`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({file: base64}),
+    body: JSON.stringify({ file: base64 }),
   });
 }
 

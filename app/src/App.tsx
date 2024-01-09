@@ -10,6 +10,7 @@ import {
   createTheme,
 } from "@mui/material";
 import styled from "@emotion/styled";
+import { Storage, Database } from "@ionic/storage";
 
 const darkTheme = createTheme({
   palette: {
@@ -26,22 +27,51 @@ function App() {
   const [apiUrl, setApiUrl] = useState<string>();
   const [showApiForm, setShowApiForm] = useState<boolean>();
   const inputRef = useRef<HTMLInputElement>();
+  const [db, setDb] = useState<Database | null>(null);
 
-  function saveApiUrl() {
+  async function saveApiUrl() {
     if (inputRef.current) {
       const url = inputRef.current.querySelector("input")?.value;
       setApiUrl(url);
       setShowApiForm(false);
+      await db.set("shazarr_api_url", url);
+    }
+  }
+
+  async function handleApiURL() {
+    const existingUrl = await db.get("shazarr_api_url");
+
+    if (
+      !existingUrl &&
+      process.env.REACT_APP_HOSTNAME &&
+      process.env.REACT_APP_API_PORT
+    ) {
+      const url = `${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_API_PORT}`;
+      setApiUrl(url);
+      await db.set("shazarr_api_url", url);
+    } else {
+      setApiUrl(existingUrl);
     }
   }
 
   useEffect(() => {
-    setAppLoaded(true);
-    console.log(process.env);
-    if (process.env.REACT_APP_HOSTNAME && process.env.REACT_APP_API_PORT) {
-      setApiUrl(`${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_API_PORT}`);
+    async function initDb() {
+      const store = new Storage();
+
+      const db = await store.create();
+
+      setDb(db);
     }
+
+    initDb();
+    setAppLoaded(true);
   }, []);
+
+  useEffect(() => {
+    if (db) {
+      handleApiURL();
+    }
+  }, [db]);
 
   if (!appLoaded) return null;
 
@@ -92,9 +122,7 @@ const H1 = styled.h1`
   text-transform: uppercase;
 `;
 
-const ButtonConfig = styled.div`
-  
-`;
+const ButtonConfig = styled.div``;
 
 const Main = styled.main`
   background-image: linear-gradient(180deg, #153b50 0%, #0a1d28 100%);
