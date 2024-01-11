@@ -54,7 +54,7 @@ export default function ShazarrButton() {
           shazarrResponse={shazarrResponse}
         />
       </Box>
-      <Box marginBottom={10}>
+      <Box>
         {shazarrResponse?.track && (
           <CardResult data={shazarrResponse.track} reset={resetSearch} />
         )}
@@ -151,7 +151,7 @@ const ListenButton = styled.div`
   // position: fixed;
   // left: 50%;
   // transform: translateX(-50%);
-  height: 30vh;
+  height: calc(100vh - 250px);
   align-items: center;
   display: flex;
   justify-content: center;

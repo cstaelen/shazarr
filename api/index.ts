@@ -19,7 +19,7 @@ app.all('*', function (req, res, next) {
 });
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server !');
+  res.sendfile('default.html', { root: __dirname + "/../static" } );
 });
 
 app.get('/config', (req: Request, res: Response) => {
