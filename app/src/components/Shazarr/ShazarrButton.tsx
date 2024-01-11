@@ -91,6 +91,7 @@ export default function ShazarrButton() {
                 {config?.TIDARR_URL && (
                   <TidarrButton
                     searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
+                    url={config.TIDARR_URL as string}
                   />
                 )}
                 {config?.LIDARR_ENABLED && (

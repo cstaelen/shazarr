@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { execSync } from "child_process";
-import { ROOT_PATH, replaceAll } from "./constants";
+import { ROOT_PATH } from "./constants";
 const fs = require('fs');
 
 dotenv.config({ path: ".env", override: true });

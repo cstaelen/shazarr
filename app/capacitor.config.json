@@ -1,6 +1,6 @@
 {
     "appId": "io.ionic.shazarr",
-    "appName": "shazarr",
+    "appName": "Shazarr",
     "bundledWebRuntime": false,
     "npmClient": "npm",
     "webDir": "build",

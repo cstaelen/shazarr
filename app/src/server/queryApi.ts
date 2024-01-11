@@ -1,30 +1,26 @@
 "use server";
+import { CapacitorHttp } from "@capacitor/core";
 
 import { ApiReturnType } from "../types";
-import { Storage as Store } from "@ionic/storage";
+import { Preferences } from "@capacitor/preferences";
 
 async function queryExpressJS(url: string, options?: any) {
   try {
-    const storage = new Store();
-    await storage.create();
-    const storeUrl = await storage.get("shazarr_api_url");
+    const { value: storeUrl } = await Preferences.get({
+      key: "shazarr_api_url",
+    });
 
-    let baseUrl = "http://127.0.0.1:12358";
+    let baseUrl = "http://0.0.0.1:12358";
     if (storeUrl) {
       baseUrl = storeUrl;
     }
 
-    const data = await fetch(`${baseUrl}${url}`, {
+    const data = await CapacitorHttp.get({
       ...options,
+      url: `${baseUrl}${url}`,
       cache: "no-cache",
-    })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        return data;
-      });
-    return data;
+    });
+    return data.data;
   } catch (e: any) {
     return { error: true, message: e.message } as ApiReturnType;
   }

@@ -28,6 +28,7 @@ export default function useShazarr() {
         setStream(streamData);
         setRecordingStatus("granted");
       } catch (err: any) {
+        resetSearch();
         alert(err.message);
       }
     } else {

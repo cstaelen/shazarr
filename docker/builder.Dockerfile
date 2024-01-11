@@ -8,7 +8,7 @@ RUN apk add git build-base npm nodejs
 WORKDIR /home/app
 ENV SHELL bash
 ENV API_PORT=12358
-ENV REACT_APP_HOSTNAME="http://127.0.0.1"
+ENV REACT_APP_HOSTNAME="http://0.0.0.0"
 ENV REACT_APP_API_PORT="$API_PORT"
 
 COPY app/package.json ./app/package.json
@@ -29,7 +29,7 @@ ENV NODE_ENV="${NODE_ENV}"
 ENV SHELL bash
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV API_PORT=12358
-ENV REACT_APP_HOSTNAME="http://127.0.0.1"
+ENV REACT_APP_HOSTNAME="http://0.0.0.0"
 ENV REACT_APP_API_PORT="$API_PORT"
 
 COPY ./app /home/app/app
@@ -55,7 +55,7 @@ ENV SHELL bash
 ENV PYTHONUNBUFFERED=1
 
 ENV API_PORT=12358
-ENV REACT_APP_HOSTNAME="http://127.0.0.1"
+ENV REACT_APP_HOSTNAME="http://0.0.0.0"
 ENV REACT_APP_API_PORT="$API_PORT"
 
 RUN apk add --update --no-cache curl nodejs npm

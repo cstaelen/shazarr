@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-
-const fallbackImage = "%PUBLIC_URL%/img-placeholder.png";
+import { useEffect, useState } from "react";
+import fallbackImage from "../../assets/img-placeholder.png";
 
 export const ImageWithFallback = ({
   alt,
@@ -23,7 +22,12 @@ export const ImageWithFallback = ({
     <img
       alt={alt}
       onError={(e) => setError(e.toString())}
-      src={error ? fallbackImage : src}
+      src={fallbackImage}
+      onLoad={(e: {target: any}) => {
+        if (src) {
+          e.target.src = src
+        }
+      }}
       {...props}
     />
   );

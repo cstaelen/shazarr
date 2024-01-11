@@ -10,7 +10,7 @@ import {
   createTheme,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { Storage, Database } from "@ionic/storage";
+import { Preferences } from "@capacitor/preferences";
 
 const darkTheme = createTheme({
   palette: {
@@ -27,19 +27,22 @@ function App() {
   const [apiUrl, setApiUrl] = useState<string>();
   const [showApiForm, setShowApiForm] = useState<boolean>();
   const inputRef = useRef<HTMLInputElement>();
-  const [db, setDb] = useState<Database | null>(null);
 
   async function saveApiUrl() {
     if (inputRef.current) {
       const url = inputRef.current.querySelector("input")?.value;
-      setApiUrl(url);
+      if (url) {
+        setApiUrl(url);
+        await Preferences.set({ key: "shazarr_api_url", value: url });
+      }
       setShowApiForm(false);
-      await db.set("shazarr_api_url", url);
     }
   }
 
   async function handleApiURL() {
-    const existingUrl = await db.get("shazarr_api_url");
+    const { value: existingUrl } = await Preferences.get({
+      key: "shazarr_api_url",
+    });
 
     if (
       !existingUrl &&
@@ -48,30 +51,16 @@ function App() {
     ) {
       const url = `${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_API_PORT}`;
       setApiUrl(url);
-      await db.set("shazarr_api_url", url);
-    } else {
+      await Preferences.set({ key: "shazarr_api_url", value: url });
+    } else if (existingUrl) {
       setApiUrl(existingUrl);
     }
   }
 
   useEffect(() => {
-    async function initDb() {
-      const store = new Storage();
-
-      const db = await store.create();
-
-      setDb(db);
-    }
-
-    initDb();
     setAppLoaded(true);
+    handleApiURL();
   }, []);
-
-  useEffect(() => {
-    if (db) {
-      handleApiURL();
-    }
-  }, [db]);
 
   if (!appLoaded) return null;
 

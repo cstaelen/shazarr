@@ -1,12 +1,17 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'com.shazarr.app',
-  appName: 'shazarr-app',
-  webDir: 'build',
+  appId: "com.shazarr.app",
+  appName: "Shazarr",
+  webDir: "build",
   server: {
-    androidScheme: 'https'
-  }
+    androidScheme: "https",
+  },
+  plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
+  },
 };
 
 export default config;

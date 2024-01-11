@@ -19,7 +19,7 @@ RUN python3 -m pip install --no-cache --upgrade shazamio
 RUN npm install -g concurrently nodemon npx typescript
 
 ENV API_PORT=12358
-ENV REACT_APP_HOSTNAME="http://127.0.0.1"
+ENV REACT_APP_HOSTNAME="http://0.0.0.0"
 ENV REACT_APP_API_PORT="$API_PORT"
 
 EXPOSE 12358

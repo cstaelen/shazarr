@@ -2,10 +2,16 @@ import { Album } from "@mui/icons-material";
 import { Button, styled } from "@mui/material";
 import React from "react";
 
-export default function TidarrButton({ searchTerms }: { searchTerms: string }) {
+export default function TidarrButton({
+  searchTerms,
+  url,
+}: {
+  searchTerms: string;
+  url: string;
+}) {
   function openTidar() {
     window.open(
-      `${process.env.NEXT_PUBLIC_TIDARR_URL}/?query=${searchTerms}`,
+      `${url}/?query=${searchTerms}`,
       "_blank"
     );
   }
