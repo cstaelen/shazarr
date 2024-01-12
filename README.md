@@ -2,7 +2,7 @@
 Use a mobile app to shazam songs.
 This prototype app is a Shazam service companion  with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
 
-<img src="https://github.com/cstaelen/docker-shazarr/blob/95801d603a5b09a3edf6063165d39b271236e460/.github/screenshot.png" width="300"/>
+<img src="https://github.com/cstaelen/docker-shazarr/blob/1fd8ad85b17ada9726f6119dd1791ed7faef4f56/.github/screenshot.png" width="300"/>
 
 ## Features
 - 5 sec audio capture and song recognition using python [ShazamIO](https://github.com/dotX12/ShazamIO).
