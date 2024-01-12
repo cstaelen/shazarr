@@ -1,13 +1,11 @@
 version: "3"
 
 services:
-  shazarr:
+  shazarr-api:
     build: "./docker"
-    container_name: "shazarr"
+    container_name: "shazarr-api"
     ports:
       - 12358:12358
-      - 35813:35813
-    restart: "always"
     volumes:
       - .:/home/app/standalone
     environment:

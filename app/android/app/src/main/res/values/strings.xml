@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">shazarr-app</string>
-    <string name="title_activity_main">shazarr-app</string>
+    <string name="app_name">Shazarr</string>
+    <string name="title_activity_main">Shazarr</string>
     <string name="package_name">com.shazarr.app</string>
     <string name="custom_url_scheme">com.shazarr.app</string>
 </resources>

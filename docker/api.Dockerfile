@@ -29,7 +29,6 @@ ENV API_PORT=12358
 COPY ./api /home/app/api
 
 COPY . .
-COPY --from=dependencies /home/app/app/node_modules ./app/node_modules
 COPY --from=dependencies /home/app/api/node_modules ./api/node_modules
 
 RUN apk add npm nodejs
@@ -69,4 +68,4 @@ WORKDIR /home/app/standalone
 
 EXPOSE 12358
 
-ENTRYPOINT ["API_PORT=12358 node ./api/dist/index.js"]
+ENTRYPOINT ["sh", "/home/app/standalone/docker/run-prod-api.sh"]

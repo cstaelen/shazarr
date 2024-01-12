@@ -19,7 +19,7 @@ import StreamProviderButton from "./StreamProviderButton";
 import React from "react";
 import { ShazamProviderType } from "../../types";
 
-import skullImage from "../../assets/skull.png";
+import skullImage from "../../resources/skull.png";
 
 export default function ShazarrButton() {
   const {

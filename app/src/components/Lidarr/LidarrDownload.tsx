@@ -4,7 +4,7 @@ import { AlbumsLoader } from "../Skeletons/AlbumsLoader";
 import AlbumCard from "./AlbumCard";
 import useLidarr from "./useLidarr";
 import React from "react";
-import lidarrLogo from "../../assets/lidarr.png";
+import lidarrLogo from "../../resources/lidarr.png";
 
 export default function LidarrDownload({
   searchTerms,

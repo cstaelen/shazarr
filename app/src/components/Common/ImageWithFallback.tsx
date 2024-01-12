@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fallbackImage from "../../assets/img-placeholder.png";
+import fallbackImage from "../../resources/img-placeholder.png";
 
 export const ImageWithFallback = ({
   alt,

@@ -27,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "build-android": "ionic capacitor build android"
+    "android:build": "ionic capacitor build android",
+    "android:serve": "ionic serve --external"
   },
   "eslintConfig": {
     "extends": [
