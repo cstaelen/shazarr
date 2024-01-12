@@ -8,6 +8,7 @@ Makefile
 .nitro
 .cache
 dist
+app
 compose.override.yml
 CHANGELOG.md
 README.md

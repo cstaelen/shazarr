@@ -1,17 +1,23 @@
 # Shazarr - ShazamIO web UI
-Use mobile app to shazam songs
-This prototype app is a Shazam companion with Lidarr and Tidarr 
+Use a mobile app to shazam songs.
+This prototype app is a Shazam service companion  with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
+
+<img src="https://github.com/cstaelen/docker-shazarr/blob/c30c348adedabb62e760a344a5347e90cc1b1056/.github/screenshot.png" width="300"/>
 
 ## Features
-- Docker image for ShazamIO services (ExpressJS)
-- Android mobile app (ReactJS+Ionic)
-- 5sec audio capture and song recognition using python ShazamIO.
-- Download result with Lidarr or Tidarr
+- 5 sec audio capture and song recognition using python [ShazamIO](https://github.com/dotX12/ShazamIO).
+- Download queried album to [Lidarr](https://github.com/linuxserver/docker-lidarr)
+- Download queried song/album with [Tidarr](https://github.com/cstaelen/tidarr)
 - Listen on streaming app like Spotify
 - Show lyrics
 
-## Install
-This is a two steps install :
+## Get started
+
+In order to use it you will have to install :
+- Docker image to query Shazam services
+- Android mobile app APK
+
+Proceed:
 1. Pull and up docker image `cstaelen/shazarr-api`
 2. Go to url on `http://<docker-host>:12358`
 3. Download APK by scanning qrcode
@@ -19,13 +25,11 @@ This is a two steps install :
 
 ### 1. Docker image
 Using `docker-compose.yml`:
-````yaml
+```yaml
 version: "3"
 services:
   shazarr-api:
-    image: cstaelen/shazarr-api
-    container_name: 'shazarr-api'
-    restart: 'always'
+    image: cstaelen/shazarr-api:latest
     ports:
       - 12358:12358
     environment:
@@ -34,8 +38,9 @@ services:
       - LIDARR_LIBRARY_PATH=/music/
       - TIDARR_URL=http://<tidarr-web-ui-url>
 ```
+
 Using `docker run`:
-```
+```shell
 docker run \
     --rm \
     --name shazarr-api \
@@ -47,9 +52,16 @@ docker run \
     -e TIDARR_URL=http://<tidarr-web-ui-url>
 ```
 
+You will find your lidarr music path in web ui :
+
+<img src="https://github.com/cstaelen/docker-shazarr/blob/c30c348adedabb62e760a344a5347e90cc1b1056/.github/lidarr-path.png" width="500"/>
+
+
 ### 2. Mobile App
 
 #### Android
+
+APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs/shazarr-app.apk)
 
 #### iOS (coming soon)
 
@@ -57,10 +69,33 @@ docker run \
 - [x] API usgin docker image
 - [x] Android app
 - [ ] iOS app
-- [ ] Offline record and sync later
 - [ ] Shazam history 
+- [ ] Offline record and sync later
 
-## Dev
+## Development
+- Docker image for API services (ExpressJS + python)
+- Android mobile app (ReactJS+Ionic)
+
+### Watch mode
+Start api in watch mode :
+```
+make api/dev
+```
+Start android front in watch mode :
+```
+make android/dev
+```
+### Build
+Build for android studio:
+```
+make android/build
+```
+Build API docker image:
+```
+make api/build
+```
 
 ## Credits
-- ShazamIO
+- Big thanks to the [ShazamIO](https://github.com/dotX12/ShazamIO) team for the awesome works 👏💪🙏
+- See Lidarr project: https://github.com/linuxserver/docker-lidarr 
+- See Tidarr project: https://github.com/cstaelen/tidarr
