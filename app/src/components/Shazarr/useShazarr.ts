@@ -1,8 +1,17 @@
 import { getConfig, recognize } from "../../server/queryApi";
-import { APIConfigType, ApiReturnType, ShazamioResponseType } from "../../types";
+import {
+  APIConfigType,
+  ApiReturnType,
+  ShazamioResponseType,
+} from "../../types";
 import { useState, useRef, useEffect } from "react";
 
-export type RecordingStatusType = "start" | "granted" | "recording" | "searching" | "inactive";
+export type RecordingStatusType =
+  | "start"
+  | "granted"
+  | "recording"
+  | "searching"
+  | "inactive";
 
 const SHAZARR_MIME_TYPE = "audio/webm";
 
@@ -10,13 +19,18 @@ export default function useShazarr() {
   const [stream, setStream] = useState<MediaStream>();
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState<Blob>();
-  const [shazarrResponse, setShazarrResponse] = useState<ShazamioResponseType>();
+  const [shazarrResponse, setShazarrResponse] =
+    useState<ShazamioResponseType>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
   const [apiError, setApiError] = useState(false);
-  const [recordingStatus, setRecordingStatus] = useState<RecordingStatusType>("inactive");
+  const [recordingStatus, setRecordingStatus] =
+    useState<RecordingStatusType>("inactive");
   const [config, setConfig] = useState<APIConfigType>();
 
   const mediaRecorder = useRef<MediaRecorder | null>(null);
+
+  const controller = new AbortController();
+  const signal = controller.signal;
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -57,11 +71,13 @@ export default function useShazarr() {
     if (!mediaRecorder.current) return;
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
+      if (recordingStatus !== "recording") return;
       const audioBlob = new Blob(audioChunks, { type: SHAZARR_MIME_TYPE });
       stream?.getTracks().forEach((track) => track.stop());
 
       setAudio(audioBlob);
       setAudioChunks([]);
+      
       setRecordingStatus("searching");
     };
   };
@@ -71,9 +87,11 @@ export default function useShazarr() {
       setShazarrLoading(true);
       blobToBase64(audio, async (base64) => {
         if (!base64 || base64.length === 0) return;
-        const response = await recognize(base64);
+        const response = await recognize(base64, signal);
+        console.log(response);
         if ((response as ApiReturnType).error) {
-          console.log('error', response);
+          console.log("error", response);
+          setApiError(true);
           resetSearch();
         } else {
           const formatted = JSON.parse(response) as ShazamioResponseType;
@@ -86,18 +104,21 @@ export default function useShazarr() {
   };
 
   const resetSearch = () => {
+    controller.abort();
     setShazarrResponse(undefined);
     setAudio(undefined);
+    stream?.getTracks().forEach((track) => track.stop());
     setStream(undefined);
     setAudioChunks([]);
     setRecordingStatus("inactive");
+    setShazarrLoading(false);
   };
 
   const blobToBase64 = (blob: Blob, cb: (base64: string) => void) => {
     const reader = new FileReader();
-    reader.onload = function() {
+    reader.onload = function () {
       const dataUrl = reader.result;
-      const base64 = (dataUrl as string)?.split(',')[1];
+      const base64 = (dataUrl as string)?.split(",")[1];
       cb(base64);
     };
     reader.readAsDataURL(blob);
@@ -110,14 +131,14 @@ export default function useShazarr() {
       setApiError(true);
     }
     setConfig(response);
-  }
+  };
 
   useEffect(() => {
     if (shazarrResponse) return;
-    
+
     switch (recordingStatus) {
       case "start":
-        getMicrophonePermission() 
+        getMicrophonePermission();
         break;
       case "granted":
         startRecording();
@@ -146,6 +167,6 @@ export default function useShazarr() {
     actions: {
       setRecordingStatus,
       resetSearch,
-    }
-  }
+    },
+  };
 }

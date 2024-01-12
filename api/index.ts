@@ -18,6 +18,7 @@ app.all('*', function (req, res, next) {
   next();
 });
 
+
 app.get('/', (req: Request, res: Response) => {
   res.sendfile('default.html', { root: __dirname + "/../static" } );
 });

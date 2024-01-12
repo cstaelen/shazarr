@@ -63,10 +63,11 @@ export default function ShazarrButton() {
           {!shazarrResponse?.track ? (
             <ListenButton>
               <IconButton
-                disabled={recordingStatus === "recording" || shazarrLoading}
                 onClick={() => {
                   resetSearch();
-                  setRecordingStatus("start");
+                  if (recordingStatus === "inactive") {
+                    setRecordingStatus("start");
+                  }
                 }}
               >
                 <Round
@@ -147,10 +148,6 @@ export default function ShazarrButton() {
 }
 
 const ListenButton = styled.div`
-  // bottom: 25vh;
-  // position: fixed;
-  // left: 50%;
-  // transform: translateX(-50%);
   height: calc(100vh - 250px);
   align-items: center;
   display: flex;

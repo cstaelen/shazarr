@@ -7,7 +7,7 @@ services:
     ports:
       - 12358:12358
       - 35813:35813
-    restart: "unless-stopped"
+    restart: "always"
     volumes:
       - .:/home/app/standalone
     environment:
