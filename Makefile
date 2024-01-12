@@ -4,14 +4,20 @@ VERSION=0.0.1
 DOCKERFILE=./docker/builder.Dockerfile
 DOCKERFILE_API=./docker/api.Dockerfile
 
-dev:
+dev-api:
 	docker compose up --build
+
+dev-android:
+	npm run android:serve --prefix ./app
+
+build-android:
+	npm run android:build --prefix ./app
 
 build-docker:
 	docker build --platform linux/amd64 -f ${DOCKERFILE} -t ${IMAGE}:${VERSION} .
 
 build-docker-api:
-	docker build --platform linux/amd64 -f ${DOCKERFILE_API} -t ${IMAGE_API}:${VERSION} .
+	docker build --platform linux/amd64 -f ${DOCKERFILE_API} -t ${IMAGE_API}:${VERSION} -t ${IMAGE_API}:latest .
 
 run-docker:
 	docker run \

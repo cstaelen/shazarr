@@ -16,7 +16,6 @@ import LidarrDownload from "../Lidarr/LidarrDownload";
 import TidarrButton from "../Tidarr/TidarrButton";
 import StatusChip from "./StatusChip";
 import StreamProviderButton from "./StreamProviderButton";
-import React from "react";
 import { ShazamProviderType } from "../../types";
 
 import skullImage from "../../resources/skull.png";
