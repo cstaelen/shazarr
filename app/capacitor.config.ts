@@ -4,7 +4,11 @@ const config: CapacitorConfig = {
   appId: "com.shazarr.app",
   appName: "Shazarr",
   webDir: "build",
+  android: {
+    allowMixedContent: true,
+  },
   server: {
+    cleartext: true,
     androidScheme: "https",
   },
   plugins: {

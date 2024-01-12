@@ -2,14 +2,7 @@
 
 import useShazarr from "./useShazarr";
 import CardResult from "./CardResult";
-import {
-  Alert,
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  Stack,
-} from "@mui/material";
+import { Alert, Box, Button, Divider, IconButton, Stack } from "@mui/material";
 import { MoreHorizOutlined, Refresh } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import LidarrDownload from "../Lidarr/LidarrDownload";
@@ -137,6 +130,7 @@ export default function ShazarrButton() {
                 >
                   Reset
                 </Button>
+                <Divider />
               </Stack>
             </>
           )}
