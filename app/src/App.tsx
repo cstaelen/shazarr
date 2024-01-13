@@ -74,7 +74,7 @@ function App() {
             <Box marginTop={10}>
               <Box marginBottom={2}>
                 <Input
-                  type="text"
+                  type="url"
                   defaultValue={apiUrl}
                   placeholder="Shazarr API URL (http://...:12358)"
                   fullWidth
@@ -92,7 +92,7 @@ function App() {
               <ShazarrButton />
               <ButtonConfig>
                 <Button onClick={() => setShowApiForm(true)}>
-                  Show server configuration
+                  Server configuration
                 </Button>
               </ButtonConfig>
             </>
@@ -111,7 +111,9 @@ const H1 = styled.h1`
   text-transform: uppercase;
 `;
 
-const ButtonConfig = styled.div``;
+const ButtonConfig = styled.div`
+  margin-bottom: 1rem;
+`;
 
 const Main = styled.main`
   background-image: linear-gradient(180deg, #153b50 0%, #0a1d28 100%);

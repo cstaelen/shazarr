@@ -74,7 +74,7 @@ APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs
 
 ## Development
 - Docker image for API services (ExpressJS + python)
-- Android mobile app (ReactJS+Ionic)
+- Android mobile app (ReactJS + Ionic/Capacitor)
 
 ### Watch mode
 Start api in watch mode :
@@ -98,5 +98,7 @@ make api/build
 
 ## Credits
 - Big thanks to the [ShazamIO](https://github.com/dotX12/ShazamIO) team for the awesome works 👏💪🙏
+- UI inspiration : https://github.com/codrops/ShazamButtonEffect
 - See Lidarr project: https://github.com/linuxserver/docker-lidarr 
 - See Tidarr project: https://github.com/cstaelen/tidarr
+

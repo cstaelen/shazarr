@@ -12,7 +12,8 @@ import StreamProviderButton from "./StreamProviderButton";
 import { ShazamProviderType } from "../../types";
 
 import skullImage from "../../resources/skull.png";
-import NotesAnimate from "./NotesAnimate";
+import NotesAnimate from "../NotesAnimate/NotesAnimate";
+import { IconNote1 } from "../NotesAnimate/Icons";
 
 export default function ShazarrButton() {
   const {
@@ -82,7 +83,7 @@ export default function ShazarrButton() {
             </ListenButton>
           ) : (
             <>
-              <Stack spacing={2}>
+              <Stack spacing={2} marginBottom={2}>
                 {config?.TIDARR_URL && (
                   <TidarrButton
                     searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
@@ -103,7 +104,6 @@ export default function ShazarrButton() {
                       <StreamProviderButton
                         key={`provider-${index}`}
                         uri={provider.actions?.[0]?.uri}
-                        caption={provider.caption}
                         type={provider.type}
                       />
                     )
@@ -115,7 +115,6 @@ export default function ShazarrButton() {
                       uri={
                         shazarrResponse.track.myshazam.apple.actions?.[0]?.uri
                       }
-                      caption="Open with Apple Music"
                       type="APPLE"
                     />
                   )}

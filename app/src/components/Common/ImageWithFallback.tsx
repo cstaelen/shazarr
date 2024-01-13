@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import fallbackImage from "../../resources/img-placeholder.png";
+import styled from "@emotion/styled";
 
 export const ImageWithFallback = ({
   alt,
@@ -19,7 +20,7 @@ export const ImageWithFallback = ({
   }, [src]);
 
   return (
-    <img
+    <ImgStyled
       alt={alt}
       onError={(e) => setError(e.toString())}
       src={fallbackImage}
@@ -32,3 +33,8 @@ export const ImageWithFallback = ({
     />
   );
 };
+
+const ImgStyled = styled.img`
+  height: auto;
+  max-width: 100%;
+`;

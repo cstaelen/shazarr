@@ -15,6 +15,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
+  CardActions,
+  CardMedia,
   Table,
   TableBody,
   TableCell,
@@ -63,35 +65,29 @@ export default function CardResult({
 
   return (
     <>
-      <Card sx={{ display: "flex" }} variant="elevation">
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            flexGrow: "1",
-            textAlign: "left",
-          }}
-        >
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <Typography
-              component="div"
-              variant="h6"
-              lineHeight={1.2}
-              marginBottom={1}
+      <Card sx={{ maxWidth: 260, margin: "0 auto 1rem" }}>
+        <CardMedia>
+          <ImageWithFallback width="400" alt="" src={data.images.coverart} />
+        </CardMedia>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {data.title}
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            {data.subtitle}
+          </Typography>
+        </CardContent>
+        {sample && (
+          <CardActions>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+                px: 2,
+                pb: 2,
+              }}
             >
-              {data.title}
-            </Typography>
-            <Typography
-              lineHeight={1.2}
-              variant="subtitle1"
-              color="text.secondary"
-              component="div"
-            >
-              {data.subtitle}
-            </Typography>
-          </CardContent>
-          {sample && (
-            <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
               <Button
                 variant="outlined"
                 startIcon={
@@ -115,20 +111,8 @@ export default function CardResult({
                 <Refresh style={{ transform: "rotate(-180deg)" }} />
               </Button>
             </Box>
-          )}
-        </Box>
-        <Box
-          sx={{
-            flex: "0 0 auto",
-          }}
-        >
-          <ImageWithFallback
-            width="150"
-            height="150"
-            alt=""
-            src={data.images.coverart}
-          />
-        </Box>
+          </CardActions>
+        )}
       </Card>
 
       <TableContainer>
