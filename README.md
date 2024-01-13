@@ -80,12 +80,12 @@ Start api in watch mode :
 ```
 make api/dev
 ```
-UI available on port 8100 http://localhost:8100/
-
 Start android front in watch mode :
 ```
 make android/dev
 ```
+UI available on port 8100 http://localhost:8100/
+
 ### Build
 Build for android studio:
 ```
