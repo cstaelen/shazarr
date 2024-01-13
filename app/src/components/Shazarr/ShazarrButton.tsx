@@ -12,6 +12,7 @@ import StreamProviderButton from "./StreamProviderButton";
 import { ShazamProviderType } from "../../types";
 
 import skullImage from "../../resources/skull.png";
+import NotesAnimate from "./NotesAnimate";
 
 export default function ShazarrButton() {
   const {
@@ -39,6 +40,7 @@ export default function ShazarrButton() {
 
   return (
     <>
+      <NotesAnimate duration={5000} run={recordingStatus === "granted"} />
       <Box marginY={3}>
         <StatusChip
           recordingStatus={recordingStatus}
