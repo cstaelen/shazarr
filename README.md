@@ -1,6 +1,5 @@
 # Shazarr - ShazamIO web UI
-Use a mobile app to shazam songs.
-This prototype app is a Shazam service companion  with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
+This project provides a mobile app to shazam songs with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
 
 <img src="https://github.com/cstaelen/docker-shazarr/blob/1fd8ad85b17ada9726f6119dd1791ed7faef4f56/.github/screenshot.png" width="300"/>
 
