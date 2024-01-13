@@ -5,6 +5,7 @@ import {
   ShazamioResponseType,
 } from "../../types";
 import { useState, useRef, useEffect } from "react";
+import { Haptics } from "@capacitor/haptics";
 
 export type RecordingStatusType =
   | "start"
@@ -77,7 +78,7 @@ export default function useShazarr() {
 
       setAudio(audioBlob);
       setAudioChunks([]);
-      
+
       setRecordingStatus("searching");
     };
   };
@@ -99,6 +100,7 @@ export default function useShazarr() {
           setShazarrLoading(false);
         }
         setRecordingStatus("inactive");
+        vibrateAction();
       });
     }
   };
@@ -124,6 +126,10 @@ export default function useShazarr() {
     reader.readAsDataURL(blob);
   };
 
+  const vibrateAction = async () => {
+    await Haptics.vibrate();
+  };
+
   const fetchConfig = async () => {
     setApiError(false);
     const response = await getConfig();
@@ -141,12 +147,14 @@ export default function useShazarr() {
         getMicrophonePermission();
         break;
       case "granted":
+        vibrateAction();
         startRecording();
         break;
       case "recording":
         setTimeout(() => stopRecording(), 5000);
         break;
       case "searching":
+        vibrateAction();
         if (audio) recognizeRecording();
         break;
     }
