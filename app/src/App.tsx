@@ -51,7 +51,7 @@ function App() {
                   <StatusChip />
                 </Box>
                 <Box
-                  marginY={3}
+                  marginTop={3}
                   flex="1 1 0"
                   display="flex"
                   alignItems="center"
@@ -59,7 +59,7 @@ function App() {
                 >
                   <ShazarrButton />
                 </Box>
-                <Box marginY={3}>
+                <Box>
                   <FormApi />
                   <HistoryList />
                 </Box>
@@ -84,11 +84,5 @@ const Main = styled.main`
   background-image: linear-gradient(180deg, #153b50 0%, #0a1d28 100%);
   margin: 0;
   text-align: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100vh;
-  overflow: auto;
+  min-height: 100vh;
 `;

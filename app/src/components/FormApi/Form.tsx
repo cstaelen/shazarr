@@ -89,7 +89,10 @@ export default function FormApi() {
         </DialogContent>
       </Dialog>
       <ButtonConfig>
-        <Button onClick={() => setShowApiForm(!showApiForm)}>
+        <Button
+          onClick={() => setShowApiForm(!showApiForm)}
+          disabled={recordingStatus !== "inactive"}
+        >
           Server configuration
         </Button>
       </ButtonConfig>

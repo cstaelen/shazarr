@@ -1,13 +1,8 @@
-import {
-  Box,
-  Button,
-  Container,
-  Drawer,
-} from "@mui/material";
+import { Box, Button, Container, Drawer } from "@mui/material";
 import HistoryCard from "./Card";
 import { useHistoryProvider } from "./Provider";
 import { useState } from "react";
-import { List } from "@mui/icons-material";
+import { Close, List } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { useShazarrProvider } from "../Shazarr/Provider";
 
@@ -16,8 +11,7 @@ export default function HistoryList() {
   const { history } = useHistoryProvider();
   const [listOpen, setListOpen] = useState<boolean>();
 
-  if (!history || history?.length === 0 || recordingStatus !== "inactive")
-    return null;
+  if (!history || history?.length === 0) return null;
 
   return (
     <Box marginBottom={2}>
@@ -26,8 +20,9 @@ export default function HistoryList() {
         variant="outlined"
         fullWidth
         onClick={() => setListOpen(true)}
+        disabled={recordingStatus !== "inactive"}
       >
-        Last records ({history?.length})
+        Show records ({history?.length})
       </Button>
       <Drawer
         anchor="bottom"
@@ -46,6 +41,15 @@ export default function HistoryList() {
                 onClose={() => setListOpen(false)}
               />
             ))}
+            <Button
+              startIcon={<Close />}
+              variant="outlined"
+              fullWidth
+              onClick={() => setListOpen(false)}
+              sx={{ marginBottom: 1 }}
+            >
+              Close records
+            </Button>
           </Container>
         </StyledBox>
       </Drawer>

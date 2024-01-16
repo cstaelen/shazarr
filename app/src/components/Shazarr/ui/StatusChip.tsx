@@ -1,3 +1,4 @@
+
 import { Check, MicOutlined, NetworkPing } from "@mui/icons-material";
 import { Chip, CircularProgress } from "@mui/material";
 import { useShazarrProvider } from "../Provider";
@@ -36,7 +37,7 @@ export default function StatusChip() {
           : shazarrResponse?.track
           ? "Found !"
           : shazarrResponse && !shazarrResponse?.track
-          ? "Not found. Retry closer."
+          ? "Not found. Get closer."
           : apiError
           ? "Offline mode"
           : "Ready"

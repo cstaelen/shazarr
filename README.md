@@ -4,23 +4,23 @@ This project provides a mobile app to shazam songs with [Lidarr](https://github.
 <img src="https://github.com/cstaelen/docker-shazarr/blob/1fd8ad85b17ada9726f6119dd1791ed7faef4f56/.github/screenshot.png" width="300"/>
 
 ## Features
-- 5 sec audio capture and song recognition using python [ShazamIO](https://github.com/dotX12/ShazamIO).
+- Audio microphone capture and song recognition using python [ShazamIO](https://github.com/dotX12/ShazamIO).
 - Download queried album to [Lidarr](https://github.com/linuxserver/docker-lidarr)
 - Download queried song/album with [Tidarr](https://github.com/cstaelen/tidarr)
-- Listen on streaming app like Spotify
+- Listen on streaming app Spotify, Apple Music and Deezer
 - Show lyrics
-- Record and recognize later if API is not accessible
-- Record ghistory
+- Offline song record and recognize later (if API is not accessible)
+- Record history
 
 ## Get started
 
 In order to use it you will have to install :
-- Docker image to query Shazam services
-- Android mobile app APK
+- API: Docker image to query Shazam services
+- Client : Android mobile app APK (iOS coming soon)
 
 Proceed:
 1. Pull and up docker image `cstaelen/shazarr-api`
-2. Go to url on `http://<docker-host>:12358`
+2. Go to url on `http://<docker-host>:12358` to see qrcode
 3. Download APK by scanning qrcode
 4. Fill Shazarr API URL in app
 
@@ -67,8 +67,10 @@ APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs
 #### iOS (coming soon)
 
 ## Roadmap
-- [x] API usgin docker image
+- [x] API using docker image
 - [x] Android app
+- [x] Record history: access last shazamed songs
+- [x] Offline record: record without API access, recognize song later 
 - [ ] iOS app
 
 ## Development

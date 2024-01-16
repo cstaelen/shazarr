@@ -47,7 +47,7 @@ export default function ShazarrButton() {
                       src={skullImage}
                       alt=""
                       width="35"
-                      style={{ transform: "scale(1.8)" }}
+                      style={{ transform: "scale(1.6)" }}
                     />
                   )}
                 </Round>
@@ -86,7 +86,7 @@ const Round = styled.div<{ isAnimate: boolean }>`
     top: 50%;
     margin-left: -3.5rem;
     margin-top: -3.5rem;
-    z-index: -1;
+    z-index: 0;
     animation: ${({ isAnimate }) =>
       isAnimate ? "button-animate 2s infinite linear" : "none"};
     transition: transform 300ms ease;

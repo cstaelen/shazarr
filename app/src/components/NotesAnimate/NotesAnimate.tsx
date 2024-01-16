@@ -91,7 +91,7 @@ const Wrapper = styled.div`
   bottom: 0;
   height: 100vh;
   overflow: hidden;
-  z-index: -1;
+  z-index: 0;
 
   @keyframes noteAnimation {
     0% {
