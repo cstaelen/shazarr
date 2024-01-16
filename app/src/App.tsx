@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ShazarrButton from "./components/Shazarr/ShazarrButton";
+import ShazarrButton from "./components/Shazarr/Button";
 import { ThemeProvider } from "@emotion/react";
 import {
   CssBaseline,
@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { HistoryProvider } from "./components/History/HistoryProvider";
-import { ShazarrProvider } from "./components/Shazarr/ShazarrProvider";
-import FormApi from "./components/FormApi";
-import HistoryList from "./components/History/HistoryList";
+import { HistoryProvider } from "./components/History/Provider";
+import { ShazarrProvider } from "./components/Shazarr/Provider";
+import FormApi from "./components/FormApi/Form";
+import HistoryList from "./components/History/List";
 import StatusChip from "./components/Shazarr/ui/StatusChip";
 
 const darkTheme = createTheme({

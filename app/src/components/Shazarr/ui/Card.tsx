@@ -24,7 +24,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { ImageWithFallback } from "../../Common/ImageWithFallback";
-import { useShazarrProvider } from "../ShazarrProvider";
+import { useShazarrProvider } from "../Provider";
 
 export default function CardResult({ data }: { data: ShazamioTrackType }) {
   const [sample, setSample] = useState<HTMLAudioElement>();
@@ -140,11 +140,11 @@ export default function CardResult({ data }: { data: ShazamioTrackType }) {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                {lyrics?.map((lyric) => (
-                  <>
+                {lyrics?.map((lyric, index) => (
+                  <span key={`lyric-${index}`}>
                     {lyric}
                     <br />
-                  </>
+                  </span>
                 ))}
               </Typography>
             </AccordionDetails>

@@ -8,8 +8,8 @@ import {
   DialogContent,
 } from "@mui/material";
 import { useState, useRef, useEffect } from "react";
-import { useShazarrProvider } from "../Shazarr/ShazarrProvider";
-import ApiErrorAlert from "./ApiErrorAlert";
+import { useShazarrProvider } from "../Shazarr/Provider";
+import ApiErrorAlert from "./Alert";
 import styled from "@emotion/styled";
 
 export default function FormApi() {

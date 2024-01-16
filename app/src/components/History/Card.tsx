@@ -4,8 +4,8 @@ import Typography from "@mui/material/Typography";
 import { DeleteForever, RemoveRedEye, Search } from "@mui/icons-material";
 import { CardActions, CardMedia, IconButton } from "@mui/material";
 import { ImageWithFallback } from "../Common/ImageWithFallback";
-import { useShazarrProvider } from "../Shazarr/ShazarrProvider";
-import { HistoryItem, useHistoryProvider } from "./HistoryProvider";
+import { useShazarrProvider } from "../Shazarr/Provider";
+import { HistoryItem, useHistoryProvider } from "./Provider";
 import { ShazamioResponseType } from "../../types";
 
 export default function HistoryCard({

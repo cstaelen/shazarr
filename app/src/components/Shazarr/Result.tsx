@@ -1,11 +1,11 @@
 import { Close } from "@mui/icons-material";
 import { Stack, Divider, Box, Button } from "@mui/material";
-import { ShazamProviderType } from "../../../types";
-import LidarrDownload from "../../Lidarr/LidarrDownload";
-import TidarrButton from "./TidarrButton";
-import CardResult from "./CardResult";
-import StreamProviderButton from "./StreamProviderButton";
-import { useShazarrProvider } from "../ShazarrProvider";
+import { ShazamProviderType } from "../../types";
+import LidarrDownload from "../Lidarr/LidarrDownload";
+import TidarrButton from "./ui/TidarrButton";
+import CardResult from "./ui/Card";
+import StreamProviderButton from "./ui/StreamProviderButton";
+import { useShazarrProvider } from "./Provider";
 
 export default function ShazarrResults() {
   const {

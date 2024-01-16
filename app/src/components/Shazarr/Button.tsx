@@ -3,23 +3,19 @@
 import { Box, IconButton } from "@mui/material";
 import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import StatusChip from "./ui/StatusChip";
 
 import skullImage from "../../resources/skull.png";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
-import { RECORD_DURATION, useShazarrProvider } from "./ShazarrProvider";
-import ShazarrResults from "./ui/ShazarrResult";
-import { useHistoryProvider } from "../History/HistoryProvider";
+import { RECORD_DURATION, useShazarrProvider } from "./Provider";
+import ShazarrResults from "./Result";
 
 export default function ShazarrButton() {
   const {
-    apiError,
     shazarrLoading,
     shazarrResponse,
     recordingStatus,
     actions: { setRecordingStatus, resetSearch },
   } = useShazarrProvider();
-  const { history } = useHistoryProvider();
 
   return (
     <>

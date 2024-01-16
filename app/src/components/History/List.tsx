@@ -3,22 +3,18 @@ import {
   Button,
   Container,
   Drawer,
-  ThemeOptions,
-  ThemeVars,
-  useTheme,
 } from "@mui/material";
-import HistoryCard from "./HistoryCard";
-import { useHistoryProvider } from "./HistoryProvider";
+import HistoryCard from "./Card";
+import { useHistoryProvider } from "./Provider";
 import { useState } from "react";
 import { List } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import { useShazarrProvider } from "../Shazarr/ShazarrProvider";
+import { useShazarrProvider } from "../Shazarr/Provider";
 
 export default function HistoryList() {
   const { recordingStatus } = useShazarrProvider();
   const { history } = useHistoryProvider();
   const [listOpen, setListOpen] = useState<boolean>();
-  const theme = useTheme();
 
   if (!history || history?.length === 0 || recordingStatus !== "inactive")
     return null;

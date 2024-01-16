@@ -12,7 +12,7 @@ import {
   APIConfigType,
   ApiReturnType,
 } from "../../types";
-import { HistoryItem, useHistoryProvider } from "../History/HistoryProvider";
+import { HistoryItem, useHistoryProvider } from "../History/Provider";
 
 export type RecordingStatusType =
   | "start"
@@ -21,14 +21,13 @@ export type RecordingStatusType =
   | "searching"
   | "inactive";
 
-
 export const RECORD_DURATION = 8000;
 
 const SHAZARR_MIME_TYPE = "audio/webm";
 
 type ShazarrContextType = {
   config: APIConfigType | undefined;
-  apiError: boolean;
+  apiError: boolean | string;
   shazarrLoading: boolean;
   shazarrResponse: ShazamioResponseType | undefined;
   recordingStatus: RecordingStatusType;
@@ -53,7 +52,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [shazarrResponse, setShazarrResponse] =
     useState<ShazamioResponseType>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
-  const [apiError, setApiError] = useState(false);
+  const [apiError, setApiError] = useState<boolean | string>(false);
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
   const [config, setConfig] = useState<APIConfigType>();
@@ -125,7 +124,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   };
 
   const recognizeRecording = async () => {
-    if (audio) {
+    if (audio && audio instanceof Blob) {
       setShazarrLoading(true);
       blobToBase64(audio, async (base64) => {
         if (!base64 || base64.length === 0) return;
@@ -150,21 +149,25 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           setShazarrLoading(false);
 
           if (formatted.track) {
-            if (historySearch) {
-              deleteHistoryItem(historySearch);
-              setHistorySearch(undefined);
-            }
-            addItemToHistory({
+            await addItemToHistory({
               title: formatted.track.title,
               artist: formatted.track.subtitle,
               date: Date.now(),
               data: formatted?.track,
             });
+
+            if (historySearch) {
+              setHistorySearch(undefined);
+              await deleteHistoryItem(historySearch);
+            }
           }
         }
         setRecordingStatus("inactive");
         vibrateAction();
       });
+    } else {
+      console.error("Err: record is not instance of Blob");
+      resetSearch();
     }
   };
 

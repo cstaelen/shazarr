@@ -75,8 +75,8 @@ export default function NotesAnimate({
   return (
     <Wrapper>
       <Stack>
-        {notes.map((note) => (
-          <>{note}</>
+        {notes.map((note, index) => (
+          <div key={`node-${index}`}>{note}</div>
         ))}
       </Stack>
     </Wrapper>
