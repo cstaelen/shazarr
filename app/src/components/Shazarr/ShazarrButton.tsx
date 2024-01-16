@@ -29,23 +29,10 @@ export default function ShazarrButton() {
           run={recordingStatus === "granted"}
         />
       ) : null}
-
-      <Box marginY={3}>
-        <StatusChip />
-      </Box>
       <Box>
         <main>
           {!shazarrResponse?.track ? (
-            <ListenButton
-              hasError={apiError && recordingStatus === "inactive"}
-              hasHistory={
-                !!(
-                  history &&
-                  history?.length > 0 &&
-                  recordingStatus === "inactive"
-                )
-              }
-            >
+            <ListenButton style={{ marginTop: "10vh" }}>
               <IconButton
                 onClick={() => {
                   resetSearch();
@@ -79,17 +66,7 @@ export default function ShazarrButton() {
   );
 }
 
-const ListenButton = styled.div<{ hasError: boolean; hasHistory: boolean }>`
-  min-height: ${({ hasError, hasHistory }) =>
-    hasHistory && !hasError
-      ? "calc(100vh -  280px)"
-      : hasError
-      ? "calc(100vh -  350px)"
-      : "calc(100vh -  230px)"};
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
+const ListenButton = styled.div``;
 
 const Round = styled.div<{ isAnimate: boolean }>`
   background: #fff;
