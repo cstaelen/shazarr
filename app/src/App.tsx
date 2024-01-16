@@ -1,16 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ShazarrButton from "./components/Shazarr/ShazarrButton";
 import { ThemeProvider } from "@emotion/react";
-import {
-  CssBaseline,
-  Container,
-  Box,
-  Input,
-  Button,
-  createTheme,
-} from "@mui/material";
+import { CssBaseline, Container, createTheme } from "@mui/material";
 import styled from "@emotion/styled";
-import { Preferences } from "@capacitor/preferences";
+import { HistoryProvider } from "./components/History/HistoryProvider";
+import { ShazarrProvider } from "./components/Shazarr/ShazarrProvider";
+import FormApi from "./components/FormApi";
+import HistoryList from "./components/History/HistoryList";
 
 const darkTheme = createTheme({
   palette: {
@@ -24,81 +20,28 @@ const darkTheme = createTheme({
 
 function App() {
   const [appLoaded, setAppLoaded] = useState(false);
-  const [apiUrl, setApiUrl] = useState<string>();
-  const [showApiForm, setShowApiForm] = useState<boolean>();
-  const inputRef = useRef<HTMLInputElement>();
-
-  async function saveApiUrl() {
-    if (inputRef.current) {
-      const url = inputRef.current.querySelector("input")?.value;
-      if (url) {
-        setApiUrl(url);
-        await Preferences.set({ key: "shazarr_api_url", value: url });
-      }
-      setShowApiForm(false);
-    }
-  }
-
-  async function handleApiURL() {
-    const { value: existingUrl } = await Preferences.get({
-      key: "shazarr_api_url",
-    });
-
-    if (
-      !existingUrl &&
-      process.env.REACT_APP_HOSTNAME &&
-      process.env.REACT_APP_API_PORT
-    ) {
-      const url = `${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_API_PORT}`;
-      setApiUrl(url);
-      await Preferences.set({ key: "shazarr_api_url", value: url });
-    } else if (existingUrl) {
-      setApiUrl(existingUrl);
-    }
-  }
 
   useEffect(() => {
     setAppLoaded(true);
-    handleApiURL();
   }, []);
 
   if (!appLoaded) return null;
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Main>
-        <Container maxWidth="xs">
-          <H1>Shazarr</H1>- ShazamIO web UI -
-          {!apiUrl || showApiForm ? (
-            <Box marginTop={10}>
-              <Box marginBottom={2}>
-                <Input
-                  type="url"
-                  defaultValue={apiUrl}
-                  placeholder="Shazarr API URL (http://...:12358)"
-                  fullWidth
-                  ref={inputRef}
-                />
-              </Box>
-              <Box>
-                <Button variant="contained" onClick={() => saveApiUrl()}>
-                  Save API URL
-                </Button>
-              </Box>
-            </Box>
-          ) : (
-            <>
+      <HistoryProvider>
+        <ShazarrProvider>
+          <CssBaseline />
+          <Main>
+            <Container maxWidth="xs">
+              <H1>Shazarr</H1>- ShazamIO web UI -
               <ShazarrButton />
-              <ButtonConfig>
-                <Button onClick={() => setShowApiForm(true)}>
-                  Server configuration
-                </Button>
-              </ButtonConfig>
-            </>
-          )}
-        </Container>
-      </Main>
+              <FormApi />
+              <HistoryList />
+            </Container>
+          </Main>
+        </ShazarrProvider>
+      </HistoryProvider>
     </ThemeProvider>
   );
 }
@@ -109,10 +52,6 @@ const H1 = styled.h1`
   letter-spacing: 4px;
   margin-bottom: 0;
   text-transform: uppercase;
-`;
-
-const ButtonConfig = styled.div`
-  margin-bottom: 1rem;
 `;
 
 const Main = styled.main`

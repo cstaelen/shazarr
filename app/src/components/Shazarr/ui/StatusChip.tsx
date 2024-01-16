@@ -1,27 +1,22 @@
-import { ShazamioResponseType } from "../../types";
-import { Check, MicOutlined } from "@mui/icons-material";
+import { Check, MicOutlined, NetworkPing } from "@mui/icons-material";
 import { Chip, CircularProgress } from "@mui/material";
-import { RecordingStatusType } from "./useShazarr";
-import React from "react";
+import { useShazarrProvider } from "../ShazarrProvider";
 
-export default function StatusChip({
-  recordingStatus,
-  loading,
-  shazarrResponse,
-}: {
-  recordingStatus: RecordingStatusType;
-  loading: boolean;
-  shazarrResponse: ShazamioResponseType | undefined;
-}) {
+export default function StatusChip() {
+  const { shazarrLoading, shazarrResponse, apiError, recordingStatus } =
+    useShazarrProvider();
+
   return (
     <Chip
       color={
         shazarrResponse?.track
           ? "success"
-          : loading || recordingStatus === "recording"
+          : shazarrLoading || recordingStatus === "recording"
           ? "default"
           : shazarrResponse && !shazarrResponse?.track
           ? "warning"
+          : apiError
+          ? "error"
           : "info"
       }
       icon={
@@ -29,6 +24,8 @@ export default function StatusChip({
           <CircularProgress size={16} style={{ margin: "0 5px 0 10px" }} />
         ) : shazarrResponse?.track ? (
           <Check fontSize="small" />
+        ) : apiError ? (
+          <NetworkPing fontSize="small" />
         ) : (
           <MicOutlined fontSize="small" />
         )
@@ -39,7 +36,9 @@ export default function StatusChip({
           : shazarrResponse?.track
           ? "Found !"
           : shazarrResponse && !shazarrResponse?.track
-          ? "Not found."
+          ? "Not found. Retry closer."
+          : apiError
+          ? "Offline mode"
           : "Ready"
       }
       variant="outlined"

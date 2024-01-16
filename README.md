@@ -9,6 +9,8 @@ This project provides a mobile app to shazam songs with [Lidarr](https://github.
 - Download queried song/album with [Tidarr](https://github.com/cstaelen/tidarr)
 - Listen on streaming app like Spotify
 - Show lyrics
+- Record and recognize later if API is not accessible
+- Record ghistory
 
 ## Get started
 
@@ -68,8 +70,6 @@ APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs
 - [x] API usgin docker image
 - [x] Android app
 - [ ] iOS app
-- [ ] Shazam history 
-- [ ] Offline record and sync later
 
 ## Development
 - Docker image for API services (ExpressJS + python)

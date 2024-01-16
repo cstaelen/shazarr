@@ -13,7 +13,7 @@ export const ImageWithFallback = ({
   height?: string;
   width?: string;
 }) => {
-  const [error, setError] = useState<string>();
+  const [, setError] = useState<string>();
 
   useEffect(() => {
     setError(undefined);

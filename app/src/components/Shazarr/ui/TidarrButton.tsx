@@ -1,6 +1,5 @@
 import { Album } from "@mui/icons-material";
 import { Button, styled } from "@mui/material";
-import React from "react";
 
 export default function TidarrButton({
   searchTerms,

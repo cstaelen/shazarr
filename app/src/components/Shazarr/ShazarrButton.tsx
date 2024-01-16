@@ -1,62 +1,45 @@
 "use client";
 
-import useShazarr from "./useShazarr";
-import CardResult from "./CardResult";
-import { Alert, Box, Button, Divider, IconButton, Stack } from "@mui/material";
-import { MoreHorizOutlined, Refresh } from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
+import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import LidarrDownload from "../Lidarr/LidarrDownload";
-import TidarrButton from "../Tidarr/TidarrButton";
-import StatusChip from "./StatusChip";
-import StreamProviderButton from "./StreamProviderButton";
-import { ShazamProviderType } from "../../types";
+import StatusChip from "./ui/StatusChip";
 
 import skullImage from "../../resources/skull.png";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
-import { IconNote1 } from "../NotesAnimate/Icons";
+import { useShazarrProvider } from "./ShazarrProvider";
+import ShazarrResults from "./ui/ShazarrResult";
+import { useHistoryProvider } from "../History/HistoryProvider";
 
 export default function ShazarrButton() {
   const {
-    config,
     apiError,
     shazarrLoading,
     shazarrResponse,
     recordingStatus,
     actions: { setRecordingStatus, resetSearch },
-  } = useShazarr();
-
-  const albumName = shazarrResponse?.track?.sections?.[0]?.metadata?.filter(
-    (m: any) => m?.title === "Album"
-  )?.[0].text;
-
-  if (apiError)
-    return (
-      <Box marginY={5} textAlign="left">
-        <Alert severity="error">
-          An error occured while connection to Shazarr API. Please, check your
-          API configuration.
-        </Alert>
-      </Box>
-    );
+  } = useShazarrProvider();
+  const { history } = useHistoryProvider();
 
   return (
     <>
       <NotesAnimate duration={5000} run={recordingStatus === "granted"} />
       <Box marginY={3}>
-        <StatusChip
-          recordingStatus={recordingStatus}
-          loading={shazarrLoading}
-          shazarrResponse={shazarrResponse}
-        />
+        <StatusChip />
       </Box>
       <Box>
-        {shazarrResponse?.track && (
-          <CardResult data={shazarrResponse.track} reset={resetSearch} />
-        )}
-        <br />
         <main>
           {!shazarrResponse?.track ? (
-            <ListenButton>
+            <ListenButton
+              hasError={apiError && recordingStatus === "inactive"}
+              hasHistory={
+                !!(
+                  history &&
+                  history?.length > 0 &&
+                  recordingStatus === "inactive"
+                )
+              }
+            >
               <IconButton
                 onClick={() => {
                   resetSearch();
@@ -82,58 +65,7 @@ export default function ShazarrButton() {
               </IconButton>
             </ListenButton>
           ) : (
-            <>
-              <Stack spacing={2} marginBottom={2}>
-                {config?.TIDARR_URL && (
-                  <TidarrButton
-                    searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
-                    url={config.TIDARR_URL as string}
-                  />
-                )}
-                {config?.LIDARR_ENABLED && (
-                  <LidarrDownload
-                    searchTerms={`${albumName} ${shazarrResponse?.track.subtitle}`}
-                  />
-                )}
-
-                <Divider />
-
-                <Box>
-                  {shazarrResponse?.track?.hub?.providers?.map(
-                    (provider: ShazamProviderType, index: number) => (
-                      <StreamProviderButton
-                        key={`provider-${index}`}
-                        uri={provider.actions?.[0]?.uri}
-                        type={provider.type}
-                      />
-                    )
-                  )}
-
-                  {shazarrResponse?.track?.myshazam?.apple?.actions?.[0]
-                    ?.uri && (
-                    <StreamProviderButton
-                      uri={
-                        shazarrResponse.track.myshazam.apple.actions?.[0]?.uri
-                      }
-                      type="APPLE"
-                    />
-                  )}
-                </Box>
-
-                <Divider />
-
-                <Button
-                  onClick={() => resetSearch()}
-                  variant="outlined"
-                  startIcon={
-                    <Refresh style={{ transform: "rotate(-180deg)" }} />
-                  }
-                >
-                  Reset
-                </Button>
-                <Divider />
-              </Stack>
-            </>
+            <ShazarrResults />
           )}
         </main>
       </Box>
@@ -141,8 +73,13 @@ export default function ShazarrButton() {
   );
 }
 
-const ListenButton = styled.div`
-  height: calc(100vh - 250px);
+const ListenButton = styled.div<{ hasError: boolean; hasHistory: boolean }>`
+  min-height: ${({ hasError, hasHistory }) =>
+    hasHistory
+      ? "calc(100vh -  280px)"
+      : hasError
+      ? "calc(100vh -  340px)"
+      : "calc(100vh -  230px)"};
   align-items: center;
   display: flex;
   justify-content: center;

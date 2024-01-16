@@ -1,11 +1,18 @@
-import { getConfig, recognize } from "../../server/queryApi";
+import { Haptics } from "@capacitor/haptics";
+import React, {
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useRef,
+} from "react";
+import { recognize, getConfig } from "../../server/queryApi";
 import {
+  ShazamioResponseType,
   APIConfigType,
   ApiReturnType,
-  ShazamioResponseType,
 } from "../../types";
-import { useState, useRef, useEffect } from "react";
-import { Haptics } from "@capacitor/haptics";
+import { HistoryItem, useHistoryProvider } from "../History/HistoryProvider";
 
 export type RecordingStatusType =
   | "start"
@@ -16,7 +23,27 @@ export type RecordingStatusType =
 
 const SHAZARR_MIME_TYPE = "audio/webm";
 
-export default function useShazarr() {
+type ShazarrContextType = {
+  config: APIConfigType | undefined;
+  apiError: boolean;
+  shazarrLoading: boolean;
+  shazarrResponse: ShazamioResponseType | undefined;
+  recordingStatus: RecordingStatusType;
+  audio: Blob | undefined;
+  actions: {
+    setRecordingStatus: (status: RecordingStatusType) => void;
+    setShazarrResponse: (data: ShazamioResponseType) => void;
+    searchOfflineRecord: (item: HistoryItem) => void;
+    resetSearch: () => void;
+    fetchConfig: () => void;
+  };
+};
+
+const ShazarrContext = React.createContext<ShazarrContextType>(
+  {} as ShazarrContextType
+);
+
+export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [stream, setStream] = useState<MediaStream>();
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState<Blob>();
@@ -27,6 +54,11 @@ export default function useShazarr() {
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
   const [config, setConfig] = useState<APIConfigType>();
+  const [historySearch, setHistorySearch] = useState<string>();
+
+  const {
+    actions: { addItemToHistory, deleteHistoryItem },
+  } = useHistoryProvider();
 
   const mediaRecorder = useRef<MediaRecorder | null>(null);
 
@@ -36,6 +68,12 @@ export default function useShazarr() {
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
       try {
+        const mediaDevices = navigator.mediaDevices as any;
+        navigator.mediaDevices.getUserMedia =
+          mediaDevices.getUserMedia ||
+          mediaDevices.webkitGetUserMedia ||
+          mediaDevices.mozGetUserMedia;
+
         const streamData = await navigator.mediaDevices.getUserMedia({
           audio: true,
           video: false,
@@ -89,15 +127,37 @@ export default function useShazarr() {
       blobToBase64(audio, async (base64) => {
         if (!base64 || base64.length === 0) return;
         const response = await recognize(base64, signal);
-        console.log(response);
         if ((response as ApiReturnType).error) {
           console.log("error", response);
+
+          if (!historySearch) {
+            addItemToHistory({
+              title: "Offline record",
+              artist: "Not discovered",
+              date: Date.now(),
+              stream: audio,
+            });
+          }
+
           setApiError(true);
           resetSearch();
         } else {
           const formatted = JSON.parse(response) as ShazamioResponseType;
           setShazarrResponse(formatted);
           setShazarrLoading(false);
+
+          if (formatted.track) {
+            if (historySearch) {
+              deleteHistoryItem(historySearch);
+              setHistorySearch(undefined);
+            }
+            addItemToHistory({
+              title: formatted.track.title,
+              artist: formatted.track.subtitle,
+              date: Date.now(),
+              data: formatted?.track,
+            });
+          }
         }
         setRecordingStatus("inactive");
         vibrateAction();
@@ -114,6 +174,7 @@ export default function useShazarr() {
     setAudioChunks([]);
     setRecordingStatus("inactive");
     setShazarrLoading(false);
+    setHistorySearch(undefined);
   };
 
   const blobToBase64 = (blob: Blob, cb: (base64: string) => void) => {
@@ -128,6 +189,15 @@ export default function useShazarr() {
 
   const vibrateAction = async () => {
     await Haptics.vibrate();
+  };
+
+  const searchOfflineRecord = (item: HistoryItem) => {
+    if (item?.stream) {
+      resetSearch();
+      setAudio(item.stream);
+      setHistorySearch(item.date);
+      setRecordingStatus("searching");
+    }
   };
 
   const fetchConfig = async () => {
@@ -165,7 +235,7 @@ export default function useShazarr() {
     fetchConfig();
   }, []);
 
-  return {
+  const value = {
     config,
     apiError,
     shazarrLoading,
@@ -175,6 +245,17 @@ export default function useShazarr() {
     actions: {
       setRecordingStatus,
       resetSearch,
+      setShazarrResponse,
+      searchOfflineRecord,
+      fetchConfig,
     },
   };
+
+  return (
+    <ShazarrContext.Provider value={value}>{children}</ShazarrContext.Provider>
+  );
 }
+
+export const useShazarrProvider = () => {
+  return useContext(ShazarrContext);
+};

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { ShazamioTrackType } from "../../types";
+import { ShazamioTrackType } from "../../../types";
 import {
   ExpandMore,
   PauseCircleFilled,
@@ -23,18 +23,16 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
-import { ImageWithFallback } from "../Common/ImageWithFallback";
+import { ImageWithFallback } from "../../Common/ImageWithFallback";
+import { useShazarrProvider } from "../ShazarrProvider";
 
-export default function CardResult({
-  data,
-  reset,
-}: {
-  data: ShazamioTrackType;
-  reset: () => void;
-}) {
+export default function CardResult({ data }: { data: ShazamioTrackType }) {
   const [sample, setSample] = useState<HTMLAudioElement>();
   const [lyrics, setLyrics] = useState<string[]>();
   const [isPlaying, setIsPlaying] = useState<boolean>();
+  const {
+    actions: { resetSearch },
+  } = useShazarrProvider();
 
   function togglePlayPause() {
     if (!sample) return;
@@ -104,7 +102,7 @@ export default function CardResult({
               </Button>
               &nbsp;
               <Button
-                onClick={() => reset()}
+                onClick={() => resetSearch()}
                 variant="outlined"
                 color="warning"
               >
