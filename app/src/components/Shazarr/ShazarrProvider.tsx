@@ -21,6 +21,9 @@ export type RecordingStatusType =
   | "searching"
   | "inactive";
 
+
+export const RECORD_DURATION = 8000;
+
 const SHAZARR_MIME_TYPE = "audio/webm";
 
 type ShazarrContextType = {
@@ -221,7 +224,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         startRecording();
         break;
       case "recording":
-        setTimeout(() => stopRecording(), 5000);
+        setTimeout(() => stopRecording(), RECORD_DURATION);
         break;
       case "searching":
         vibrateAction();

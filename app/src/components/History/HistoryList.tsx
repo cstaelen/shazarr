@@ -1,4 +1,12 @@
-import { Box, Button, Drawer } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Drawer,
+  ThemeOptions,
+  ThemeVars,
+  useTheme,
+} from "@mui/material";
 import HistoryCard from "./HistoryCard";
 import { useHistoryProvider } from "./HistoryProvider";
 import { useState } from "react";
@@ -10,6 +18,7 @@ export default function HistoryList() {
   const { recordingStatus } = useShazarrProvider();
   const { history } = useHistoryProvider();
   const [listOpen, setListOpen] = useState<boolean>();
+  const theme = useTheme();
 
   if (!history || history?.length === 0 || recordingStatus !== "inactive")
     return null;
@@ -32,20 +41,23 @@ export default function HistoryList() {
           keepMounted: true,
         }}
       >
-        <StyledBox padding={1}>
-          {history?.map((item, index) => (
-            <HistoryCard
-              item={item}
-              key={`history-item${index}`}
-              onClose={() => setListOpen(false)}
-            />
-          ))}
+        <StyledBox>
+          <Container maxWidth="xs" sx={{ padding: "0 0.5rem" }}>
+            {history?.map((item, index) => (
+              <HistoryCard
+                item={item}
+                key={`history-item${index}`}
+                onClose={() => setListOpen(false)}
+              />
+            ))}
+          </Container>
         </StyledBox>
       </Drawer>
     </Box>
   );
 }
 
-const StyledBox = styled(Box)(() => ({
-  backgroundColor: "grey[800]",
-}));
+const StyledBox = styled(Box)`
+  background: ${({ theme }: any) => theme.palette.background.paper};
+  padding-top: 0.5rem;
+`;

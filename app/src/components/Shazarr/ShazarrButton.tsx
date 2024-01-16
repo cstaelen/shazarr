@@ -7,7 +7,7 @@ import StatusChip from "./ui/StatusChip";
 
 import skullImage from "../../resources/skull.png";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
-import { useShazarrProvider } from "./ShazarrProvider";
+import { RECORD_DURATION, useShazarrProvider } from "./ShazarrProvider";
 import ShazarrResults from "./ui/ShazarrResult";
 import { useHistoryProvider } from "../History/HistoryProvider";
 
@@ -23,7 +23,13 @@ export default function ShazarrButton() {
 
   return (
     <>
-      <NotesAnimate duration={5000} run={recordingStatus === "granted"} />
+      {recordingStatus !== "inactive" ? (
+        <NotesAnimate
+          duration={RECORD_DURATION}
+          run={recordingStatus === "granted"}
+        />
+      ) : null}
+
       <Box marginY={3}>
         <StatusChip />
       </Box>
@@ -75,10 +81,10 @@ export default function ShazarrButton() {
 
 const ListenButton = styled.div<{ hasError: boolean; hasHistory: boolean }>`
   min-height: ${({ hasError, hasHistory }) =>
-    hasHistory
+    hasHistory && !hasError
       ? "calc(100vh -  280px)"
       : hasError
-      ? "calc(100vh -  340px)"
+      ? "calc(100vh -  350px)"
       : "calc(100vh -  230px)"};
   align-items: center;
   display: flex;

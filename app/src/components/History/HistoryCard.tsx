@@ -23,7 +23,7 @@ export default function HistoryCard({
   } = useHistoryProvider();
 
   return (
-    <Card sx={{ display: "flex", margin: "0 auto 1rem", alignItems: "center" }}>
+    <Card sx={{ display: "flex", margin: "0 auto 0.5rem", alignItems: "center" }} >
       <CardMedia sx={{ lineHeight: 0, padding: 1 }}>
         <ImageWithFallback
           height="50"
@@ -58,7 +58,6 @@ export default function HistoryCard({
         <IconButton
           onClick={() => {
             deleteHistoryItem(item.date);
-            onClose();
           }}
         >
           <DeleteForever />
