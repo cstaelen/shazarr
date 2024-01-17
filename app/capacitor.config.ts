@@ -7,9 +7,13 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: true,
   },
+  ios: {
+    scheme: 'Shazarr',
+  },
   server: {
     cleartext: true,
     androidScheme: "https",
+    iosScheme: "https",
   },
   plugins: {
     CapacitorHttp: {
