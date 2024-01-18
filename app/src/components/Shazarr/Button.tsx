@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, IconButton } from "@mui/material";
+import { Alert, Box, IconButton } from "@mui/material";
 import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
 
@@ -13,52 +13,47 @@ export default function ShazarrButton() {
   const {
     shazarrLoading,
     shazarrResponse,
+    recordingError,
     recordingStatus,
     actions: { setRecordingStatus, resetSearch },
   } = useShazarrProvider();
 
   return (
-    <>
+    <Box width="100%">
       {recordingStatus !== "inactive" ? (
         <NotesAnimate
           duration={RECORD_DURATION}
-          run={recordingStatus === "granted"}
+          run={recordingStatus === "start"}
         />
       ) : null}
-      <Box>
-        <main>
-          {!shazarrResponse?.track ? (
-            <ListenButton style={{ marginTop: "10vh" }}>
-              <IconButton
-                onClick={() => {
-                  resetSearch();
-                  if (recordingStatus === "inactive") {
-                    setRecordingStatus("start");
-                  }
-                }}
-              >
-                <Round
-                  isAnimate={recordingStatus === "recording" || shazarrLoading}
-                >
-                  {shazarrLoading ? (
-                    <MoreHorizOutlined fontSize="large" />
-                  ) : (
-                    <img
-                      src={skullImage}
-                      alt=""
-                      width="35"
-                      style={{ transform: "scale(1.6)" }}
-                    />
-                  )}
-                </Round>
-              </IconButton>
-            </ListenButton>
-          ) : (
-            <ShazarrResults />
-          )}
-        </main>
-      </Box>
-    </>
+      {!shazarrResponse?.track ? (
+        <ListenButton style={{ marginTop: "10vh" }}>
+          <IconButton
+            onClick={() => {
+              resetSearch();
+              if (recordingStatus === "inactive") {
+                setRecordingStatus("start");
+              }
+            }}
+          >
+            <Round isAnimate={recordingStatus === "start" || shazarrLoading}>
+              {shazarrLoading ? (
+                <MoreHorizOutlined fontSize="large" />
+              ) : (
+                <img
+                  src={skullImage}
+                  alt=""
+                  width="35"
+                  style={{ transform: "scale(1.6)" }}
+                />
+              )}
+            </Round>
+          </IconButton>
+        </ListenButton>
+      ) : (
+        <ShazarrResults />
+      )}
+    </Box>
   );
 }
 

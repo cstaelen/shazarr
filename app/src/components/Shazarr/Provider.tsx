@@ -1,11 +1,6 @@
+import { VoiceRecorder } from "capacitor-voice-recorder";
 import { Haptics } from "@capacitor/haptics";
-import React, {
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-  useRef,
-} from "react";
+import React, { useContext, useState, ReactNode, useEffect } from "react";
 import { recognize, getConfig } from "../../server/queryApi";
 import {
   ShazamioResponseType,
@@ -13,25 +8,20 @@ import {
   ApiReturnType,
 } from "../../types";
 import { HistoryItem, useHistoryProvider } from "../History/Provider";
+import { ErrorCodeType } from "../FormApi/errorCode";
 
-export type RecordingStatusType =
-  | "start"
-  | "granted"
-  | "recording"
-  | "searching"
-  | "inactive";
+export type RecordingStatusType = "start" | "searching" | "inactive";
 
 export const RECORD_DURATION = 8000;
-
-const SHAZARR_MIME_TYPE = "audio/webm";
 
 type ShazarrContextType = {
   config: APIConfigType | undefined;
   apiError: boolean | string;
+  recordingError: ErrorCodeType | undefined;
   shazarrLoading: boolean;
   shazarrResponse: ShazamioResponseType | undefined;
   recordingStatus: RecordingStatusType;
-  audio: Blob | undefined;
+  audio: string | undefined;
   actions: {
     setRecordingStatus: (status: RecordingStatusType) => void;
     setShazarrResponse: (data: ShazamioResponseType) => void;
@@ -46,13 +36,12 @@ const ShazarrContext = React.createContext<ShazarrContextType>(
 );
 
 export function ShazarrProvider({ children }: { children: ReactNode }) {
-  const [stream, setStream] = useState<MediaStream>();
-  const [audioChunks, setAudioChunks] = useState([]);
-  const [audio, setAudio] = useState<Blob>();
+  const [audio, setAudio] = useState<string>();
   const [shazarrResponse, setShazarrResponse] =
     useState<ShazamioResponseType>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
   const [apiError, setApiError] = useState<boolean | string>(false);
+  const [recordingError, setRecordingError] = useState<ErrorCodeType>();
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
   const [config, setConfig] = useState<APIConfigType>();
@@ -62,135 +51,100 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     actions: { addItemToHistory, deleteHistoryItem },
   } = useHistoryProvider();
 
-  const mediaRecorder = useRef<MediaRecorder | null>(null);
-
   const controller = new AbortController();
   const signal = controller.signal;
 
-  const getMicrophonePermission = async () => {
-    if ("MediaRecorder" in window) {
-      try {
-        const mediaDevices = navigator.mediaDevices as any;
-        navigator.mediaDevices.getUserMedia =
-          mediaDevices.getUserMedia ||
-          mediaDevices.webkitGetUserMedia ||
-          mediaDevices.mozGetUserMedia;
+  const processRecording = async () => {
+    setRecordingError(undefined);
+    try {
+      const { value: hasPerm } =
+        await VoiceRecorder.hasAudioRecordingPermission();
 
-        const streamData = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-          video: false,
-        });
-        setStream(streamData);
-        setRecordingStatus("granted");
-      } catch (err: any) {
-        resetSearch();
-        alert(err.message);
+      if (!hasPerm) {
+        const { value: resultRequestPerm } =
+          await VoiceRecorder.requestAudioRecordingPermission();
+
+        if (resultRequestPerm) {
+          processRecording();
+          return;
+        }
       }
-    } else {
-      alert("The MediaRecorder API is not supported in your browser.");
+      const { value: isRecording } = await VoiceRecorder.startRecording();
+      if (isRecording) {
+        setTimeout(async () => {
+          const { status } = await VoiceRecorder.getCurrentStatus();
+          if (recordingStatus !== "inactive" && status === "RECORDING") {
+            const {
+              value: { recordDataBase64 },
+            } = await VoiceRecorder.stopRecording();
+            setAudio(recordDataBase64);
+            setRecordingStatus("searching");
+          }
+        }, RECORD_DURATION);
+      }
+    } catch (e: any) {
+      resetSearch();
+      setRecordingError(e.message);
     }
-  };
-
-  const startRecording = async () => {
-    if (!stream) return;
-    setRecordingStatus("recording");
-    //create new Media recorder instance using the stream
-    const media = new MediaRecorder(stream, { mimeType: SHAZARR_MIME_TYPE });
-    //set the MediaRecorder instance to the mediaRecorder ref
-    mediaRecorder.current = media;
-    mediaRecorder.current.start();
-    const localAudioChunks: [] = [];
-    mediaRecorder.current.ondataavailable = (event) => {
-      if (typeof event.data === "undefined") return;
-      if (event.data.size === 0) return;
-      localAudioChunks.push(event.data as never);
-    };
-    setAudioChunks(localAudioChunks);
-  };
-
-  const stopRecording = () => {
-    if (!mediaRecorder.current) return;
-    mediaRecorder.current.stop();
-    mediaRecorder.current.onstop = () => {
-      if (recordingStatus !== "recording") return;
-      const audioBlob = new Blob(audioChunks, { type: SHAZARR_MIME_TYPE });
-      stream?.getTracks().forEach((track) => track.stop());
-
-      setAudio(audioBlob);
-      setAudioChunks([]);
-
-      setRecordingStatus("searching");
-    };
   };
 
   const recognizeRecording = async () => {
-    if (audio && audio instanceof Blob) {
-      setShazarrLoading(true);
-      blobToBase64(audio, async (base64) => {
-        if (!base64 || base64.length === 0) return;
-        const response = await recognize(base64, signal);
-        if ((response as ApiReturnType).error) {
-          console.log("error", response);
+    setShazarrLoading(true);
 
-          if (!historySearch) {
-            addItemToHistory({
-              title: "Offline record",
-              artist: "Not discovered",
-              date: Date.now(),
-              stream: audio,
-            });
-          }
+    if (!audio || audio.length === 0) return;
+    const response = await recognize(audio, signal);
+    if ((response as ApiReturnType).error) {
+      console.log("error", response);
 
-          setApiError(true);
-          resetSearch();
-        } else {
-          const formatted = JSON.parse(response) as ShazamioResponseType;
-          setShazarrResponse(formatted);
-          setShazarrLoading(false);
+      if (!historySearch) {
+        addItemToHistory({
+          title: "Offline record",
+          artist: "Not discovered",
+          date: Date.now(),
+          stream: audio,
+        });
+      }
 
-          if (formatted.track) {
-            await addItemToHistory({
-              title: formatted.track.title,
-              artist: formatted.track.subtitle,
-              date: Date.now(),
-              data: formatted?.track,
-            });
-
-            if (historySearch) {
-              setHistorySearch(undefined);
-              await deleteHistoryItem(historySearch);
-            }
-          }
-        }
-        setRecordingStatus("inactive");
-        vibrateAction();
-      });
-    } else {
-      console.error("Err: record is not instance of Blob");
+      setApiError(true);
       resetSearch();
+    } else {
+      const formatted = JSON.parse(response) as ShazamioResponseType;
+      setShazarrResponse(formatted);
+      setShazarrLoading(false);
+
+      if (formatted.track) {
+        await addItemToHistory({
+          title: formatted.track.title,
+          artist: formatted.track.subtitle,
+          date: Date.now(),
+          data: formatted?.track,
+        });
+
+        if (historySearch) {
+          setHistorySearch(undefined);
+          await deleteHistoryItem(historySearch);
+        }
+      }
     }
+    setRecordingStatus("inactive");
   };
 
-  const resetSearch = () => {
+  const resetSearch = async () => {
     controller.abort();
     setShazarrResponse(undefined);
     setAudio(undefined);
-    stream?.getTracks().forEach((track) => track.stop());
-    setStream(undefined);
-    setAudioChunks([]);
     setRecordingStatus("inactive");
     setShazarrLoading(false);
     setHistorySearch(undefined);
-  };
 
-  const blobToBase64 = (blob: Blob, cb: (base64: string) => void) => {
-    const reader = new FileReader();
-    reader.onload = function () {
-      const dataUrl = reader.result;
-      const base64 = (dataUrl as string)?.split(",")[1];
-      cb(base64);
-    };
-    reader.readAsDataURL(blob);
+    try {
+      const { status } = await VoiceRecorder.getCurrentStatus();
+      if (status === "RECORDING") {
+        await VoiceRecorder.stopRecording();
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const vibrateAction = async () => {
@@ -220,18 +174,15 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
 
     switch (recordingStatus) {
       case "start":
-        getMicrophonePermission();
-        break;
-      case "granted":
         vibrateAction();
-        startRecording();
-        break;
-      case "recording":
-        setTimeout(() => stopRecording(), RECORD_DURATION);
+        processRecording();
         break;
       case "searching":
         vibrateAction();
-        if (audio) recognizeRecording();
+        if (audio) {
+          recognizeRecording();
+          vibrateAction();
+        }
         break;
     }
   }, [recordingStatus]);
@@ -244,6 +195,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const value = {
     config,
     apiError,
+    recordingError,
     shazarrLoading,
     shazarrResponse,
     recordingStatus,

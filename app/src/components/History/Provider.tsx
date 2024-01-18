@@ -15,7 +15,7 @@ export type HistoryItem = {
   artist: string;
   date: string;
   data?: ShazamioTrackType;
-  stream?: Blob;
+  stream?: string;
 };
 
 const HistoryContext = React.createContext<HistoryContextType>(
@@ -31,7 +31,7 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
 
   function deleteHistoryItem(date: string) {
     const clone = [...(history || [])].filter((item) => item.date !== date);
-    setHistory(clone);
+    setHistory([...clone]);
   }
 
   async function getStorageHistory() {

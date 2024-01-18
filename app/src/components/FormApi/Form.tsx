@@ -18,6 +18,7 @@ export default function FormApi() {
   const inputRef = useRef<HTMLInputElement>();
   const {
     recordingStatus,
+    recordingError,
     apiError,
     actions: { fetchConfig },
   } = useShazarrProvider();
@@ -55,9 +56,12 @@ export default function FormApi() {
   return (
     <>
       {apiError && recordingStatus === "inactive" && <ApiErrorAlert />}
-
+      {recordingError && recordingStatus === "inactive" && (
+        <ApiErrorAlert message={recordingError} />
+      )}
       <Dialog
         fullWidth
+        maxWidth="xs"
         open={!!showApiForm}
         onClose={() => setShowApiForm(false)}
       >
