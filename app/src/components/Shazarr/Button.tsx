@@ -23,7 +23,7 @@ export default function ShazarrButton() {
       {recordingStatus !== "inactive" ? (
         <NotesAnimate
           duration={RECORD_DURATION}
-          run={recordingStatus === "start"}
+          run={recordingStatus === "recording"}
         />
       ) : null}
       {!shazarrResponse?.track ? (

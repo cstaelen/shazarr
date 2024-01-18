@@ -10,7 +10,7 @@ import {
 import { HistoryItem, useHistoryProvider } from "../History/Provider";
 import { ErrorCodeType } from "../FormApi/errorCode";
 
-export type RecordingStatusType = "start" | "searching" | "inactive";
+export type RecordingStatusType = "start" | "recording" | "searching" | "inactive";
 
 export const RECORD_DURATION = 8000;
 
@@ -69,6 +69,8 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           return;
         }
       }
+      setRecordingStatus("recording");
+      vibrateAction();
       const { value: isRecording } = await VoiceRecorder.startRecording();
       if (isRecording) {
         setTimeout(async () => {
@@ -77,8 +79,10 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             const {
               value: { recordDataBase64 },
             } = await VoiceRecorder.stopRecording();
+
             setAudio(recordDataBase64);
             setRecordingStatus("searching");
+            vibrateAction();
           }
         }, RECORD_DURATION);
       }
@@ -126,6 +130,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         }
       }
     }
+    vibrateAction();
     setRecordingStatus("inactive");
   };
 
@@ -174,14 +179,11 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
 
     switch (recordingStatus) {
       case "start":
-        vibrateAction();
         processRecording();
         break;
       case "searching":
-        vibrateAction();
         if (audio) {
           recognizeRecording();
-          vibrateAction();
         }
         break;
     }

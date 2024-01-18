@@ -1,3 +1,4 @@
+
 import { Check, MicOutlined, NetworkPing } from "@mui/icons-material";
 import { Chip, CircularProgress } from "@mui/material";
 import { useShazarrProvider } from "../Provider";
@@ -11,7 +12,7 @@ export default function StatusChip() {
       color={
         shazarrResponse?.track
           ? "success"
-          : shazarrLoading || recordingStatus === "start"
+          : shazarrLoading || recordingStatus === "recording"
           ? "default"
           : shazarrResponse && !shazarrResponse?.track
           ? "warning"
@@ -31,9 +32,7 @@ export default function StatusChip() {
         )
       }
       label={
-        recordingStatus === "start"
-          ? "recording ..."
-          : recordingStatus && recordingStatus !== "inactive"
+        recordingStatus && recordingStatus !== "inactive"
           ? `${recordingStatus}...`
           : shazarrResponse?.track
           ? "Found !"
