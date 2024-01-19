@@ -1,12 +1,12 @@
 # Shazarr - ShazamIO web UI
 This project provides a mobile app to shazam songs with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
 
-<img src="https://github.com/cstaelen/docker-shazarr/blob/1fd8ad85b17ada9726f6119dd1791ed7faef4f56/.github/screenshot.png" width="300"/>
+<img src="https://github.com/cstaelen/docker-shazarr/blob/b436440b628ff5c8a0925a57e63e6659b1bf273e/.github/screenshot.jpg" />
 
 ## Features
 - Audio microphone capture and song recognition using python [ShazamIO](https://github.com/dotX12/ShazamIO).
-- Download queried album to [Lidarr](https://github.com/linuxserver/docker-lidarr)
-- Download queried song/album with [Tidarr](https://github.com/cstaelen/tidarr)
+- Download discovered album to [Lidarr](https://github.com/linuxserver/docker-lidarr)
+- Download discovered song/album with [Tidarr](https://github.com/cstaelen/tidarr)
 - Listen on streaming app Spotify, Apple Music and Deezer
 - Show lyrics
 - Offline song record and recognize later (if API is not accessible)
@@ -14,11 +14,13 @@ This project provides a mobile app to shazam songs with [Lidarr](https://github.
 
 ## Get started
 
-In order to use it you will have to install :
-- API: Docker image to query Shazam services
-- Client : Android mobile app APK (iOS coming soon)
+In order to use it you will have to install:
+- **API** : Docker image to query Shazam services
+- **Client apps**:
+  - **android**: ✅ APK download
+  - **ios**: ⚠️ build app from Xcode ONLY (needs xcode and paired device)
 
-Proceed:
+Summary:
 1. Pull and up docker image `cstaelen/shazarr-api`
 2. Go to url on `http://<docker-host>:12358` to see qrcode
 3. Download APK by scanning qrcode
@@ -58,20 +60,36 @@ You will find your lidarr music path in web ui :
 <img src="https://github.com/cstaelen/docker-shazarr/blob/c30c348adedabb62e760a344a5347e90cc1b1056/.github/lidarr-path.png" width="500"/>
 
 
+API should be reachable at `http://<docker_machine_ip>:12358`.
+
 ### 2. Mobile App
 
 #### Android
+Downloads:
+- by scanning QR code displayed on `http://<docker_shazarr>:12358`
+- APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs/shazarr-app.apk)
 
-APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs/shazarr-app.apk)
+#### iOS (source build)
+Requirements: `npm`, `ionic`, `xcode`.
 
-#### iOS (coming soon)
+1. Git clone project first
+2. in project folder run:
+```
+cd docker-shazarr
+npm run ios:build
+```
+XCode should open project.
+
+3. [Pair your iOS device](https://developer.apple.com/documentation/xcode/running-your-app-in-simulator-or-on-a-device/#Connect-real-devices-to-your-Mac)
+4. build the app.
+5. After few secs, it should be installed on your ipad/iphone.
 
 ## Roadmap
 - [x] API using docker image
 - [x] Android app
 - [x] Record history: access last shazamed songs
 - [x] Offline record: record without API access, recognize song later 
-- [ ] iOS app
+- [-] iOS app: find a way to distribute packaged app without using app store and without have to build it
 
 ## Development
 - Docker image for API services (ExpressJS + python)
@@ -82,16 +100,22 @@ Start api in watch mode :
 ```
 make api/dev
 ```
-Start android front in watch mode :
+UI available on port 8100 http://localhost:12358/
+
+Start app in watch mode :
 ```
-make android/dev
+make app/dev
 ```
 UI available on port 8100 http://localhost:8100/
 
 ### Build
-Build for android studio:
+Build APK with Android studio:
 ```
 make android/build
+```
+Build ios app with Xcode:
+```
+make ios/build
 ```
 Build API docker image:
 ```

@@ -14,13 +14,6 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
-		75304DD52B588FD10065F80E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75304DD32B588FD10065F80E /* AudioToolbox.framework */; };
-		75304DDB2B58907C0065F80E /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75304DD72B58907C0065F80E /* CoreAudioKit.framework */; };
-		75304DDC2B58907C0065F80E /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75304DD82B58907C0065F80E /* CoreAudio.framework */; };
-		75304DDD2B58907C0065F80E /* AVFAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75304DD92B58907C0065F80E /* AVFAudio.framework */; };
-		75304DE52B5892070065F80E /* libAudioDSPCore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 75304DE22B5891F30065F80E /* libAudioDSPCore.tbd */; };
-		75304DE72B5892160065F80E /* libAudioStatistics.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 75304DE42B5891F30065F80E /* libAudioStatistics.tbd */; };
-		75304DE92B5892160065F80E /* libswiftCoreAudio.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 75304DE12B5891F30065F80E /* libswiftCoreAudio.tbd */; };
 		75FE82E42B588F5600197A9D /* Pods_Shazarr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 913D421E42808CFE0DA957A2 /* Pods_Shazarr.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,14 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75304DE92B5892160065F80E /* libswiftCoreAudio.tbd in Frameworks */,
 				75FE82E42B588F5600197A9D /* Pods_Shazarr.framework in Frameworks */,
-				75304DE72B5892160065F80E /* libAudioStatistics.tbd in Frameworks */,
-				75304DDB2B58907C0065F80E /* CoreAudioKit.framework in Frameworks */,
-				75304DE52B5892070065F80E /* libAudioDSPCore.tbd in Frameworks */,
-				75304DDC2B58907C0065F80E /* CoreAudio.framework in Frameworks */,
-				75304DD52B588FD10065F80E /* AudioToolbox.framework in Frameworks */,
-				75304DDD2B58907C0065F80E /* AVFAudio.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
