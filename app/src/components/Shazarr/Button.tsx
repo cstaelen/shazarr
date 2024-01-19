@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Box, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
 
@@ -13,7 +13,6 @@ export default function ShazarrButton() {
   const {
     shazarrLoading,
     shazarrResponse,
-    recordingError,
     recordingStatus,
     actions: { setRecordingStatus, resetSearch },
   } = useShazarrProvider();
@@ -36,7 +35,9 @@ export default function ShazarrButton() {
               }
             }}
           >
-            <Round isAnimate={recordingStatus === "start" || shazarrLoading}>
+            <Round
+              isAnimate={recordingStatus === "recording" || shazarrLoading}
+            >
               {shazarrLoading ? (
                 <MoreHorizOutlined fontSize="large" />
               ) : (

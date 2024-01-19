@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ShazarrButton from "./components/Shazarr/Button";
 import { ThemeProvider } from "@emotion/react";
+import { Device } from "@capacitor/device";
 import {
   CssBaseline,
   Container,
@@ -28,9 +29,16 @@ const darkTheme = createTheme({
 
 function App() {
   const [appLoaded, setAppLoaded] = useState(false);
+  const [devideOS, setDevideOS] = useState<"ios" | "android" | "web">();
+
+  const getDeviceOS = async () => {
+    const { platform } = await Device.getInfo();
+    setDevideOS(platform);
+  };
 
   useEffect(() => {
     setAppLoaded(true);
+    getDeviceOS();
   }, []);
 
   if (!appLoaded) return null;
@@ -42,7 +50,7 @@ function App() {
           <CssBaseline />
           <Main>
             <Container maxWidth="xs">
-              <Stack direction="column" minHeight={`100vh`}>
+              <StackStyled direction="column" os={devideOS}>
                 <Box>
                   <H1>Shazarr</H1>
                   <Typography component="h2" marginBottom={2}>
@@ -63,7 +71,7 @@ function App() {
                   <FormApi />
                   <HistoryList />
                 </Box>
-              </Stack>
+              </StackStyled>
             </Container>
           </Main>
         </ShazarrProvider>
@@ -82,7 +90,15 @@ const H1 = styled.h1`
 
 const Main = styled.main`
   background-image: linear-gradient(180deg, #153b50 0%, #0a1d28 100%);
+  display: flex;
   margin: 0;
   text-align: center;
   min-height: 100vh;
+`;
+
+const StackStyled = styled(Stack)<{
+  os: "ios" | "android" | "web" | undefined;
+}>`
+  min-height: 100vh;
+  padding: ${({ os }) => (os === "ios" ? "3rem 0" : 0)};
 `;
