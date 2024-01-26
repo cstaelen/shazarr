@@ -1,10 +1,9 @@
 # Shazarr - Unofficial Shazam mobile app web UI
 Shazarr project is a mobile app (android, ios) providing Shazam song recognition service with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
 
-<img src="https://github.com/cstaelen/docker-shazarr/blob/b436440b628ff5c8a0925a57e63e6659b1bf273e/.github/screenshot.jpg" />
 
 ## Features
-- Audio microphone capture and song recognition using python [node-shazam-api](https://github.com/asivery/node-shazam-api).
+- Audio microphone capture and song recognition using reverse Shazam API with [node-shazam-api](https://github.com/asivery/node-shazam-api).
 - Download discovered album with [Lidarr](https://github.com/linuxserver/docker-lidarr)
 - Download discovered song/album with [Tidarr](https://github.com/cstaelen/tidarr)
 - Add custom search service
@@ -12,13 +11,20 @@ Shazarr project is a mobile app (android, ios) providing Shazam song recognition
 - Show lyrics
 - Offline mode : record and recognize later (if network down)
 - Records history
+- Privacy: No login, no tracking, no API key
+
+## Screenshots
+
+<img src="https://github.com/cstaelen/docker-shazarr/blob/b436440b628ff5c8a0925a57e63e6659b1bf273e/.github/screenshot.jpg" />
 
 ## Get started
 
-- **Client apps**:
-  - **android**: ✅ APK download
-  - **ios**: ⚠️ build app from Xcode ONLY (needs xcode and paired device)
+- **android**: ✅ APK download
+- **ios**: ⚠️ build app from Xcode ONLY (needs xcode and paired device)
 
+Get last release  :
+
+[<img src="https://github.com/cstaelen/shazarr-app/blob/4465b4d6532a4ade3a970be2b9ade3705706e50f/.github/qr-release.png" width="100" />](https://github.com/cstaelen/shazarr-app/releases/latest)
 
 ### App options (fit with your data)
 
@@ -26,6 +32,8 @@ Shazarr project is a mobile app (android, ios) providing Shazam song recognition
 - **Lidarr API key**: `123456789abcdef`
 - **Lidarr library path**: `/music/`
 - **Tidarr URL**: `http://<tidarr-web-ui-url>`
+- **Custom service URL**: `http://<service-url>?query=`
+- **Custom service name**: `My custom music service`
 
 FYI you will find your lidarr music path in web ui :
 
@@ -34,7 +42,7 @@ FYI you will find your lidarr music path in web ui :
 ### Android APP
   APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs/shazarr-app.apk)
 
-#### iOS (source build)
+#### iOS ( /!\ source build only )
 Requirements: `npm`, `ionic`, `xcode`.
 
 1. Git clone project first
