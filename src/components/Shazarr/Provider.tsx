@@ -8,7 +8,6 @@ import { RECORD_DURATION } from "../../constant";
 import { Shazam, s16LEToSamplesArray } from "shazam-api";
 import { useConfigProvider } from "../Config/Provider";
 import { b64toBlob, ffmpegTranscode } from "./utils";
-import toWav from "audiobuffer-to-wav";
 
 export type RecordingStatusType =
   | "start"
@@ -47,13 +46,9 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [historySearch, setHistorySearch] = useState<string>();
 
   const { isNetworkConnected } = useConfigProvider();
-
   const {
     actions: { addItemToHistory, deleteHistoryItem },
   } = useHistoryProvider();
-
-  const controller = new AbortController();
-  const signal = controller.signal;
 
   const processRecording = async () => {
     setRecordingError(undefined);
@@ -107,69 +102,59 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       });
     } else {
       const blob = b64toBlob(audio);
-      let arrayBuffer: ArrayBuffer | null | string;
-      let audioCtx = new AudioContext();
 
-      let fileReader = new FileReader();
+      let arrayBuffer: ArrayBuffer;
+      const fileReader = new FileReader();
+      fileReader.onload = async function (event: ProgressEvent<FileReader>) {
+        if (event?.target?.result) {
+          arrayBuffer = event.target.result as ArrayBuffer;
 
-      fileReader.onloadend = () => {
-        arrayBuffer = fileReader.result;
+          const rawSamples = await ffmpegTranscode(
+            arrayBuffer,
+            "wav",
+            "-ar 16000 -ac 1 -f s16le"
+          );
 
-        audioCtx.decodeAudioData(
-          arrayBuffer as ArrayBuffer,
-          async function (buffer) {
-            var wav = toWav(buffer, {
-              float32: true,
-            });
-            console.log(wav);
-
-            const rawSamples = await ffmpegTranscode(
-              wav,
-              "wav",
-              "-ar 16000 -ac 1 -f s16le"
-            );
-
-            const shazam = new Shazam();
-            const samples = s16LEToSamplesArray(rawSamples);
-
-            try {
-              const response = (await shazam.recognizeSong(
-                samples
-              )) as any as ShazamioTrackType;
-
-              setApiError(JSON.stringify(response));
-
-              console.log("songData", response?.title);
-
-              setShazarrResponse({ track: response });
-              if (response?.title) {
-                addItemToHistory({
-                  title: response.title,
-                  artist: response.subtitle,
-                  date: Date.now(),
-                  data: response,
-                });
-                if (historySearch) {
-                  deleteHistoryItem(historySearch);
-                }
-              }
-
-              vibrateAction();
-              setRecordingStatus("inactive");
-              setShazarrLoading(false);
-            } catch (e: any) {
-              setApiError(true);
-            }
-          }
-        );
+          processShazam(rawSamples);
+        }
       };
 
       fileReader.readAsArrayBuffer(blob);
     }
   };
 
+  async function processShazam(rawSamples: Uint8Array) {
+    const shazam = new Shazam();
+    const samples = s16LEToSamplesArray(rawSamples);
+
+    try {
+      const response = (await shazam.recognizeSong(
+        samples
+      )) as any as ShazamioTrackType;
+
+      if (response?.title && recordingStatus !== "inactive") {
+        setShazarrResponse({ track: response });
+
+        addItemToHistory({
+          title: response.title,
+          artist: response.subtitle,
+          date: Date.now(),
+          data: response,
+        });
+        if (historySearch) {
+          deleteHistoryItem(historySearch);
+        }
+      }
+
+      vibrateAction();
+      setRecordingStatus("inactive");
+      setShazarrLoading(false);
+    } catch (e: any) {
+      setApiError("SHAZAM_API_ERROR");
+    }
+  }
+
   const resetSearch = async () => {
-    controller.abort();
     setShazarrResponse(undefined);
     setAudio(undefined);
     setRecordingStatus("inactive");
