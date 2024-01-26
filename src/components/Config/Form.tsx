@@ -33,6 +33,8 @@ export default function ConfigForm() {
       lidarr_api_key: data.get("lidarr_api_key")?.toString() || "",
       lidarr_library_path: data.get("lidarr_library_path")?.toString() || "",
       tidarr_url: data.get("tidarr_url")?.toString() || "",
+      custom_service_url: data.get("custom_service_url")?.toString() || "",
+      custom_service_name: data.get("custom_service_name")?.toString() || "",
     });
     setShowApiForm(false)
   }
@@ -80,7 +82,7 @@ export default function ConfigForm() {
           onClick={() => setShowApiForm(!showApiForm)}
           disabled={recordingStatus !== "inactive"}
         >
-          Server configuration
+          Services configuration
         </Button>
       </ButtonConfig>
     </>

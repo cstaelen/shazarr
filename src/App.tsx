@@ -56,7 +56,7 @@ function App() {
                   <Box>
                     <H1>Shazarr</H1>
                     <Typography component="h2" marginBottom={2}>
-                      - Unofficial Shazam API app -
+                      - Open Shazam API app -
                     </Typography>
                     <StatusChip />
                   </Box>

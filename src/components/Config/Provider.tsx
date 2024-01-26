@@ -17,6 +17,8 @@ export type ConfigStoreType = {
   lidarr_api_key: string;
   lidarr_library_path: string;
   tidarr_url: string;
+  custom_service_url: string;
+  custom_service_name: string;
 };
 
 type storeKeysType = keyof ConfigStoreType;
@@ -61,6 +63,16 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
       tidarr_url: {
         value: storeData?.tidarr_url,
         placeholder: "Tidarr URL (http://...)",
+        type: "url",
+      },
+      custom_service_url: {
+        value: storeData?.custom_service_url,
+        placeholder: "Custom service (http://...?query=)",
+        type: "url",
+      },
+      custom_service_name: {
+        value: storeData?.custom_service_name,
+        placeholder: "Custom service name",
         type: "url",
       },
     };
