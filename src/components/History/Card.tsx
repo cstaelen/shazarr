@@ -29,7 +29,7 @@ export default function HistoryCard({
           height="50"
           width="50"
           alt=""
-          src={item?.data?.images.coverart || ""}
+          src={item?.data?.images?.coverart || ""}
         />
       </CardMedia>
       <CardContent sx={{ padding: "0.5rem", flex: "1 1 0", textAlign: "left" }}>

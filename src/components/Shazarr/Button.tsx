@@ -4,9 +4,9 @@ import { Box, IconButton } from "@mui/material";
 import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import SpeakerIcon from "@mui/icons-material/Speaker";
-import FingerprintIcon from "@mui/icons-material/Fingerprint";
+// import FingerprintIcon from "@mui/icons-material/Fingerprint";
 
-// import skullImage from "../../resources/skull.png";
+import skullImage from "../../resources/skull.png";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
 import { useShazarrProvider } from "./Provider";
@@ -22,7 +22,7 @@ export default function ShazarrButton() {
   } = useShazarrProvider();
 
   return (
-    <Box width="100%">
+    <Box width="100%" sx={{ position: "relative" }}>
       {recordingStatus !== "inactive" ? (
         <NotesAnimate
           duration={RECORD_DURATION}
@@ -31,31 +31,6 @@ export default function ShazarrButton() {
       ) : null}
       {!shazarrResponse?.track ? (
         <>
-          <Box
-            sx={{
-              position: "fixed",
-              opacity: 0.05,
-              zIndex: 0,
-              overflow: "hidden",
-              height: "100vh",
-              textAlign: "center",
-              top: 0,
-              left: 0,
-              width: "100vw",
-            }}
-            >
-            <SpeakerIcon
-              sx={{
-                fontSize: 550,
-                left: "50%",
-                lineHeight: 0,
-                top: "calc(50%)",
-                transform: "translate(-50%, -50%)",
-                position: "absolute",
-              }}
-            />
-          </Box>
-
           <ListenButton style={{ marginTop: "10vh" }}>
             <IconButton
               onClick={() => {
@@ -69,17 +44,29 @@ export default function ShazarrButton() {
                 isAnimate={recordingStatus === "recording" || shazarrLoading}
               >
                 {recordingStatus === "searching" ? (
-                  <MoreHorizOutlined fontSize="large" />
+                  <MoreHorizOutlined
+                    style={{ transform: "scale(1.6)", opacity: 0.5 }}
+                  />
                 ) : recordingStatus === "recording" ? (
                   <GraphicEqIcon
-                    width="35"
                     style={{ transform: "scale(1.6)", opacity: 0.5 }}
                   />
                 ) : (
+                  <>
+                    {/*
                   <FingerprintIcon
-                    width="35"
-                    style={{ transform: "scale(1.6)", opacity: 0.5 }}
+                  width="35"
+                  style={{ transform: "scale(1.6)", opacity: 0.5 }}
                   />
+                */}
+                    <img
+                      src={skullImage}
+                      alt=""
+                      height="35"
+                      width="35"
+                      style={{ transform: "scale(1.6)", lineHeight: 0 }}
+                    />
+                  </>
                 )}
               </Round>
             </IconButton>
@@ -98,11 +85,16 @@ const ListenButton = styled.div`
 `;
 
 const Round = styled.div<{ isAnimate: boolean }>`
+  align-items: center;
   background: #fff;
   border-radius: 100%;
+  display: flex;
+  justify-content: center;
   line-height: 0;
   padding: 2rem;
   position: relative;
+  height: 6rem;
+  width: 6rem;
 
   svg {
     fill: black;

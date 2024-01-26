@@ -49,7 +49,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const { isNetworkConnected } = useConfigProvider();
 
   const {
-    actions: { addItemToHistory },
+    actions: { addItemToHistory, deleteHistoryItem },
   } = useHistoryProvider();
 
   const controller = new AbortController();
@@ -131,15 +131,35 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
 
             const shazam = new Shazam();
             const samples = s16LEToSamplesArray(rawSamples);
-            const response = await shazam.recognizeSong(samples) as any as  ShazamioTrackType;
 
-            console.log("songData", response?.title);
+            try {
+              const response = (await shazam.recognizeSong(
+                samples
+              )) as any as ShazamioTrackType;
 
-            setShazarrResponse({ track: response });
+              setApiError(JSON.stringify(response));
 
-            vibrateAction();
-            setRecordingStatus("inactive");
-            setShazarrLoading(false);
+              console.log("songData", response?.title);
+
+              setShazarrResponse({ track: response });
+              if (response?.title) {
+                addItemToHistory({
+                  title: response.title,
+                  artist: response.subtitle,
+                  date: Date.now(),
+                  data: response,
+                });
+                if (historySearch) {
+                  deleteHistoryItem(historySearch);
+                }
+              }
+
+              vibrateAction();
+              setRecordingStatus("inactive");
+              setShazarrLoading(false);
+            } catch (e: any) {
+              setApiError(true);
+            }
           }
         );
       };

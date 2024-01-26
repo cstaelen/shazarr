@@ -7,6 +7,7 @@ import CardResult from "./ui/Card";
 import StreamProviderButton from "./ui/StreamProviderButton";
 import { useShazarrProvider } from "./Provider";
 import { useConfigProvider } from "../Config/Provider";
+import CustomServiceButton from "./ui/CustomServiceButton";
 
 export default function ShazarrResults() {
   const {
@@ -27,12 +28,6 @@ export default function ShazarrResults() {
       <CardResult data={shazarrResponse.track} />
       <br />
       <Stack spacing={2} marginBottom={2}>
-        {config?.tidarr_url && (
-          <TidarrButton
-            searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
-            url={config.tidarr_url as string}
-          />
-        )}
         {config?.lidarr_url &&
           config?.lidarr_api_key &&
           config?.lidarr_library_path && (
@@ -40,7 +35,19 @@ export default function ShazarrResults() {
               searchTerms={`${albumName} ${shazarrResponse?.track.subtitle}`}
             />
           )}
-
+        {config?.tidarr_url && (
+          <TidarrButton
+            searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
+            url={config.tidarr_url as string}
+          />
+        )}
+        {config?.custom_service_url && config?.custom_service_name && (
+          <CustomServiceButton
+            searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
+            url={config.custom_service_url as string}
+            label={config.custom_service_name as string}
+          />
+        )}
         <Divider />
 
         <Box>
