@@ -1,7 +1,5 @@
 {
-    "name": "shazarr",
-    "integrations": {
-      "capacitor": {}
-    },
-    "type": "react"
-  }
+  "name": "New Ionic App",
+  "integrations": {},
+  "type": "react"
+}
