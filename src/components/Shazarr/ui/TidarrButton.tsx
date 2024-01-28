@@ -10,7 +10,7 @@ export default function TidarrButton({
 }) {
   function openTidar() {
     window.open(
-      `${url}/?query=${searchTerms}`,
+      `${url}/?query=${encodeURIComponent(searchTerms)}`,
       "_blank"
     );
   }
