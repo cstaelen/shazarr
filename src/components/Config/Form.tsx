@@ -5,6 +5,7 @@ import {
   Paper,
   Dialog,
   DialogContent,
+  Link,
 } from "@mui/material";
 import { useState, FormEvent } from "react";
 import { useShazarrProvider } from "../Shazarr/Provider";
@@ -36,7 +37,7 @@ export default function ConfigForm() {
       custom_service_url: data.get("custom_service_url")?.toString() || "",
       custom_service_name: data.get("custom_service_name")?.toString() || "",
     });
-    setShowApiForm(false)
+    setShowApiForm(false);
   }
 
   return (
@@ -69,6 +70,15 @@ export default function ConfigForm() {
                 </Paper>
               </Box>
             ))}
+            <Box sx={{ textAlign: "center", paddingBottom: "10px" }}>
+              <Link
+                href="https://github.com/cstaelen/shazarr-app"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Github page
+              </Link>
+            </Box>
             <Box>
               <Button fullWidth type="submit" variant="contained">
                 Save configuration
