@@ -144,6 +144,8 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         if (historySearch) {
           deleteHistoryItem(historySearch);
         }
+      } else {
+        setShazarrResponse({} as ShazamioResponseType);
       }
 
       vibrateAction();
