@@ -61,7 +61,8 @@ XCode should open project.
 - [x] Android app
 - [x] Record history: access last shazamed songs
 - [x] Offline record: record without API access, recognize song later 
-- [-] iOS app: find a way to distribute packaged app without using app store and without have to build it
+- [ ] Update ffmpeg and use WASM version
+- [ ] iOS app: find a way to distribute packaged app without using app store and without have to clone and build it
 
 ## Development
 - Android + iOS mobile app (ReactJS + Ionic/Capacitor)
