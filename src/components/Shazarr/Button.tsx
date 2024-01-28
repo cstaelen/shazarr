@@ -3,7 +3,7 @@
 import { Box, IconButton } from "@mui/material";
 import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import SpeakerIcon from "@mui/icons-material/Speaker";
+// import SpeakerIcon from "@mui/icons-material/Speaker";
 // import FingerprintIcon from "@mui/icons-material/Fingerprint";
 
 import skullImage from "../../resources/skull.png";

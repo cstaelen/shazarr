@@ -56,21 +56,19 @@ export default function NotesAnimate({
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
   useEffect(() => {
-    if (run) {
+    if (run && !isRunning) {
       setIsRunning(true);
-      if (!isRunning) {
-        const animationInterval = setInterval(
-          () => setNotes((notes) => [...notes, <Note key={notes.length} />]),
-          50
-        );
 
-        setTimeout(() => {
-          clearInterval(animationInterval);
-          setIsRunning(false);
-        }, duration);
-      }
+      const animationInterval = setInterval(
+        () => setNotes((notes) => [...notes, <Note key={notes.length} />]),
+        50
+      );
+
+      setTimeout(() => {
+        clearInterval(animationInterval);
+      }, duration);
     }
-  }, [run]);
+  }, [run, isRunning, duration]);
 
   return (
     <Wrapper>

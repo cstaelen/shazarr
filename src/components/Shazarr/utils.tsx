@@ -24,6 +24,10 @@ export const b64toBlob = (
   return blob;
 };
 
+function getPublicPathFor(script: string) {
+  return `${process.env.PUBLIC_URL}/${script}`;
+}
+
 export async function ffmpegTranscode(
   data: ArrayBuffer,
   inputFormat: string,
@@ -36,6 +40,8 @@ export async function ffmpegTranscode(
           logger: (payload: any) => {
             console.log(payload.action, payload.message);
           },
+          corePath: getPublicPathFor("ffmpeg-core.js"),
+          workerPath: getPublicPathFor("worker.min.js"),
         }
       : undefined
   );

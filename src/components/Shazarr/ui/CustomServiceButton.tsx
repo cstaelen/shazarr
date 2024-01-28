@@ -1,5 +1,5 @@
-import { Album, Search } from "@mui/icons-material";
-import { Button, styled } from "@mui/material";
+import { Search } from "@mui/icons-material";
+import { Button } from "@mui/material";
 
 export default function CustomServiceButton({
   searchTerms,
@@ -24,7 +24,3 @@ export default function CustomServiceButton({
     </Button>
   );
 }
-
-const AlbumStyled = styled(Album)`
-  font-size: 32px !important;
-`;
