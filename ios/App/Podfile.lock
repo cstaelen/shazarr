@@ -6,6 +6,8 @@ PODS:
     - Capacitor
   - CapacitorHaptics (5.0.6):
     - Capacitor
+  - CapacitorNetwork (5.0.6):
+    - Capacitor
   - CapacitorPreferences (5.0.6):
     - Capacitor
   - CapacitorVoiceRecorder (5.0.0):
@@ -16,6 +18,7 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
+  - "CapacitorNetwork (from `../../node_modules/@capacitor/network`)"
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
   - CapacitorVoiceRecorder (from `../../node_modules/capacitor-voice-recorder`)
 
@@ -28,6 +31,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/device"
   CapacitorHaptics:
     :path: "../../node_modules/@capacitor/haptics"
+  CapacitorNetwork:
+    :path: "../../node_modules/@capacitor/network"
   CapacitorPreferences:
     :path: "../../node_modules/@capacitor/preferences"
   CapacitorVoiceRecorder:
@@ -38,9 +43,10 @@ SPEC CHECKSUMS:
   CapacitorCordova: 931b48fcdbc9bc985fc2f16cec9f77c794a27729
   CapacitorDevice: 2c968f98a1ec4d22357418c1521e7ddc46c675e6
   CapacitorHaptics: 1fffc1217c7e64a472d7845be50fb0c2f7d4204c
+  CapacitorNetwork: d80b3e79bef6ec37640ee2806c19771f07ff2d0c
   CapacitorPreferences: f03954bcb0ff09c792909e46bff88e3183c16b10
   CapacitorVoiceRecorder: 872ea857b497ce2c71afe3e4eb5de0a74290c0db
 
-PODFILE CHECKSUM: 59058b6826f0a357c604b4312a78076a431106b7
+PODFILE CHECKSUM: ef2d8c830ee3aa622b01c2b6b18e76d8dce82d88
 
 COCOAPODS: 1.14.3
