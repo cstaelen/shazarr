@@ -2,9 +2,10 @@ import { Preferences } from "@capacitor/preferences";
 import React, { useContext, useState, ReactNode, useEffect } from "react";
 import { SHAZARR_STORE_KEY } from "../../constant";
 import { Network } from "@capacitor/network";
+import { usePrevious } from "@uidotdev/usehooks";
 
 type ConfigContextType = {
-  config?: ConfigStoreType;
+  config?: ConfigStoreType | null;
   formConfig?: ConfigFieldsType;
   isNetworkConnected: boolean;
   actions: {
@@ -36,48 +37,58 @@ const ConfigContext = React.createContext<ConfigContextType>(
 );
 
 export function ConfigProvider({ children }: { children: ReactNode }) {
-  const [config, setConfig] = useState<ConfigStoreType>();
+  const [config, setConfig] = useState<ConfigStoreType | null>(null);
   const [formConfig, setFormConfig] = useState<ConfigFieldsType>();
   const [isNetworkConnected, setIsNetworkConnected] = useState<boolean>(false);
 
+  const configPrevious = usePrevious(config);
+
   async function loadConfig() {
     const store = await getStorageValue(SHAZARR_STORE_KEY);
-    const storeData: ConfigStoreType = JSON.parse(store || "{}");
+
+    let storeData: ConfigStoreType = {} as ConfigStoreType;
+    if (store && store !== "undefined") {
+      storeData = JSON.parse(store);
+    }
+
+    setConfig(storeData);
+  }
+
+  function loadForm() {
+    if (!config) return null;
 
     const formFields: ConfigFieldsType = {
       lidarr_url: {
-        value: storeData?.lidarr_url,
+        value: config?.lidarr_url,
         placeholder: "Lidarr URL (http://...)",
         type: "url",
       },
       lidarr_api_key: {
-        value: storeData?.lidarr_api_key,
+        value: config?.lidarr_api_key,
         placeholder: "Lidarr api key ...",
         type: "text",
       },
       lidarr_library_path: {
-        value: storeData?.lidarr_library_path,
+        value: config?.lidarr_library_path,
         placeholder: "Lidarr music path (/music/)",
         type: "text",
       },
       tidarr_url: {
-        value: storeData?.tidarr_url,
+        value: config?.tidarr_url,
         placeholder: "Tidarr URL (http://...)",
         type: "url",
       },
       custom_service_url: {
-        value: storeData?.custom_service_url,
+        value: config?.custom_service_url,
         placeholder: "Custom service (http://...?query=)",
         type: "url",
       },
       custom_service_name: {
-        value: storeData?.custom_service_name,
+        value: config?.custom_service_name,
         placeholder: "Custom service name",
-        type: "url",
+        type: "text",
       },
     };
-
-    setConfig(storeData);
     setFormConfig(formFields);
   }
 
@@ -90,7 +101,9 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
   }
 
   async function setStorageValue(key: string, value: string) {
+    if (!value) return;
     await Preferences.set({ key: key, value: value });
+    loadForm();
   }
 
   async function logCurrentNetworkStatus() {
@@ -99,15 +112,15 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    if (config) {
+    if (config !== configPrevious) {
       setStorageValue(SHAZARR_STORE_KEY, JSON.stringify(config));
     }
-  }, [config]);
+  }, [config, configPrevious]);
 
   useEffect(() => {
     loadConfig();
     logCurrentNetworkStatus();
-  });
+  }, []);
 
   const value = {
     config,

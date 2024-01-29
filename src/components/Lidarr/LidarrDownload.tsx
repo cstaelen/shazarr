@@ -5,6 +5,7 @@ import AlbumCard from "./AlbumCard";
 import useLidarr from "./useLidarr";
 import React from "react";
 import lidarrLogo from "../../resources/lidarr.png";
+import { useConfigProvider } from "../Config/Provider";
 
 export default function LidarrDownload({
   searchTerms,
@@ -16,6 +17,7 @@ export default function LidarrDownload({
     results: lidarrResults,
     actions: { searchAlbum },
   } = useLidarr();
+  const { isNetworkConnected } = useConfigProvider();
 
   return (
     <>
@@ -33,7 +35,7 @@ export default function LidarrDownload({
             <CloseOutlined />
           ) : undefined
         }
-        disabled={lidarrLoading}
+        disabled={lidarrLoading || !isNetworkConnected}
         onClick={() => searchAlbum(searchTerms)}
       >
         <strong>Download with Lidarr</strong>
@@ -42,11 +44,11 @@ export default function LidarrDownload({
       {!lidarrLoading &&
         lidarrResults?.map((album) => (
           <>
-            {album?.releases?.map((release) => (
+            {album?.releases?.map((release, index) => (
               <AlbumCard
+                key={`lidarr-album-${index}`}
                 release={release}
                 album={album}
-                key={album.foreignAlbumId}
               />
             ))}
           </>

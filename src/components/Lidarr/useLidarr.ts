@@ -1,6 +1,6 @@
 "use client";
 
-import { monitorAlbumLidarr, queryLidarr } from "../../server/queryApi";
+import { monitorAlbumLidarr, queryLidarr } from "./server";
 import { LidarrResultType } from "../../types";
 import { useState } from "react";
 
@@ -21,6 +21,7 @@ export default function useLidarr() {
     } else {
       setLoading(true);
       const response = await queryLidarr(terms);
+      console.log(response);
       setResults(response);
       setLoading(false);
     }
@@ -28,10 +29,10 @@ export default function useLidarr() {
 
   const monitorAlbum = async (albumData: LidarrResultType) => {
     setLoading(true);
-    const response = await monitorAlbumLidarr(JSON.stringify(albumData));
+    const response = await monitorAlbumLidarr(albumData);
 
     let monitorOutput: LidarrMonitorResponseType = {
-      message: "",
+      message: "An error occured",
       status: "error",
       description: "",
     };

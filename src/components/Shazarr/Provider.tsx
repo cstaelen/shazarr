@@ -102,24 +102,16 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       });
     } else {
       const blob = b64toBlob(audio);
-
-      let arrayBuffer: ArrayBuffer;
-      const fileReader = new FileReader();
-      fileReader.onload = async function (event: ProgressEvent<FileReader>) {
-        if (event?.target?.result) {
-          arrayBuffer = event.target.result as ArrayBuffer;
-
-          const rawSamples = await ffmpegTranscode(
-            arrayBuffer,
-            "wav",
-            "-ar 16000 -ac 1 -f s16le"
-          );
-
+      blob.arrayBuffer().then(async (buffer) => {
+        const rawSamples = await ffmpegTranscode(
+          buffer,
+          "wav",
+          "-ar 16000 -ac 1 -f s16le -preset ultrafast"
+        );
+        if (recordingStatus !== "inactive") {
           processShazam(rawSamples);
         }
-      };
-
-      fileReader.readAsArrayBuffer(blob);
+      });
     }
   };
 

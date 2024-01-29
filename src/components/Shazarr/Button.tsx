@@ -3,9 +3,6 @@
 import { Box, IconButton } from "@mui/material";
 import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
-// import SpeakerIcon from "@mui/icons-material/Speaker";
-// import FingerprintIcon from "@mui/icons-material/Fingerprint";
-
 import skullImage from "../../resources/skull.png";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
@@ -53,12 +50,6 @@ export default function ShazarrButton() {
                   />
                 ) : (
                   <>
-                    {/*
-                  <FingerprintIcon
-                  width="35"
-                  style={{ transform: "scale(1.6)", opacity: 0.5 }}
-                  />
-                */}
                     <img
                       src={skullImage}
                       alt=""

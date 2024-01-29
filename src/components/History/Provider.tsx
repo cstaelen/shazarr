@@ -1,6 +1,7 @@
 import React, { useContext, useState, ReactNode, useEffect } from "react";
 import { ShazamioTrackType } from "../../types";
 import { Preferences } from "@capacitor/preferences";
+import { HISTORY_STORE_KEY } from "../../constant";
 
 type HistoryContextType = {
   history: HistoryItem[] | undefined;
@@ -36,7 +37,7 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
 
   async function getStorageHistory() {
     const { value } = await Preferences.get({
-      key: "shazarr_history",
+      key: HISTORY_STORE_KEY,
     });
     if (value) {
       setHistory(JSON.parse(value));
@@ -45,7 +46,7 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
 
   async function setStorageHistory(history: HistoryItem[]) {
     await Preferences.set({
-      key: "shazarr_history",
+      key: HISTORY_STORE_KEY,
       value: JSON.stringify(history),
     });
   }
