@@ -60,7 +60,8 @@ XCode should open project.
 ## Roadmap
 - [x] Android app
 - [x] Record history: access last shazamed songs
-- [x] Offline record: record without API access, recognize song later 
+- [x] Offline record: record without API access, recognize song later
+- [ ] Update notifications 
 - [ ] Update ffmpeg and use WASM version
 - [ ] iOS app: find a way to distribute packaged app without using app store and without have to clone and build it
 
