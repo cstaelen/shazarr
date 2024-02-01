@@ -3,6 +3,8 @@ import React, { useContext, useState, ReactNode, useEffect } from "react";
 import { SHAZARR_STORE_KEY } from "../../constant";
 import { Network } from "@capacitor/network";
 import { usePrevious } from "@uidotdev/usehooks";
+import { LocalNotifications } from "@capacitor/local-notifications";
+import skullImage from "../../resources/skull.png";
 
 type ConfigContextType = {
   config?: ConfigStoreType | null;
@@ -111,6 +113,64 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     setIsNetworkConnected(status.connected);
   }
 
+  async function checkForUpdates() {
+    if (process.env.REACT_APP_CURRENT_VERSION) {
+      const response = await fetch(
+        `https://api.github.com/repos${process.env.REACT_APP_REPO_API_URL}/releases`
+      );
+      const data = await response.json();
+      const latestVersion = data[0].tag_name.substring(
+        1,
+        data[0].tag_name.length
+      );
+      const currentVersion = process.env.REACT_APP_CURRENT_VERSION.substring(
+        1,
+        data[0].tag_name.length
+      );
+      if (latestVersion !== currentVersion && latestVersion > currentVersion) {
+        sendNotification();
+      }
+    }
+  }
+
+  async function sendNotification() {
+    let allowed = false;
+
+    const { display: currentPerm } =
+      await LocalNotifications.checkPermissions();
+
+    if (currentPerm !== "granted") {
+      const { display: requestStatus } =
+        await LocalNotifications.requestPermissions();
+      console.log("requestStatus", requestStatus);
+      if (requestStatus === "granted") {
+        allowed = true;
+      }
+    } else {
+      allowed = true;
+    }
+
+    if (!allowed) return;
+
+    LocalNotifications.addListener("localNotificationActionPerformed", () => {
+      window.open(
+        `https://github.com${process.env.REACT_APP_REPO_API_URL}/releases`
+      );
+    });
+    LocalNotifications.schedule({
+      notifications: [
+        {
+          title: "Update available !",
+          body: "A new version of Shazarr is available. Download it on github.",
+          id: 1,
+          largeIcon: skullImage,
+          smallIcon: skullImage,
+          schedule: { at: new Date(Date.now() + 500) },
+        },
+      ],
+    });
+  }
+
   useEffect(() => {
     if (config !== configPrevious) {
       setStorageValue(SHAZARR_STORE_KEY, JSON.stringify(config));
@@ -118,6 +178,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
   }, [config, configPrevious]);
 
   useEffect(() => {
+    checkForUpdates();
     loadConfig();
     logCurrentNetworkStatus();
   }, []);
