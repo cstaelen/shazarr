@@ -7,7 +7,7 @@ import { ErrorCodeType } from "../Config/errorCode";
 import { RECORD_DURATION } from "../../constant";
 import { Shazam, s16LEToSamplesArray } from "shazam-api";
 import { useConfigProvider } from "../Config/Provider";
-import { b64toBlob, ffmpegTranscode } from "./utils";
+import { b64toBlob, transcodePCM16 } from "./utils";
 
 export type RecordingStatusType =
   | "start"
@@ -49,8 +49,9 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const {
     actions: { addItemToHistory, deleteHistoryItem },
   } = useHistoryProvider();
+  // const { transcode } = useFFmpegTranscode();
 
-  const processRecording = async () => {
+  const processRecording = async (duration: number = RECORD_DURATION) => {
     setRecordingError(undefined);
     try {
       const { value: hasPerm } =
@@ -80,7 +81,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             setRecordingStatus("searching");
             vibrateAction();
           }
-        }, RECORD_DURATION);
+        }, duration);
       }
     } catch (e: any) {
       resetSearch();
@@ -88,7 +89,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const recognizeRecording = async () => {
+  const processTranscoding = () => {
     setShazarrLoading(true);
 
     if (!audio || audio.length === 0) return;
@@ -100,51 +101,46 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         date: Date.now(),
         stream: audio,
       });
+      vibrateAction();
+      setRecordingStatus("inactive");
+      setShazarrLoading(false);
     } else {
-      const blob = b64toBlob(audio);
-      blob.arrayBuffer().then(async (buffer) => {
-        const rawSamples = await ffmpegTranscode(
-          buffer,
-          "wav",
-          "-ar 16000 -ac 1 -f s16le -preset ultrafast"
-        );
+      transcodePCM16(audio).then((pcm16) => {
         if (recordingStatus !== "inactive") {
-          processShazam(rawSamples);
+          processShazam(pcm16);
         }
       });
     }
   };
 
-  async function processShazam(rawSamples: Uint8Array) {
+  function processShazam(samples: number[]) {
     const shazam = new Shazam();
-    const samples = s16LEToSamplesArray(rawSamples);
 
     try {
-      const response = (await shazam.recognizeSong(
-        samples
-      )) as any as ShazamioTrackType;
+      shazam.recognizeSong(samples).then((output: any) => {
+        const response = output as any as ShazamioTrackType;
+        if (response?.title && recordingStatus !== "inactive") {
+          setShazarrResponse({ track: response });
 
-      if (response?.title && recordingStatus !== "inactive") {
-        setShazarrResponse({ track: response });
-
-        addItemToHistory({
-          title: response.title,
-          artist: response.subtitle,
-          date: Date.now(),
-          data: response,
-        });
-        if (historySearch) {
-          deleteHistoryItem(historySearch);
+          addItemToHistory({
+            title: response.title,
+            artist: response.subtitle,
+            date: Date.now(),
+            data: response,
+          });
+          if (historySearch) {
+            deleteHistoryItem(historySearch);
+          }
+        } else {
+          setShazarrResponse({} as ShazamioResponseType);
         }
-      } else {
-        setShazarrResponse({} as ShazamioResponseType);
-      }
 
-      vibrateAction();
-      setRecordingStatus("inactive");
-      setShazarrLoading(false);
+        vibrateAction();
+        setRecordingStatus("inactive");
+        setShazarrLoading(false);
+      });
     } catch (e: any) {
-      setApiError("SHAZAM_API_ERROR");
+      setRecordingError("SHAZAM_API_ERROR");
     }
   }
 
@@ -187,7 +183,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         break;
       case "searching":
         if (audio) {
-          recognizeRecording();
+          processTranscoding();
         }
         break;
     }

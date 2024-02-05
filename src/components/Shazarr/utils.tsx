@@ -1,5 +1,3 @@
-import { createWorker } from "@ffmpeg/ffmpeg";
-
 export const b64toBlob = (
   b64Data: string,
   contentType = "",
@@ -24,40 +22,40 @@ export const b64toBlob = (
   return blob;
 };
 
-function getPublicPathFor(script: string) {
-  return `${process.env.PUBLIC_URL}/${script}`;
-}
+export async function transcodePCM16(base64: string) {
+  const blob = b64toBlob(base64);
+  const audioCtx = new AudioContext();
 
-export async function ffmpegTranscode(
-  data: ArrayBuffer,
-  inputFormat: string,
-  outputParameters: string
-) {
-  const debug = false;
-  let ffmpegProcess = createWorker(
-    debug
-      ? {
-          logger: (payload: any) => {
-            console.log(payload.action, payload.message);
-          },
-          corePath: getPublicPathFor("ffmpeg-core.js"),
-          workerPath: getPublicPathFor("worker.min.js"),
-        }
-      : undefined
+  const buffer = await blob.arrayBuffer();
+  const source = await audioCtx.decodeAudioData(buffer);
+
+  const TARGET_SAMPLE_RATE = 16000;
+
+  const offlineCtx = new OfflineAudioContext(
+    source.numberOfChannels,
+    source.duration * TARGET_SAMPLE_RATE,
+    TARGET_SAMPLE_RATE
   );
-  await ffmpegProcess.load();
 
-  await ffmpegProcess.write(`audio.${inputFormat}`, data);
-  try {
-    await ffmpegProcess.transcode(
-      `audio.${inputFormat}`,
-      `raw`,
-      outputParameters
-    );
-  } catch (er) {
-    console.log(er);
-  }
-  const output = (await ffmpegProcess.read(`raw`)).data;
-  await ffmpegProcess.worker.terminate();
-  return output;
+  const offlineSource = offlineCtx.createBufferSource();
+  offlineSource.buffer = source;
+  offlineSource.connect(offlineCtx.destination);
+  offlineSource.start();
+  return offlineCtx.startRendering().then((resampled) => {
+    const floats = new Float32Array(resampled.getChannelData(0).length);
+    resampled.getChannelData(0).forEach(function (sample, i) {
+      floats[i] = sample < 0 ? sample / 0x80 : sample / 0x7f;
+    });
+
+    const PCM16iSamples = [];
+    for (let i = 0; i < floats.length; i++) {
+      let val = Math.floor(32767 * floats[i]);
+      val = Math.min(32767, val);
+      val = Math.max(-32768, val);
+
+      PCM16iSamples.push(val);
+    }
+
+    return PCM16iSamples;
+  });
 }

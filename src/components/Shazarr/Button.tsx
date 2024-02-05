@@ -22,8 +22,7 @@ export default function ShazarrButton() {
     <Box width="100%" sx={{ position: "relative" }}>
       {recordingStatus !== "inactive" ? (
         <NotesAnimate
-          duration={RECORD_DURATION}
-          run={recordingStatus === "recording"}
+          duration={recordingStatus === "recording" ? RECORD_DURATION : 0}
         />
       ) : null}
       {!shazarrResponse?.track ? (
