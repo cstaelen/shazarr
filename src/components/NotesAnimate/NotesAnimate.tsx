@@ -47,16 +47,14 @@ const Note = () => {
 
 export default function NotesAnimate({
   duration,
-  run,
 }: {
   duration: number;
-  run: boolean;
 }) {
   const [notes, setNotes] = useState<ReactElement[]>([]);
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
   useEffect(() => {
-    if (run && !isRunning) {
+    if (!isRunning && duration > 0) {
       setIsRunning(true);
 
       const animationInterval = setInterval(
@@ -66,9 +64,9 @@ export default function NotesAnimate({
 
       setTimeout(() => {
         clearInterval(animationInterval);
-      }, duration);
+      }, (duration - 1000));
     }
-  }, [run, isRunning, duration]);
+  }, [isRunning, duration]);
 
   return (
     <Wrapper>
