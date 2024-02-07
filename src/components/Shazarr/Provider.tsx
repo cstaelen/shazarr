@@ -5,9 +5,9 @@ import { ShazamioResponseType, ShazamioTrackType } from "../../types";
 import { HistoryItem, useHistoryProvider } from "../History/Provider";
 import { ErrorCodeType } from "../Config/errorCode";
 import { RECORD_DURATION } from "../../constant";
-import { Shazam, s16LEToSamplesArray } from "shazam-api";
+import { Shazam } from "shazam-api";
 import { useConfigProvider } from "../Config/Provider";
-import { b64toBlob, transcodePCM16 } from "./utils";
+import { transcodePCM16 } from "./utils";
 
 export type RecordingStatusType =
   | "start"
@@ -16,7 +16,6 @@ export type RecordingStatusType =
   | "inactive";
 
 type ShazarrContextType = {
-  apiError: boolean | string;
   recordingError: ErrorCodeType | undefined;
   shazarrLoading: boolean;
   shazarrResponse: ShazamioResponseType | undefined;
@@ -39,7 +38,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [shazarrResponse, setShazarrResponse] =
     useState<ShazamioResponseType>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
-  const [apiError, setApiError] = useState<boolean | string>(false);
   const [recordingError, setRecordingError] = useState<ErrorCodeType>();
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
@@ -49,7 +47,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const {
     actions: { addItemToHistory, deleteHistoryItem },
   } = useHistoryProvider();
-  // const { transcode } = useFFmpegTranscode();
 
   const processRecording = async (duration: number = RECORD_DURATION) => {
     setRecordingError(undefined);
@@ -116,8 +113,9 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   function processShazam(samples: number[]) {
     const shazam = new Shazam();
 
-    try {
-      shazam.recognizeSong(samples).then((output: any) => {
+    shazam
+      .recognizeSong(samples)
+      .then((output: any) => {
         const response = output as any as ShazamioTrackType;
         if (response?.title && recordingStatus !== "inactive") {
           setShazarrResponse({ track: response });
@@ -134,14 +132,15 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         } else {
           setShazarrResponse({} as ShazamioResponseType);
         }
-
+      })
+      .catch((e) => {
+        setRecordingError("SHAZAM_API_ERROR");
+      })
+      .finally(() => {
         vibrateAction();
         setRecordingStatus("inactive");
         setShazarrLoading(false);
       });
-    } catch (e: any) {
-      setRecordingError("SHAZAM_API_ERROR");
-    }
   }
 
   const resetSearch = async () => {
@@ -190,7 +189,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   }, [recordingStatus]);
 
   const value = {
-    apiError,
     recordingError,
     shazarrLoading,
     shazarrResponse,
