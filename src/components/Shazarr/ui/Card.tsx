@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import { ImageWithFallback } from "../../Common/ImageWithFallback";
 import { useShazarrProvider } from "../Provider";
+import { App } from "@capacitor/app";
 
 export default function CardResult({ data }: { data: ShazamioTrackType }) {
   const [sample, setSample] = useState<HTMLAudioElement>();
@@ -47,11 +48,7 @@ export default function CardResult({ data }: { data: ShazamioTrackType }) {
   }
 
   useEffect(() => {
-    const sampleURI = data?.hub.actions.filter((action) => !!action.uri)[0].uri;
-    if (sampleURI) {
-      const player = new Audio(sampleURI);
-      setSample(player);
-    }
+    if (!data) return;
 
     const dataLyrics = data?.sections?.filter(
       (section) => section.type === "LYRICS"
@@ -59,6 +56,19 @@ export default function CardResult({ data }: { data: ShazamioTrackType }) {
     if (dataLyrics) {
       setLyrics(dataLyrics);
     }
+
+    const sampleURI = data?.hub.actions.filter((action) => !!action.uri)[0].uri;
+    if (!sampleURI) return;
+    const player = new Audio(sampleURI);
+    setSample(player);
+
+    App.addListener("pause", () => player?.pause());
+    App.addListener("backButton", () => player?.pause());
+
+    return () => {
+      player?.pause();
+      player?.remove();
+    };
   }, [data]);
 
   return (
