@@ -75,8 +75,9 @@ export default function ConfigForm() {
                 href="https://github.com/cstaelen/shazarr-app"
                 target="_blank"
                 rel="noreferrer"
+                fontSize={12}
               >
-                Github page
+                Github page - {process.env.REACT_APP_CURRENT_VERSION}
               </Link>
             </Box>
             <Box>

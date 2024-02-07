@@ -62,12 +62,17 @@ export default function CardResult({ data }: { data: ShazamioTrackType }) {
     const player = new Audio(sampleURI);
     setSample(player);
 
-    App.addListener("pause", () => player?.pause());
-    App.addListener("backButton", () => player?.pause());
-
-    return () => {
+    function pausePlayer() {
       player?.pause();
       player?.remove();
+      setIsPlaying(false);
+    }
+
+    App.addListener("pause", () => pausePlayer());
+    App.addListener("backButton", () => pausePlayer());
+
+    return () => {
+      pausePlayer();
     };
   }, [data]);
 

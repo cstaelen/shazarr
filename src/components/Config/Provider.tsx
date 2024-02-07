@@ -4,7 +4,6 @@ import { SHAZARR_STORE_KEY } from "../../constant";
 import { Network } from "@capacitor/network";
 import { usePrevious } from "@uidotdev/usehooks";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import skullImage from "../../resources/skull.png";
 
 type ConfigContextType = {
   config?: ConfigStoreType | null;
@@ -170,8 +169,8 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           title: "Update available !",
           body: "A new version of Shazarr is available. Download it on github.",
           id: 1,
-          largeIcon: skullImage,
-          smallIcon: skullImage,
+          largeIcon: "ic_stat_name/ic_stat_name",
+          smallIcon: "ic_stat_name/ic_stat_name",
           schedule: { at: new Date(Date.now() + 500) },
         },
       ],
