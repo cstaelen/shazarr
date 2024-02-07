@@ -6,6 +6,7 @@ import useLidarr from "./useLidarr";
 import React from "react";
 import lidarrLogo from "../../resources/lidarr.png";
 import { useConfigProvider } from "../Config/Provider";
+import ApiErrorAlert from "../Config/Alert";
 
 export default function LidarrDownload({
   searchTerms,
@@ -13,6 +14,7 @@ export default function LidarrDownload({
   searchTerms: string;
 }) {
   const {
+    lidarrError,
     loading: lidarrLoading,
     results: lidarrResults,
     actions: { searchAlbum },
@@ -41,7 +43,10 @@ export default function LidarrDownload({
         <strong>Download with Lidarr</strong>
       </Button>
       {lidarrLoading && <AlbumsLoader />}
+      {lidarrError ? <ApiErrorAlert message={lidarrError} /> : null}
       {!lidarrLoading &&
+        lidarrResults &&
+        lidarrResults.length > 0 &&
         lidarrResults?.map((album) => (
           <>
             {album?.releases?.map((release, index) => (

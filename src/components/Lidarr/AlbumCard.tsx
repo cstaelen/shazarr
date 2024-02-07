@@ -15,6 +15,7 @@ import useLidarr from "./useLidarr";
 import { LidarrAlbumRelease, LidarrResultType } from "../../types";
 import { ImageWithFallback } from "../Common/ImageWithFallback";
 import { Add } from "@mui/icons-material";
+import ApiErrorAlert from "../Config/Alert";
 
 export default function AlbumCard({
   album,
@@ -23,7 +24,7 @@ export default function AlbumCard({
   album: LidarrResultType;
   release: LidarrAlbumRelease;
 }) {
-  const { loading, monitorResponse, actions } = useLidarr();
+  const { lidarrError, loading, monitorResponse, actions } = useLidarr();
 
   return (
     <Card sx={{ position: "relative" }}>
@@ -128,6 +129,7 @@ export default function AlbumCard({
           </Alert>
         </Box>
       )}
+      {lidarrError ? <ApiErrorAlert message={lidarrError} /> : null}
     </Card>
   );
 }
