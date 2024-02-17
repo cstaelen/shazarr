@@ -4,6 +4,7 @@ import { monitorAlbumLidarr, queryLidarr } from "./server";
 import { LidarrResultType } from "../../types";
 import { useState } from "react";
 import { ErrorCodeType } from "../Config/errorCode";
+import { useConfigProvider } from "../Config/Provider";
 
 export type LidarrMonitorResponseType = {
   message: string;
@@ -17,7 +18,9 @@ export default function useLidarr() {
   const [results, setResults] = useState<LidarrResultType[]>();
   const [monitorResponse, setMonitorResponse] =
     useState<LidarrMonitorResponseType>();
-
+  const {
+    actions: { addToLogs },
+  } = useConfigProvider();
   const searchAlbum = async (terms: string) => {
     if (results && results.length > 0) {
       setResults(undefined);
@@ -25,8 +28,8 @@ export default function useLidarr() {
       setLoading(true);
 
       const response = await queryLidarr(terms);
-      console.log(response);
       if (response.error) {
+        addToLogs(`LIDARR_SEARCH_ERROR : ${response.message}`);
         setLidarrError("LIDARR_SEARCH_ERROR");
       } else {
         setResults(response);
@@ -69,6 +72,10 @@ export default function useLidarr() {
           status: "success",
           description: "",
         };
+      }
+
+      if (monitorOutput.status === "error") {
+        addToLogs(`LIDARR_MONITOR_ERROR : ${monitorOutput.message}`);
       }
       setMonitorResponse(monitorOutput);
     }

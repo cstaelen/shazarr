@@ -13,10 +13,11 @@ import {
 import styled from "@emotion/styled";
 import { HistoryProvider } from "./components/History/Provider";
 import { ShazarrProvider } from "./components/Shazarr/Provider";
-import ConfigForm from "./components/Config/Form";
+import Config from "./components/Config";
 import HistoryList from "./components/History/List";
 import StatusChip from "./components/Shazarr/ui/StatusChip";
 import { ConfigProvider } from "./components/Config/Provider";
+import LidarrDownload from "./components/Lidarr/LidarrDownload";
 
 const darkTheme = createTheme({
   palette: {
@@ -70,12 +71,13 @@ function App() {
                     <ShazarrButton />
                   </Box>
                   <Box>
-                    <ConfigForm />
+                    <Config />
                     <HistoryList />
                   </Box>
                 </StackStyled>
               </Container>
             </Main>
+            <LidarrDownload searchTerms="Nirvana nevermind" />
           </ShazarrProvider>
         </HistoryProvider>
       </ConfigProvider>

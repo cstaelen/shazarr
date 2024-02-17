@@ -6,21 +6,22 @@ import {
   Dialog,
   DialogContent,
   Link,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import { useState, FormEvent } from "react";
-import { useShazarrProvider } from "../Shazarr/Provider";
-import ApiErrorAlert from "./Alert";
+import { useShazarrProvider } from "../../Shazarr/Provider";
 import styled from "@emotion/styled";
-import { useConfigProvider } from "./Provider";
+import { useConfigProvider } from "../Provider";
 
-export default function ConfigForm() {
+export default function ModalConfig() {
   const [showApiForm, setShowApiForm] = useState<boolean>();
-  const { recordingStatus, recordingError } = useShazarrProvider();
+  const { recordingStatus } = useShazarrProvider();
   const {
     config,
     formConfig,
-    isNetworkConnected,
-    actions: { setConfig },
+    isDebugMode,
+    actions: { setConfig, setIsDebugMode },
   } = useConfigProvider();
 
   if (!formConfig) return null;
@@ -42,12 +43,6 @@ export default function ConfigForm() {
 
   return (
     <>
-      {!isNetworkConnected && recordingStatus === "inactive" && (
-        <ApiErrorAlert severity="info" />
-      )}
-      {recordingError && recordingStatus === "inactive" && (
-        <ApiErrorAlert message={recordingError} />
-      )}
       <Dialog
         fullWidth
         maxWidth="xs"
@@ -70,6 +65,17 @@ export default function ConfigForm() {
                 </Paper>
               </Box>
             ))}
+            <Box sx={{ textAlign: "center", paddingBottom: "10px" }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isDebugMode}
+                    onChange={(e) => setIsDebugMode(e.target.checked)}
+                  />
+                }
+                label="Show logs"
+              />
+            </Box>
             <Box sx={{ textAlign: "center", paddingBottom: "10px" }}>
               <Link
                 href="https://github.com/cstaelen/shazarr-app"
