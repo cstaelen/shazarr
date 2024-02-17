@@ -49,7 +49,7 @@ export default function ModalConfig() {
         open={!!showApiForm}
         onClose={() => setShowApiForm(false)}
       >
-        <DialogContent sx={{ padding: "0.5rem" }}>
+        <DialogContent sx={{ padding: 2 }}>
           <Box component="form" onSubmit={(e) => saveConfig(e)}>
             {Object.entries(formConfig)?.map((field, index) => (
               <Box marginBottom={2} key={`form-field-${index}`}>
@@ -73,7 +73,7 @@ export default function ModalConfig() {
                     onChange={(e) => setIsDebugMode(e.target.checked)}
                   />
                 }
-                label="Show logs"
+                label="Debug mode ?"
               />
             </Box>
             <Box sx={{ textAlign: "center", paddingBottom: "10px" }}>

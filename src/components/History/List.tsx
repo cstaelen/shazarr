@@ -1,9 +1,8 @@
-import { Box, Button, Container, Drawer } from "@mui/material";
+import { Box, Button, Container, Drawer, useTheme } from "@mui/material";
 import HistoryCard from "./Card";
 import { useHistoryProvider } from "./Provider";
 import { useState } from "react";
 import { Close, List } from "@mui/icons-material";
-import styled from "@emotion/styled";
 import { useShazarrProvider } from "../Shazarr/Provider";
 
 export default function HistoryList() {
@@ -12,6 +11,8 @@ export default function HistoryList() {
   const [listOpen, setListOpen] = useState<boolean>();
 
   if (!history || history?.length === 0) return null;
+
+  const { palette } = useTheme();
 
   return (
     <Box marginBottom={2}>
@@ -32,7 +33,7 @@ export default function HistoryList() {
           keepMounted: true,
         }}
       >
-        <StyledBox>
+        <Box sx={{ backgroundImage: palette.background.paper, paddingTop: 1 }}>
           <Container maxWidth="xs" sx={{ padding: "0 0.5rem" }}>
             {history?.map((item, index) => (
               <HistoryCard
@@ -51,13 +52,8 @@ export default function HistoryList() {
               Close records
             </Button>
           </Container>
-        </StyledBox>
+        </Box>
       </Drawer>
     </Box>
   );
 }
-
-const StyledBox = styled(Box)`
-  background: ${({ theme }: any) => theme.palette.background.paper};
-  padding-top: 0.5rem;
-`;

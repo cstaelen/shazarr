@@ -5,7 +5,7 @@ declare module "@ffmpeg/ffmpeg";
 
 interface Navigator {
   mediaDevices: {
-    webkitGetUserMedia: any;
-    mozGetUserMedia: any;
+    webkitGetUserMedia: object;
+    mozGetUserMedia: object;
   };
 }

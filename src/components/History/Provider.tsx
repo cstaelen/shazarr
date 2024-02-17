@@ -6,7 +6,7 @@ import { HISTORY_STORE_KEY } from "../../constant";
 type HistoryContextType = {
   history: HistoryItem[] | undefined;
   actions: {
-    addItemToHistory: any;
+    addItemToHistory: (item: HistoryItem) => void;
     deleteHistoryItem: (date: string) => void;
   };
 };

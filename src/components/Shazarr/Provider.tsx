@@ -83,9 +83,10 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           }
         }, duration);
       }
-    } catch (e: any) {
+    } catch (error: unknown) {
+      const e = error as Error;
       resetSearch();
-      setRecordingError(e.message);
+      setRecordingError("ERROR_RECORDING");
       addToLogs(
         `PROCESS_RECORDING_ERROR : [${new Date().toISOString()}] ${e.message}`,
       );
@@ -101,7 +102,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       addItemToHistory({
         title: "Offline record",
         artist: "Not discovered",
-        date: Date.now(),
+        date: Date.now().toString(),
         stream: audio,
       });
       vibrateAction();
@@ -121,24 +122,30 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
 
     shazam
       .recognizeSong(samples)
-      .then((output: any) => {
-        const response = output as any as ShazamioTrackType;
-        if (response?.title && recordingStatus !== "inactive") {
-          setShazarrResponse({ track: response });
+      .then(
+        (
+          output: {
+            [key: string]: string | object | number | undefined;
+          } | null,
+        ) => {
+          const response = output as ShazamioTrackType;
+          if (response?.title && recordingStatus !== "inactive") {
+            setShazarrResponse({ track: response });
 
-          addItemToHistory({
-            title: response.title,
-            artist: response.subtitle,
-            date: Date.now(),
-            data: response,
-          });
-          if (historySearch) {
-            deleteHistoryItem(historySearch);
+            addItemToHistory({
+              title: response.title,
+              artist: response.subtitle,
+              date: Date.now().toString(),
+              data: response,
+            });
+            if (historySearch) {
+              deleteHistoryItem(historySearch);
+            }
+          } else {
+            setShazarrResponse({} as ShazamioResponseType);
           }
-        } else {
-          setShazarrResponse({} as ShazamioResponseType);
-        }
-      })
+        },
+      )
       .catch((e) => {
         setRecordingError("SHAZAM_API_ERROR");
         addToLogs(

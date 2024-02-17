@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
     allowMixedContent: true,
   },
   ios: {
-    scheme: 'Shazarr',
+    scheme: "Shazarr",
   },
   server: {
     cleartext: true,

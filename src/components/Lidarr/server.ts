@@ -16,13 +16,13 @@ async function getConfigData() {
   return JSON.parse(storeData) as ConfigFieldsType;
 }
 
-async function fetchLidarr(url: string, options?: any) {
+async function fetchLidarr(url: string, options?: RequestInit) {
   const store = await getConfigData();
   if (!store) return;
 
   const baseUrl = store.lidarr_url;
 
-  const opts = {
+  const opts: RequestInit = {
     ...options,
     cache: "no-cache",
   };

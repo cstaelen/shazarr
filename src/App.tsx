@@ -17,7 +17,6 @@ import Config from "./components/Config";
 import HistoryList from "./components/History/List";
 import StatusChip from "./components/Shazarr/ui/StatusChip";
 import { ConfigProvider } from "./components/Config/Provider";
-import LidarrDownload from "./components/Lidarr/LidarrDownload";
 
 const darkTheme = createTheme({
   palette: {
@@ -77,7 +76,6 @@ function App() {
                 </StackStyled>
               </Container>
             </Main>
-            <LidarrDownload searchTerms="Nirvana nevermind" />
           </ShazarrProvider>
         </HistoryProvider>
       </ConfigProvider>
