@@ -45,11 +45,7 @@ const Note = () => {
   return Icons[iconIndex];
 };
 
-export default function NotesAnimate({
-  duration,
-}: {
-  duration: number;
-}) {
+export default function NotesAnimate({ duration }: { duration: number }) {
   const [notes, setNotes] = useState<ReactElement[]>([]);
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
@@ -59,12 +55,12 @@ export default function NotesAnimate({
 
       const animationInterval = setInterval(
         () => setNotes((notes) => [...notes, <Note key={notes.length} />]),
-        50
+        50,
       );
 
       setTimeout(() => {
         clearInterval(animationInterval);
-      }, (duration - 1000));
+      }, duration - 1000);
     }
   }, [isRunning, duration]);
 

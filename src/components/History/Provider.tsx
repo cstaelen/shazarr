@@ -20,7 +20,7 @@ export type HistoryItem = {
 };
 
 const HistoryContext = React.createContext<HistoryContextType>(
-  {} as HistoryContextType
+  {} as HistoryContextType,
 );
 
 export function HistoryProvider({ children }: { children: ReactNode }) {

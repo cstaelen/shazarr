@@ -39,7 +39,7 @@ export type ConfigFieldsType = {
 };
 
 const ConfigContext = React.createContext<ConfigContextType>(
-  {} as ConfigContextType
+  {} as ConfigContextType,
 );
 
 export function ConfigProvider({ children }: { children: ReactNode }) {
@@ -135,16 +135,16 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     if (process.env.REACT_APP_CURRENT_VERSION) {
       try {
         const response = await fetch(
-          `https://api.github.com/repos${process.env.REACT_APP_REPO_API_URL}/releases`
+          `https://api.github.com/repos${process.env.REACT_APP_REPO_API_URL}/releases`,
         );
         const data = await response.json();
         const latestVersion = data[0].tag_name.substring(
           1,
-          data[0].tag_name.length
+          data[0].tag_name.length,
         );
         const currentVersion = process.env.REACT_APP_CURRENT_VERSION.substring(
           1,
-          data[0].tag_name.length
+          data[0].tag_name.length,
         );
         if (
           latestVersion !== currentVersion &&
@@ -179,7 +179,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
 
     LocalNotifications.addListener("localNotificationActionPerformed", () => {
       window.open(
-        `https://github.com${process.env.REACT_APP_REPO_API_URL}/releases`
+        `https://github.com${process.env.REACT_APP_REPO_API_URL}/releases`,
       );
     });
     LocalNotifications.schedule({

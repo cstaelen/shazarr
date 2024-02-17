@@ -51,7 +51,7 @@ export default function CardResult({ data }: { data: ShazamioTrackType }) {
     if (!data) return;
 
     const dataLyrics = data?.sections?.filter(
-      (section) => section.type === "LYRICS"
+      (section) => section.type === "LYRICS",
     )?.[0]?.text;
     if (dataLyrics) {
       setLyrics(dataLyrics);

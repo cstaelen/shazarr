@@ -20,12 +20,18 @@ export default function StreamProviderButton({
       startIcon={<Headphones />}
       onClick={handleClick}
       style={{
-        background: type === "SPOTIFY" ? "#18d860" : type === "DEEZER" ? "#a239ff" : "#fff",
-        color: type === "DEEZER" ? "#fff" : type === "APPLE" ? "#fa586a" : "#212121",
+        background:
+          type === "SPOTIFY"
+            ? "#18d860"
+            : type === "DEEZER"
+              ? "#a239ff"
+              : "#fff",
+        color:
+          type === "DEEZER" ? "#fff" : type === "APPLE" ? "#fa586a" : "#212121",
         fontWeight: "bold",
         margin: "0.25rem",
       }}
-    > 
+    >
       {caption || type}
     </Button>
   );

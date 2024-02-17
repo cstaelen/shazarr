@@ -18,7 +18,7 @@ export default function ShazarrResults() {
   const { config } = useConfigProvider();
 
   const albumName = shazarrResponse?.track?.sections?.[0]?.metadata?.filter(
-    (m: any) => m?.title === "Album"
+    (m: any) => m?.title === "Album",
   )?.[0].text;
 
   if (!shazarrResponse) return null;
@@ -58,7 +58,7 @@ export default function ShazarrResults() {
                 uri={provider.actions?.[0]?.uri}
                 type={provider.type}
               />
-            )
+            ),
           )}
 
           {shazarrResponse?.track?.myshazam?.apple?.actions?.[0]?.uri && (

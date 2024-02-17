@@ -20,7 +20,7 @@ async function fetchLidarr(url: string, options?: any) {
   const store = await getConfigData();
   if (!store) return;
 
-  let baseUrl = store.lidarr_url;
+  const baseUrl = store.lidarr_url;
 
   const opts = {
     ...options,
@@ -46,7 +46,7 @@ export async function queryLidarr(term: string) {
   if (!store) return;
 
   const url = `/api/v1/album/lookup?term=${encodeURIComponent(
-    term as string
+    term as string,
   )}&apikey=${store.lidarr_api_key}`;
 
   return await fetchLidarr(url);

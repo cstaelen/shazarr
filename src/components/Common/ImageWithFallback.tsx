@@ -24,9 +24,9 @@ export const ImageWithFallback = ({
       alt={alt}
       onError={(e) => setError(e.toString())}
       src={fallbackImage}
-      onLoad={(e: {target: any}) => {
+      onLoad={(e: { target: any }) => {
         if (src) {
-          e.target.src = src
+          e.target.src = src;
         }
       }}
       {...props}

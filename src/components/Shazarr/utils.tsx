@@ -1,7 +1,7 @@
 export const b64toBlob = (
   b64Data: string,
   contentType = "",
-  sliceSize = 512
+  sliceSize = 512,
 ) => {
   const byteCharacters = atob(b64Data);
   const byteArrays = [];
@@ -34,7 +34,7 @@ export async function transcodePCM16(base64: string) {
   const offlineCtx = new OfflineAudioContext(
     source.numberOfChannels,
     source.duration * TARGET_SAMPLE_RATE,
-    TARGET_SAMPLE_RATE
+    TARGET_SAMPLE_RATE,
   );
 
   const offlineSource = offlineCtx.createBufferSource();

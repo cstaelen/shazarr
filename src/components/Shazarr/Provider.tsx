@@ -30,7 +30,7 @@ type ShazarrContextType = {
 };
 
 const ShazarrContext = React.createContext<ShazarrContextType>(
-  {} as ShazarrContextType
+  {} as ShazarrContextType,
 );
 
 export function ShazarrProvider({ children }: { children: ReactNode }) {
@@ -87,7 +87,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       resetSearch();
       setRecordingError(e.message);
       addToLogs(
-        `PROCESS_RECORDING_ERROR : [${new Date().toISOString()}] ${e.message}`
+        `PROCESS_RECORDING_ERROR : [${new Date().toISOString()}] ${e.message}`,
       );
     }
   };
@@ -142,7 +142,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       .catch((e) => {
         setRecordingError("SHAZAM_API_ERROR");
         addToLogs(
-          `SHAZAM_API_ERROR : [${new Date().toISOString()}] ${e.message}`
+          `SHAZAM_API_ERROR : [${new Date().toISOString()}] ${e.message}`,
         );
       })
       .finally(async () => {

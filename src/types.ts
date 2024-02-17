@@ -1,11 +1,11 @@
 export type ApiReturnType = { error: boolean; message: string };
 
 export type ShazamioResponseType = {
-  track:  ShazamioTrackType;
+  track: ShazamioTrackType;
 };
 
 export type ShazamioTrackType = {
-  genres: {primary: string}
+  genres: { primary: string };
   hub: {
     actions: ShazamActionType[];
     options: ShazamOptionType[];
@@ -39,7 +39,7 @@ type ShazamActionType = {
   type: string;
   uri?: string;
   id?: string;
-}
+};
 
 type ShazamOptionType = {
   actions: ShazamActionType[];
@@ -47,7 +47,7 @@ type ShazamOptionType = {
   listcaption: string;
   type: string;
   providername: string;
-}
+};
 
 export type ShazamProviderType = {
   actions: ShazamActionType[];
@@ -55,21 +55,21 @@ export type ShazamProviderType = {
   images: {
     default: string;
     overflow: string;
-  }
+  };
   type: string;
-}
+};
 
 type ShazamSectionType = {
   tabname: string;
   type: string;
   metadata?: {
-    title: string; 
+    title: string;
     text: string;
   }[];
   metapages?: [];
   youtubeurl?: string;
   text?: string[];
-}
+};
 
 export type LidarrResultType = {
   albumType: string;
@@ -89,7 +89,7 @@ export type LidarrResultType = {
   releases: LidarrAlbumRelease[];
   releaseDate: string;
   title: string;
-}
+};
 
 type LidarrArtistType = {
   added: string;
@@ -101,7 +101,7 @@ type LidarrArtistType = {
   ended: boolean;
   foreignArtistId: string;
   title: string;
-}
+};
 
 export type LidarrAlbumRelease = {
   foreignReleaseId: string;
@@ -109,9 +109,9 @@ export type LidarrAlbumRelease = {
   format: string;
   title: string;
   trackCount: number;
-}
+};
 
 export type APIConfigType = {
   LIDARR_ENABLED: string | boolean | undefined;
   TIDARR_URL: string | boolean | undefined;
-}
+};

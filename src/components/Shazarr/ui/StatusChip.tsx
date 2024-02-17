@@ -14,12 +14,12 @@ export default function StatusChip() {
         shazarrResponse?.track
           ? "success"
           : shazarrLoading || recordingStatus === "recording"
-          ? "default"
-          : shazarrResponse && !shazarrResponse?.track
-          ? "warning"
-          : !isNetworkConnected
-          ? "error"
-          : "info"
+            ? "default"
+            : shazarrResponse && !shazarrResponse?.track
+              ? "warning"
+              : !isNetworkConnected
+                ? "error"
+                : "info"
       }
       icon={
         recordingStatus && recordingStatus !== "inactive" ? (
@@ -36,12 +36,12 @@ export default function StatusChip() {
         recordingStatus && recordingStatus !== "inactive"
           ? `${recordingStatus}...`
           : shazarrResponse?.track
-          ? "Found !"
-          : shazarrResponse && !shazarrResponse?.track
-          ? "Not found. Get closer."
-          : !isNetworkConnected
-          ? "Offline mode"
-          : "Ready"
+            ? "Found !"
+            : shazarrResponse && !shazarrResponse?.track
+              ? "Not found. Get closer."
+              : !isNetworkConnected
+                ? "Offline mode"
+                : "Ready"
       }
       variant="outlined"
     />
