@@ -1,13 +1,13 @@
 import { Close } from "@mui/icons-material";
 import { Stack, Divider, Box, Button } from "@mui/material";
 import { ShazamProviderType } from "../../types";
-import LidarrDownload from "../Lidarr/LidarrDownload";
 import TidarrButton from "./ui/TidarrButton";
 import CardResult from "./ui/Card";
 import StreamProviderButton from "./ui/StreamProviderButton";
 import { useShazarrProvider } from "./Provider";
 import { useConfigProvider } from "../Config/Provider";
 import CustomServiceButton from "./ui/CustomServiceButton";
+import LidarrButton from "./ui/LidarrButton";
 
 export default function ShazarrResults() {
   const {
@@ -28,13 +28,12 @@ export default function ShazarrResults() {
       <CardResult data={shazarrResponse.track} />
       <br />
       <Stack spacing={2} marginBottom={2}>
-        {config?.lidarr_url &&
-          config?.lidarr_api_key &&
-          config?.lidarr_library_path && (
-            <LidarrDownload
-              searchTerms={`${albumName} ${shazarrResponse?.track.subtitle}`}
-            />
-          )}
+        {config?.lidarr_url && (
+          <LidarrButton
+            searchTerms={`${albumName} ${shazarrResponse?.track.subtitle}`}
+            url={config.lidarr_url as string}
+          />
+        )}
         {config?.tidarr_url && (
           <TidarrButton
             searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}

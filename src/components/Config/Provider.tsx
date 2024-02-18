@@ -1,6 +1,6 @@
 import { Preferences } from "@capacitor/preferences";
 import React, { useContext, useState, ReactNode, useEffect } from "react";
-import { SHAZARR_STORE_KEY, SHAZARR_LOGS_KEY } from "../../constant";
+import { SHAZARR_STORE_KEY } from "../../constant";
 import { Network } from "@capacitor/network";
 import { usePrevious } from "@uidotdev/usehooks";
 import { LocalNotifications } from "@capacitor/local-notifications";
@@ -9,20 +9,13 @@ type ConfigContextType = {
   config?: ConfigStoreType | null;
   formConfig?: ConfigFieldsType;
   isNetworkConnected: boolean;
-  isDebugMode: boolean;
-  logs: string[] | null;
   actions: {
     setConfig: (config: ConfigStoreType) => void;
-    addToLogs: (log: string) => void;
-    clearLogs: () => void;
-    setIsDebugMode: (isDebugMode: boolean) => void;
   };
 };
 
 export type ConfigStoreType = {
   lidarr_url: string;
-  lidarr_api_key: string;
-  lidarr_library_path: string;
   tidarr_url: string;
   custom_service_url: string;
   custom_service_name: string;
@@ -46,11 +39,8 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<ConfigStoreType | null>(null);
   const [formConfig, setFormConfig] = useState<ConfigFieldsType>();
   const [isNetworkConnected, setIsNetworkConnected] = useState<boolean>(false);
-  const [isDebugMode, setIsDebugMode] = useState<boolean>(false);
-  const [logs, setLogs] = useState<string[] | null>(null);
 
   const configPrevious = usePrevious(config);
-  const logsPrevious = usePrevious(logs);
 
   async function loadConfig() {
     const store = await getStorageValue(SHAZARR_STORE_KEY);
@@ -63,17 +53,6 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     setConfig(storeData);
   }
 
-  async function loadLogs() {
-    const store = await getStorageValue(SHAZARR_LOGS_KEY);
-
-    let logsData: string[] = [];
-    if (store && store !== "undefined") {
-      logsData = JSON.parse(store);
-    }
-
-    setLogs(logsData);
-  }
-
   function loadForm() {
     if (!config) return null;
 
@@ -82,16 +61,6 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
         value: config?.lidarr_url,
         placeholder: "Lidarr URL (http://...)",
         type: "url",
-      },
-      lidarr_api_key: {
-        value: config?.lidarr_api_key,
-        placeholder: "Lidarr api key ...",
-        type: "text",
-      },
-      lidarr_library_path: {
-        value: config?.lidarr_library_path,
-        placeholder: "Lidarr music path (/music/)",
-        type: "text",
       },
       tidarr_url: {
         value: config?.tidarr_url,
@@ -196,16 +165,6 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  function addToLogs(log: string) {
-    if (!isDebugMode) return;
-    const data = [...(logs || []), log];
-    setLogs(data);
-  }
-
-  function clearLogs() {
-    setLogs(null);
-  }
-
   useEffect(() => {
     if (config !== configPrevious) {
       setStorageValue(SHAZARR_STORE_KEY, JSON.stringify(config));
@@ -213,15 +172,8 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
   }, [config, configPrevious]);
 
   useEffect(() => {
-    if (logs !== logsPrevious) {
-      setStorageValue(SHAZARR_LOGS_KEY, JSON.stringify(logs));
-    }
-  }, [logs, logsPrevious]);
-
-  useEffect(() => {
     checkForUpdates();
     loadConfig();
-    loadLogs();
     logCurrentNetworkStatus();
   }, []);
 
@@ -229,13 +181,8 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     config,
     formConfig,
     isNetworkConnected,
-    isDebugMode,
-    logs,
     actions: {
       setConfig,
-      addToLogs,
-      clearLogs,
-      setIsDebugMode,
     },
   };
 

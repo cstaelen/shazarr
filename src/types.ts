@@ -1,5 +1,3 @@
-export type ApiReturnType = { error: boolean; message: string };
-
 export type ShazamioResponseType = {
   track: ShazamioTrackType;
 };
@@ -70,44 +68,4 @@ type ShazamSectionType = {
   metapages?: [];
   youtubeurl?: string;
   text?: string[];
-};
-
-export type LidarrResultType = {
-  albumType: string;
-  anyReleaseOk: boolean;
-  artist: LidarrArtistType;
-  artistId: number;
-  disambiguation: string;
-  duration: number;
-  foreignAlbumId: string;
-  images: {
-    coverType: string;
-    extension: string;
-    remoteUrl: string;
-    url: string;
-  }[];
-  mediumCount: number;
-  releases: LidarrAlbumRelease[];
-  releaseDate: string;
-  title: string;
-};
-
-type LidarrArtistType = {
-  added: string;
-  artistMetadataId: number;
-  artistName: string;
-  artistType: string;
-  disambiguation: string;
-  discogsId: number;
-  ended: boolean;
-  foreignArtistId: string;
-  title: string;
-};
-
-export type LidarrAlbumRelease = {
-  foreignReleaseId: string;
-  duration: number;
-  format: string;
-  title: string;
-  trackCount: number;
 };

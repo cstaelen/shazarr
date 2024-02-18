@@ -43,10 +43,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     useState<RecordingStatusType>("inactive");
   const [historySearch, setHistorySearch] = useState<string>();
 
-  const {
-    isNetworkConnected,
-    actions: { addToLogs },
-  } = useConfigProvider();
+  const { isNetworkConnected } = useConfigProvider();
   const {
     actions: { addItemToHistory, deleteHistoryItem },
   } = useHistoryProvider();
@@ -83,13 +80,9 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           }
         }, duration);
       }
-    } catch (error: unknown) {
-      const e = error as Error;
+    } catch {
       resetSearch();
       setRecordingError("ERROR_RECORDING");
-      addToLogs(
-        `PROCESS_RECORDING_ERROR : [${new Date().toISOString()}] ${e.message}`,
-      );
     }
   };
 
@@ -146,11 +139,8 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           }
         },
       )
-      .catch((e) => {
+      .catch(() => {
         setRecordingError("SHAZAM_API_ERROR");
-        addToLogs(
-          `SHAZAM_API_ERROR : [${new Date().toISOString()}] ${e.message}`,
-        );
       })
       .finally(async () => {
         await vibrateAction();

@@ -1,12 +1,11 @@
 import { useShazarrProvider } from "../Shazarr/Provider";
 import ApiErrorAlert from "./Alert";
 import { useConfigProvider } from "./Provider";
-import ModalConfig from "./modals/ModalConfig";
-import ModalLogs from "./modals/ModalLogs";
+import ConfigForm from "./Form";
 
 export default function Config() {
   const { recordingStatus, recordingError } = useShazarrProvider();
-  const { formConfig, isNetworkConnected, isDebugMode } = useConfigProvider();
+  const { formConfig, isNetworkConnected } = useConfigProvider();
 
   if (!formConfig) return null;
 
@@ -19,8 +18,7 @@ export default function Config() {
         <ApiErrorAlert message={recordingError} />
       )}
 
-      {isDebugMode ? <ModalLogs /> : null}
-      <ModalConfig />
+      <ConfigForm />
     </>
   );
 }
