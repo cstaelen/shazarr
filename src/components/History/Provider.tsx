@@ -1,21 +1,21 @@
 import React, { useContext, useState, ReactNode, useEffect } from "react";
-import { ShazamioTrackType } from "../../types";
 import { Preferences } from "@capacitor/preferences";
 import { HISTORY_STORE_KEY } from "../../constant";
+import { ShazamTrack } from "shazam-api/dist/types";
 
 type HistoryContextType = {
   history: HistoryItem[] | undefined;
   actions: {
     addItemToHistory: (item: HistoryItem) => void;
-    deleteHistoryItem: (date: string) => void;
+    deleteHistoryItem: (date: number) => void;
   };
 };
 
 export type HistoryItem = {
   title: string;
   artist: string;
-  date: string;
-  data?: ShazamioTrackType;
+  date: number;
+  data?: ShazamTrack;
   stream?: string;
 };
 
@@ -30,7 +30,7 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
     setHistory([...(history || []), item]);
   }
 
-  function deleteHistoryItem(date: string) {
+  function deleteHistoryItem(date: number) {
     const clone = [...(history || [])].filter((item) => item.date !== date);
     setHistory([...clone]);
   }

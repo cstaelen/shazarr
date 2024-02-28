@@ -1,6 +1,5 @@
 import { Close } from "@mui/icons-material";
 import { Stack, Divider, Box, Button } from "@mui/material";
-import { ShazamProviderType } from "../../types";
 import TidarrButton from "./ui/TidarrButton";
 import CardResult from "./ui/Card";
 import StreamProviderButton from "./ui/StreamProviderButton";
@@ -8,6 +7,7 @@ import { useShazarrProvider } from "./Provider";
 import { useConfigProvider } from "../Config/Provider";
 import CustomServiceButton from "./ui/CustomServiceButton";
 import LidarrButton from "./ui/LidarrButton";
+import { ShazamProvider } from "shazam-api/dist/types";
 
 export default function ShazarrResults() {
   const {
@@ -17,7 +17,7 @@ export default function ShazarrResults() {
 
   const { config } = useConfigProvider();
 
-  const albumName = shazarrResponse?.track?.sections?.[0]?.metadata?.filter(
+  const albumName = shazarrResponse?.sections?.[0]?.metadata?.filter(
     (m: { title: string }) => m?.title === "Album",
   )?.[0].text;
 
@@ -25,24 +25,24 @@ export default function ShazarrResults() {
 
   return (
     <>
-      <CardResult data={shazarrResponse.track} />
+      <CardResult data={shazarrResponse} />
       <br />
       <Stack spacing={2} marginBottom={2}>
         {config?.lidarr_url && (
           <LidarrButton
-            searchTerms={`${albumName} ${shazarrResponse?.track.subtitle}`}
+            searchTerms={`${albumName} ${shazarrResponse.subtitle}`}
             url={config.lidarr_url as string}
           />
         )}
         {config?.tidarr_url && (
           <TidarrButton
-            searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
+            searchTerms={`${shazarrResponse.title} ${shazarrResponse.subtitle}`}
             url={config.tidarr_url as string}
           />
         )}
         {config?.custom_service_url && config?.custom_service_name && (
           <CustomServiceButton
-            searchTerms={`${shazarrResponse?.track.title} ${shazarrResponse?.track.subtitle}`}
+            searchTerms={`${shazarrResponse.title} ${shazarrResponse.subtitle}`}
             url={config.custom_service_url as string}
             label={config.custom_service_name as string}
           />
@@ -50,8 +50,8 @@ export default function ShazarrResults() {
         <Divider />
 
         <Box>
-          {shazarrResponse?.track?.hub?.providers?.map(
-            (provider: ShazamProviderType, index: number) => (
+          {shazarrResponse?.hub?.providers?.map(
+            (provider: ShazamProvider, index: number) => (
               <StreamProviderButton
                 key={`provider-${index}`}
                 uri={provider.actions?.[0]?.uri}
@@ -60,9 +60,9 @@ export default function ShazarrResults() {
             ),
           )}
 
-          {shazarrResponse?.track?.myshazam?.apple?.actions?.[0]?.uri && (
+          {shazarrResponse?.myshazam?.apple?.actions?.[0]?.uri && (
             <StreamProviderButton
-              uri={shazarrResponse.track.myshazam.apple.actions?.[0]?.uri}
+              uri={shazarrResponse.myshazam.apple.actions?.[0]?.uri}
               type="APPLE"
             />
           )}

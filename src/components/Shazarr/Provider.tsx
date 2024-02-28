@@ -1,13 +1,13 @@
 import { VoiceRecorder } from "capacitor-voice-recorder";
 import { Haptics } from "@capacitor/haptics";
 import React, { useContext, useState, ReactNode, useEffect } from "react";
-import { ShazamioResponseType, ShazamioTrackType } from "../../types";
 import { HistoryItem, useHistoryProvider } from "../History/Provider";
 import { ErrorCodeType } from "../Config/errorCode";
 import { RECORD_DURATION } from "../../constant";
 import { Shazam } from "shazam-api";
 import { useConfigProvider } from "../Config/Provider";
 import { transcodePCM16 } from "./utils";
+import { ShazamRoot, ShazamTrack } from "shazam-api/dist/types";
 
 export type RecordingStatusType =
   | "start"
@@ -18,12 +18,12 @@ export type RecordingStatusType =
 type ShazarrContextType = {
   recordingError: ErrorCodeType | undefined;
   shazarrLoading: boolean;
-  shazarrResponse: ShazamioResponseType | undefined;
+  shazarrResponse: ShazamTrack | undefined;
   recordingStatus: RecordingStatusType;
   audio: string | undefined;
   actions: {
     setRecordingStatus: (status: RecordingStatusType) => void;
-    setShazarrResponse: (data: ShazamioResponseType) => void;
+    setShazarrResponse: (data: ShazamTrack) => void;
     searchOfflineRecord: (item: HistoryItem) => void;
     resetSearch: () => void;
   };
@@ -35,13 +35,12 @@ const ShazarrContext = React.createContext<ShazarrContextType>(
 
 export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [audio, setAudio] = useState<string>();
-  const [shazarrResponse, setShazarrResponse] =
-    useState<ShazamioResponseType>();
+  const [shazarrResponse, setShazarrResponse] = useState<ShazamTrack>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
   const [recordingError, setRecordingError] = useState<ErrorCodeType>();
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
-  const [historySearch, setHistorySearch] = useState<string>();
+  const [historySearch, setHistorySearch] = useState<number>();
 
   const { isNetworkConnected } = useConfigProvider();
   const {
@@ -95,7 +94,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       addItemToHistory({
         title: "Offline record",
         artist: "Not discovered",
-        date: Date.now().toString(),
+        date: Date.now(),
         stream: audio,
       });
       vibrateAction();
@@ -114,31 +113,25 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     const shazam = new Shazam();
 
     shazam
-      .recognizeSong(samples)
-      .then(
-        (
-          output: {
-            [key: string]: string | object | number | undefined;
-          } | null,
-        ) => {
-          const response = output as ShazamioTrackType;
-          if (response?.title && recordingStatus !== "inactive") {
-            setShazarrResponse({ track: response });
+      .fullRecognizeSong(samples)
+      .then((value: ShazamRoot | null) => {
+        const response = value?.track;
+        if (response?.title && recordingStatus !== "inactive") {
+          setShazarrResponse(response);
 
-            addItemToHistory({
-              title: response.title,
-              artist: response.subtitle,
-              date: Date.now().toString(),
-              data: response,
-            });
-            if (historySearch) {
-              deleteHistoryItem(historySearch);
-            }
-          } else {
-            setShazarrResponse({} as ShazamioResponseType);
+          addItemToHistory({
+            title: response.title,
+            artist: response.subtitle,
+            date: Date.now(),
+            data: response,
+          });
+          if (historySearch) {
+            deleteHistoryItem(historySearch);
           }
-        },
-      )
+        } else {
+          setShazarrResponse(undefined);
+        }
+      })
       .catch(() => {
         setRecordingError("SHAZAM_API_ERROR");
       })

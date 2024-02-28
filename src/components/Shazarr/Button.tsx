@@ -25,7 +25,7 @@ export default function ShazarrButton() {
           duration={recordingStatus === "recording" ? RECORD_DURATION : 0}
         />
       ) : null}
-      {!shazarrResponse?.track ? (
+      {!shazarrResponse ? (
         <>
           <ListenButton style={{ marginTop: "10vh" }}>
             <IconButton

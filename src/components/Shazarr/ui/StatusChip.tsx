@@ -11,11 +11,11 @@ export default function StatusChip() {
   return (
     <Chip
       color={
-        shazarrResponse?.track
+        shazarrResponse
           ? "success"
           : shazarrLoading || recordingStatus === "recording"
             ? "default"
-            : shazarrResponse && !shazarrResponse?.track
+            : shazarrResponse && !shazarrResponse
               ? "warning"
               : !isNetworkConnected
                 ? "error"
@@ -24,7 +24,7 @@ export default function StatusChip() {
       icon={
         recordingStatus && recordingStatus !== "inactive" ? (
           <CircularProgress size={16} style={{ margin: "0 5px 0 10px" }} />
-        ) : shazarrResponse?.track ? (
+        ) : shazarrResponse ? (
           <Check fontSize="small" />
         ) : !isNetworkConnected ? (
           <NetworkPing fontSize="small" />
@@ -35,9 +35,9 @@ export default function StatusChip() {
       label={
         recordingStatus && recordingStatus !== "inactive"
           ? `${recordingStatus}...`
-          : shazarrResponse?.track
+          : shazarrResponse
             ? "Found !"
-            : shazarrResponse && !shazarrResponse?.track
+            : shazarrResponse && !shazarrResponse
               ? "Not found. Get closer."
               : !isNetworkConnected
                 ? "Offline mode"

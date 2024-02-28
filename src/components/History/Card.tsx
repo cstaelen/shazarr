@@ -6,7 +6,6 @@ import { CardActions, CardMedia, IconButton } from "@mui/material";
 import { ImageWithFallback } from "../Common/ImageWithFallback";
 import { useShazarrProvider } from "../Shazarr/Provider";
 import { HistoryItem, useHistoryProvider } from "./Provider";
-import { ShazamioResponseType } from "../../types";
 
 export default function HistoryCard({
   item,
@@ -21,6 +20,9 @@ export default function HistoryCard({
   const {
     actions: { deleteHistoryItem },
   } = useHistoryProvider();
+
+  const date = new Date(item.date).toUTCString();
+  const dateRecord = new Date(date).toLocaleString();
 
   return (
     <Card
@@ -39,16 +41,15 @@ export default function HistoryCard({
           <strong>{item.title}</strong> {`- ${item.artist}`}
           <br />
           <small>
-            <i>{new Date(item.date).toLocaleString()}</i>
+            <i>{dateRecord}</i>
           </small>
         </Typography>
       </CardContent>
       <CardActions>
         <IconButton
           onClick={() => {
-            const data = { track: item.data } as ShazamioResponseType;
             if (item?.data) {
-              setShazarrResponse(data);
+              setShazarrResponse(item.data);
             } else {
               searchOfflineRecord(item);
             }

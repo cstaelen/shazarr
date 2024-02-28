@@ -22,8 +22,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
-    "shazam-api": "0.1.3",
-    "typescript": "^4"
+    "shazam-api": "0.2.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -41,7 +40,8 @@
     "patch-package": "^8.0.0",
     "prettier": "^3.2.5",
     "source-map-loader": "^5.0.0",
-    "ts-prune": "^0.10.3"
+    "ts-prune": "^0.10.3",
+    "typescript": "^4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -56,8 +56,7 @@
     "find-deadcode": "ts-prune | (! grep -v 'used in module')",
     "depcheck": "npx depcheck",
     "eslint": "eslint src",
-    "eslint-fix": "eslint --fix src",
-    "postinstall": "patch-package"
+    "eslint-fix": "eslint --fix src"
   },
   "eslintConfig": {
     "extends": [

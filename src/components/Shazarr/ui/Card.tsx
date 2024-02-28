@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { ShazamioTrackType } from "../../../types";
 import {
   ExpandMore,
   PauseCircleFilled,
@@ -26,8 +25,9 @@ import {
 import { ImageWithFallback } from "../../Common/ImageWithFallback";
 import { useShazarrProvider } from "../Provider";
 import { App } from "@capacitor/app";
+import { ShazamTrack } from "shazam-api/dist/types";
 
-export default function CardResult({ data }: { data: ShazamioTrackType }) {
+export default function CardResult({ data }: { data: ShazamTrack }) {
   const [sample, setSample] = useState<HTMLAudioElement>();
   const [lyrics, setLyrics] = useState<string[]>();
   const [isPlaying, setIsPlaying] = useState<boolean>();

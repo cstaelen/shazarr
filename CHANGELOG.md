@@ -3,6 +3,19 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.0.7
+### 🖍 Changed
+* Update `shazam-api` node package to 0.2.0
+* Remove git patch package and clean code
+### 🐛 Fixed
+* Fix datetime issue on android
+
+## 📦 0.0.6
+### 🖍 Changed
+* Use Lidarr in lazy mode to avoid API issue
+
+Clean code - code style
+
 ## 📦 0.0.5
 ### 🐛 Fixed
 * Fix Audio player keeps playing issue
