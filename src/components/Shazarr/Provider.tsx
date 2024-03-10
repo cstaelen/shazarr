@@ -130,6 +130,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           }
         } else {
           setShazarrResponse(undefined);
+          setRecordingError("SHAZARR_NOT_FOUND");
         }
       })
       .catch(() => {
