@@ -25,7 +25,7 @@ export default function LidarrButton({
       startIcon={<img src={lidarrLogo} alt="" width="32" height="32" />}
       onClick={() => openTidar()}
     >
-      <strong>Download with Tidarr</strong>
+      <strong>Download with Lidarr</strong>
     </Button>
   );
 }

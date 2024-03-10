@@ -3,6 +3,10 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.0.8
+### 🐛 Fixed
+* Fix missing "not found" message
+
 ## 📦 0.0.7
 ### 🖍 Changed
 * Update `shazam-api` node package to 0.2.0
