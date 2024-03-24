@@ -29,8 +29,6 @@ Get last release  :
 ### App options (fit with your data)
 
 - **Lidarr URL** : `http://<lidarr-web-ui-url>`
-- **Lidarr API key**: `123456789abcdef`
-- **Lidarr library path**: `/music/`
 - **Tidarr URL**: `http://<tidarr-web-ui-url>`
 - **Custom service URL**: `http://<service-url>?query=`
 - **Custom service name**: `My custom music service`
