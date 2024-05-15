@@ -1,0 +1,199 @@
+{
+    "matches": [
+        {
+            "id": "265200025",
+            "offset": 12.782737304,
+            "timeskew": 0.0013953447,
+            "frequencyskew": -0.00020134449
+        }
+    ],
+    "location": {
+        "accuracy": 0.01
+    },
+    "timestamp": 1715808867833,
+    "timezone": "Europe/Paris",
+    "track": {
+        "layout": "5",
+        "type": "MUSIC",
+        "key": "60010180",
+        "title": "Randy Dandy-Oh",
+        "subtitle": "The Dreadnoughts",
+        "images": {
+            "background": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/89/2c/1a/892c1adc-e9d8-77cb-46d7-dd70e1cd97da/pr_source.png/800x800cc.jpg",
+            "coverart": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/8a/4e/6e/8a4e6e9f-6a82-5847-c64d-5dc3129df21b/cover.jpg/400x400cc.jpg",
+            "coverarthq": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/8a/4e/6e/8a4e6e9f-6a82-5847-c64d-5dc3129df21b/cover.jpg/400x400cc.jpg",
+            "joecolor": "b:f0f0f0p:000000s:292827t:303030q:51504f"
+        },
+        "share": {
+            "subject": "Randy Dandy-Oh - The Dreadnoughts",
+            "text": "Randy Dandy-Oh by The Dreadnoughts",
+            "href": "https://www.shazam.com/track/60010180/randy-dandy-oh",
+            "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/8a/4e/6e/8a4e6e9f-6a82-5847-c64d-5dc3129df21b/cover.jpg/400x400cc.jpg",
+            "twitter": "I used @Shazam to discover Randy Dandy-Oh by The Dreadnoughts.",
+            "html": "https://www.shazam.com/snippets/email-share/60010180?lang=en&country=US",
+            "avatar": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/89/2c/1a/892c1adc-e9d8-77cb-46d7-dd70e1cd97da/pr_source.png/800x800cc.jpg",
+            "snapchat": "https://www.shazam.com/partner/sc/track/60010180"
+        },
+        "hub": {
+            "type": "APPLEMUSIC",
+            "image": "https://images.shazam.com/static/icons/hub/ios/v5/applemusic_{scalefactor}.png",
+            "actions": [
+                {
+                    "name": "apple",
+                    "type": "applemusicplay",
+                    "id": "896288089"
+                },
+                {
+                    "name": "apple",
+                    "type": "uri",
+                    "uri": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/61/68/3b/61683bbc-bcca-411f-d460-5a894bb513c9/mzaf_2797442894212639830.plus.aac.p.m4a"
+                }
+            ],
+            "options": [
+                {
+                    "caption": "OPEN IN",
+                    "actions": [
+                        {
+                            "name": "hub:applemusic:deeplink",
+                            "type": "applemusicopen",
+                            "uri": "https://music.apple.com/us/album/randy-dandy-oh/896288077?i=896288089&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                        },
+                        {
+                            "name": "hub:applemusic:deeplink",
+                            "type": "uri",
+                            "uri": "https://music.apple.com/us/album/randy-dandy-oh/896288077?i=896288089&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                        }
+                    ],
+                    "beacondata": {
+                        "type": "open",
+                        "providername": "applemusic"
+                    },
+                    "image": "https://images.shazam.com/static/icons/hub/ios/v5/overflow-open-option_{scalefactor}.png",
+                    "type": "open",
+                    "listcaption": "Open in Apple Music",
+                    "overflowimage": "https://images.shazam.com/static/icons/hub/ios/v5/applemusic-overflow_{scalefactor}.png",
+                    "colouroverflowimage": false,
+                    "providername": "applemusic"
+                },
+                {
+                    "caption": "BUY",
+                    "actions": [
+                        {
+                            "type": "uri",
+                            "uri": "https://itunes.apple.com/us/album/randy-dandy-oh/896288077?i=896288089&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=itunes&itsct=Shazam_ios"
+                        }
+                    ],
+                    "beacondata": {
+                        "type": "buy",
+                        "providername": "itunes"
+                    },
+                    "image": "https://images.shazam.com/static/icons/hub/ios/v5/itunes-overflow-buy_{scalefactor}.png",
+                    "type": "buy",
+                    "listcaption": "Buy on iTunes",
+                    "overflowimage": "https://images.shazam.com/static/icons/hub/ios/v5/itunes-overflow-buy_{scalefactor}.png",
+                    "colouroverflowimage": false,
+                    "providername": "itunes"
+                }
+            ],
+            "providers": [
+                {
+                    "caption": "Open in Spotify",
+                    "images": {
+                        "overflow": "https://images.shazam.com/static/icons/hub/ios/v5/spotify-overflow_{scalefactor}.png",
+                        "default": "https://images.shazam.com/static/icons/hub/ios/v5/spotify_{scalefactor}.png"
+                    },
+                    "actions": [
+                        {
+                            "name": "hub:spotify:searchdeeplink",
+                            "type": "uri",
+                            "uri": "spotify:search:Randy%20Dandy-Oh%20The%20Dreadnoughts"
+                        }
+                    ],
+                    "type": "SPOTIFY"
+                },
+                {
+                    "caption": "Open in Deezer",
+                    "images": {
+                        "overflow": "https://images.shazam.com/static/icons/hub/ios/v5/deezer-overflow_{scalefactor}.png",
+                        "default": "https://images.shazam.com/static/icons/hub/ios/v5/deezer_{scalefactor}.png"
+                    },
+                    "actions": [
+                        {
+                            "name": "hub:deezer:searchdeeplink",
+                            "type": "uri",
+                            "uri": "deezer-query://www.deezer.com/play?query=%7Btrack%3A%27Randy+Dandy-Oh%27%20artist%3A%27The+Dreadnoughts%27%7D"
+                        }
+                    ],
+                    "type": "DEEZER"
+                }
+            ],
+            "explicit": false,
+            "displayname": "APPLE MUSIC"
+        },
+        "sections": [
+            {
+                "type": "SONG",
+                "metapages": [
+                    {
+                        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/89/2c/1a/892c1adc-e9d8-77cb-46d7-dd70e1cd97da/pr_source.png/800x800cc.jpg",
+                        "caption": "The Dreadnoughts"
+                    },
+                    {
+                        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/8a/4e/6e/8a4e6e9f-6a82-5847-c64d-5dc3129df21b/cover.jpg/400x400cc.jpg",
+                        "caption": "Randy Dandy-Oh"
+                    }
+                ],
+                "tabname": "Song",
+                "metadata": [
+                    {
+                        "title": "Album",
+                        "text": "Polka's Not Dead"
+                    },
+                    {
+                        "title": "Label",
+                        "text": "Stomp Records"
+                    },
+                    {
+                        "title": "Released",
+                        "text": "2010"
+                    }
+                ]
+            },
+            {
+                "type": "RELATED",
+                "url": "https://cdn.shazam.com/shazam/v3/en/US/iphone/-/tracks/track-similarities-id-60010180?startFrom=0&pageSize=20&connected=",
+                "tabname": "Related"
+            }
+        ],
+        "url": "https://www.shazam.com/track/60010180/randy-dandy-oh",
+        "artists": [
+            {
+                "id": "42",
+                "adamid": "292280012"
+            }
+        ],
+        "isrc": "CASE11000099",
+        "genres": {
+            "primary": "Punk"
+        },
+        "urlparams": {
+            "{tracktitle}": "Randy+Dandy-Oh",
+            "{trackartist}": "The+Dreadnoughts"
+        },
+        "myshazam": {
+            "apple": {
+                "actions": [
+                    {
+                        "name": "myshazam:apple",
+                        "type": "uri",
+                        "uri": "https://music.apple.com/us/album/randy-dandy-oh/896288077?i=896288089&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                    }
+                ]
+            }
+        },
+        "highlightsurls": {},
+        "relatedtracksurl": "https://cdn.shazam.com/shazam/v3/en/US/iphone/-/tracks/track-similarities-id-60010180?startFrom=0&pageSize=20&connected=",
+        "albumadamid": "896288077"
+    },
+    "tagid": "461A1003-235D-4859-B067-CA1FCC7B726A"
+}

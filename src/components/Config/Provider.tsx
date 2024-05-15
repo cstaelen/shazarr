@@ -175,6 +175,11 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     checkForUpdates();
     loadConfig();
     logCurrentNetworkStatus();
+    const logInterval = setInterval(() => logCurrentNetworkStatus(), 5000);
+
+    return () => {
+      clearInterval(logInterval);
+    };
   }, []);
 
   const value = {

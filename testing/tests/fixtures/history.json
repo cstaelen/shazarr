@@ -1,0 +1,566 @@
+[
+    {
+        "title": "Chillin'",
+        "artist": "Modjo",
+        "date": 1715939118463,
+        "data": {
+            "layout": "5",
+            "type": "MUSIC",
+            "key": "5748248",
+            "title": "Chillin'",
+            "subtitle": "Modjo",
+            "images": {
+                "background": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/a7/2e/3f/a72e3fa5-1a8f-f1c3-4691-2f42206000a2/pr_source.png/800x800cc.jpg",
+                "coverart": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f5/25/2b/f5252b6e-0659-890b-7e9d-0e691944b95b/cover.jpg/400x400cc.jpg",
+                "coverarthq": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f5/25/2b/f5252b6e-0659-890b-7e9d-0e691944b95b/cover.jpg/400x400cc.jpg",
+                "joecolor": "b:1c211dp:fefefcs:90b0e3t:d1d2cfq:7993bb"
+            },
+            "share": {
+                "subject": "Chillin' - Modjo",
+                "text": "Chillin' by Modjo",
+                "href": "https://www.shazam.com/track/5748248/chillin",
+                "image": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f5/25/2b/f5252b6e-0659-890b-7e9d-0e691944b95b/cover.jpg/400x400cc.jpg",
+                "twitter": "I used @Shazam to discover Chillin' by Modjo.",
+                "html": "https://www.shazam.com/snippets/email-share/5748248?lang=en&country=US",
+                "avatar": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/a7/2e/3f/a72e3fa5-1a8f-f1c3-4691-2f42206000a2/pr_source.png/800x800cc.jpg",
+                "snapchat": "https://www.shazam.com/partner/sc/track/5748248"
+            },
+            "hub": {
+                "type": "APPLEMUSIC",
+                "image": "https://images.shazam.com/static/icons/hub/ios/v5/applemusic_{scalefactor}.png",
+                "actions": [
+                    {
+                        "name": "apple",
+                        "type": "applemusicplay",
+                        "id": "692624263"
+                    },
+                    {
+                        "name": "apple",
+                        "type": "uri",
+                        "uri": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/3d/91/96/3d919613-1c6c-e350-34c5-dcb5acbbef69/mzaf_1715107421462239116.plus.aac.ep.m4a"
+                    }
+                ],
+                "options": [
+                    {
+                        "caption": "OPEN IN",
+                        "actions": [
+                            {
+                                "name": "hub:applemusic:deeplink",
+                                "type": "applemusicopen",
+                                "uri": "https://music.apple.com/us/album/chillin/692624255?i=692624263&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                            },
+                            {
+                                "name": "hub:applemusic:deeplink",
+                                "type": "uri",
+                                "uri": "https://music.apple.com/us/album/chillin/692624255?i=692624263&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                            }
+                        ],
+                        "beacondata": {
+                            "type": "open",
+                            "providername": "applemusic"
+                        },
+                        "image": "https://images.shazam.com/static/icons/hub/ios/v5/overflow-open-option_{scalefactor}.png",
+                        "type": "open",
+                        "listcaption": "Open in Apple Music",
+                        "overflowimage": "https://images.shazam.com/static/icons/hub/ios/v5/applemusic-overflow_{scalefactor}.png",
+                        "colouroverflowimage": false,
+                        "providername": "applemusic"
+                    },
+                    {
+                        "caption": "BUY",
+                        "actions": [
+                            {
+                                "type": "uri",
+                                "uri": "https://itunes.apple.com/us/album/chillin/692624255?i=692624263&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=itunes&itsct=Shazam_ios"
+                            }
+                        ],
+                        "beacondata": {
+                            "type": "buy",
+                            "providername": "itunes"
+                        },
+                        "image": "https://images.shazam.com/static/icons/hub/ios/v5/itunes-overflow-buy_{scalefactor}.png",
+                        "type": "buy",
+                        "listcaption": "Buy on iTunes",
+                        "overflowimage": "https://images.shazam.com/static/icons/hub/ios/v5/itunes-overflow-buy_{scalefactor}.png",
+                        "colouroverflowimage": false,
+                        "providername": "itunes"
+                    }
+                ],
+                "providers": [
+                    {
+                        "caption": "Open in Spotify",
+                        "images": {
+                            "overflow": "https://images.shazam.com/static/icons/hub/ios/v5/spotify-overflow_{scalefactor}.png",
+                            "default": "https://images.shazam.com/static/icons/hub/ios/v5/spotify_{scalefactor}.png"
+                        },
+                        "actions": [
+                            {
+                                "name": "hub:spotify:searchdeeplink",
+                                "type": "uri",
+                                "uri": "spotify:search:Chillin%27%20Modjo"
+                            }
+                        ],
+                        "type": "SPOTIFY"
+                    },
+                    {
+                        "caption": "Open in Deezer",
+                        "images": {
+                            "overflow": "https://images.shazam.com/static/icons/hub/ios/v5/deezer-overflow_{scalefactor}.png",
+                            "default": "https://images.shazam.com/static/icons/hub/ios/v5/deezer_{scalefactor}.png"
+                        },
+                        "actions": [
+                            {
+                                "name": "hub:deezer:searchdeeplink",
+                                "type": "uri",
+                                "uri": "deezer-query://www.deezer.com/play?query=%7Btrack%3A%27Chillin%5C%27%27%20artist%3A%27Modjo%27%7D"
+                            }
+                        ],
+                        "type": "DEEZER"
+                    }
+                ],
+                "explicit": false,
+                "displayname": "APPLE MUSIC"
+            },
+            "sections": [
+                {
+                    "type": "SONG",
+                    "metapages": [
+                        {
+                            "image": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/a7/2e/3f/a72e3fa5-1a8f-f1c3-4691-2f42206000a2/pr_source.png/800x800cc.jpg",
+                            "caption": "Modjo"
+                        },
+                        {
+                            "image": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f5/25/2b/f5252b6e-0659-890b-7e9d-0e691944b95b/cover.jpg/400x400cc.jpg",
+                            "caption": "Chillin'"
+                        }
+                    ],
+                    "tabname": "Song",
+                    "metadata": [
+                        {
+                            "title": "Album",
+                            "text": "Modjo (Remastered)"
+                        },
+                        {
+                            "title": "Label",
+                            "text": "Modjo Music"
+                        },
+                        {
+                            "title": "Released",
+                            "text": "2001"
+                        }
+                    ]
+                },
+                {
+                    "type": "RELATED",
+                    "url": "https://cdn.shazam.com/shazam/v3/en/US/iphone/-/tracks/track-similarities-id-5748248?startFrom=0&pageSize=20&connected=",
+                    "tabname": "Related"
+                }
+            ],
+            "url": "https://www.shazam.com/track/5748248/chillin",
+            "artists": [
+                {
+                    "id": "42",
+                    "adamid": "13453219"
+                }
+            ],
+            "isrc": "FR9W10100534",
+            "genres": {
+                "primary": "Pop"
+            },
+            "urlparams": {
+                "{tracktitle}": "Chillin%27",
+                "{trackartist}": "Modjo"
+            },
+            "myshazam": {
+                "apple": {
+                    "actions": [
+                        {
+                            "name": "myshazam:apple",
+                            "type": "uri",
+                            "uri": "https://music.apple.com/us/album/chillin/692624255?i=692624263&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                        }
+                    ]
+                }
+            },
+            "highlightsurls": {},
+            "relatedtracksurl": "https://cdn.shazam.com/shazam/v3/en/US/iphone/-/tracks/track-similarities-id-5748248?startFrom=0&pageSize=20&connected=",
+            "albumadamid": "692624255"
+        }
+    },
+    {
+        "title": "Fly Like an Eagle",
+        "artist": "Steve Miller Band",
+        "date": 1715939146777,
+        "data": {
+            "layout": "5",
+            "type": "MUSIC",
+            "key": "10015269",
+            "title": "Fly Like an Eagle",
+            "subtitle": "Steve Miller Band",
+            "images": {
+                "background": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/f5/a3/e0/f5a3e04c-07c0-1128-4a41-728d5345c4c8/mza_5307523159630067331.png/800x800cc.jpg",
+                "coverart": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/29/fb/fb/29fbfb3e-9c63-fe43-b46b-f52a5081b66f/00602547847348.rgb.jpg/400x400cc.jpg",
+                "coverarthq": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/29/fb/fb/29fbfb3e-9c63-fe43-b46b-f52a5081b66f/00602547847348.rgb.jpg/400x400cc.jpg",
+                "joecolor": "b:231f20p:ffc428s:f1a84dt:d2a226q:c88d44"
+            },
+            "share": {
+                "subject": "Fly Like an Eagle - Steve Miller Band",
+                "text": "Fly Like an Eagle by Steve Miller Band",
+                "href": "https://www.shazam.com/track/10015269/fly-like-an-eagle",
+                "image": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/29/fb/fb/29fbfb3e-9c63-fe43-b46b-f52a5081b66f/00602547847348.rgb.jpg/400x400cc.jpg",
+                "twitter": "I used @Shazam to discover Fly Like an Eagle by Steve Miller Band.",
+                "html": "https://www.shazam.com/snippets/email-share/10015269?lang=en&country=US",
+                "avatar": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/f5/a3/e0/f5a3e04c-07c0-1128-4a41-728d5345c4c8/mza_5307523159630067331.png/800x800cc.jpg",
+                "snapchat": "https://www.shazam.com/partner/sc/track/10015269"
+            },
+            "hub": {
+                "type": "APPLEMUSIC",
+                "image": "https://images.shazam.com/static/icons/hub/ios/v5/applemusic_{scalefactor}.png",
+                "actions": [
+                    {
+                        "name": "apple",
+                        "type": "applemusicplay",
+                        "id": "1440832763"
+                    },
+                    {
+                        "name": "apple",
+                        "type": "uri",
+                        "uri": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/f4/e1/fe/f4e1fe4f-d36f-43ec-06b4-a5ac92ec9f68/mzaf_5821903771995822541.plus.aac.ep.m4a"
+                    }
+                ],
+                "options": [
+                    {
+                        "caption": "OPEN IN",
+                        "actions": [
+                            {
+                                "name": "hub:applemusic:deeplink",
+                                "type": "applemusicopen",
+                                "uri": "https://music.apple.com/us/album/fly-like-an-eagle/1440832463?i=1440832763&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                            },
+                            {
+                                "name": "hub:applemusic:deeplink",
+                                "type": "uri",
+                                "uri": "https://music.apple.com/us/album/fly-like-an-eagle/1440832463?i=1440832763&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                            }
+                        ],
+                        "beacondata": {
+                            "type": "open",
+                            "providername": "applemusic"
+                        },
+                        "image": "https://images.shazam.com/static/icons/hub/ios/v5/overflow-open-option_{scalefactor}.png",
+                        "type": "open",
+                        "listcaption": "Open in Apple Music",
+                        "overflowimage": "https://images.shazam.com/static/icons/hub/ios/v5/applemusic-overflow_{scalefactor}.png",
+                        "colouroverflowimage": false,
+                        "providername": "applemusic"
+                    },
+                    {
+                        "caption": "BUY",
+                        "actions": [
+                            {
+                                "type": "uri",
+                                "uri": "https://itunes.apple.com/us/album/fly-like-an-eagle/1440832463?i=1440832763&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=itunes&itsct=Shazam_ios"
+                            }
+                        ],
+                        "beacondata": {
+                            "type": "buy",
+                            "providername": "itunes"
+                        },
+                        "image": "https://images.shazam.com/static/icons/hub/ios/v5/itunes-overflow-buy_{scalefactor}.png",
+                        "type": "buy",
+                        "listcaption": "Buy on iTunes",
+                        "overflowimage": "https://images.shazam.com/static/icons/hub/ios/v5/itunes-overflow-buy_{scalefactor}.png",
+                        "colouroverflowimage": false,
+                        "providername": "itunes"
+                    }
+                ],
+                "providers": [
+                    {
+                        "caption": "Open in Spotify",
+                        "images": {
+                            "overflow": "https://images.shazam.com/static/icons/hub/ios/v5/spotify-overflow_{scalefactor}.png",
+                            "default": "https://images.shazam.com/static/icons/hub/ios/v5/spotify_{scalefactor}.png"
+                        },
+                        "actions": [
+                            {
+                                "name": "hub:spotify:searchdeeplink",
+                                "type": "uri",
+                                "uri": "spotify:search:Fly%20Like%20an%20Eagle%20Steve%20Miller%20Band"
+                            }
+                        ],
+                        "type": "SPOTIFY"
+                    },
+                    {
+                        "caption": "Open in Deezer",
+                        "images": {
+                            "overflow": "https://images.shazam.com/static/icons/hub/ios/v5/deezer-overflow_{scalefactor}.png",
+                            "default": "https://images.shazam.com/static/icons/hub/ios/v5/deezer_{scalefactor}.png"
+                        },
+                        "actions": [
+                            {
+                                "name": "hub:deezer:searchdeeplink",
+                                "type": "uri",
+                                "uri": "deezer-query://www.deezer.com/play?query=%7Btrack%3A%27Fly+Like+an+Eagle%27%20artist%3A%27Steve+Miller+Band%27%7D"
+                            }
+                        ],
+                        "type": "DEEZER"
+                    }
+                ],
+                "explicit": false,
+                "displayname": "APPLE MUSIC"
+            },
+            "sections": [
+                {
+                    "type": "SONG",
+                    "metapages": [
+                        {
+                            "image": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/f5/a3/e0/f5a3e04c-07c0-1128-4a41-728d5345c4c8/mza_5307523159630067331.png/800x800cc.jpg",
+                            "caption": "Steve Miller Band"
+                        },
+                        {
+                            "image": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/29/fb/fb/29fbfb3e-9c63-fe43-b46b-f52a5081b66f/00602547847348.rgb.jpg/400x400cc.jpg",
+                            "caption": "Fly Like an Eagle"
+                        }
+                    ],
+                    "tabname": "Song",
+                    "metadata": [
+                        {
+                            "title": "Album",
+                            "text": "Fly Like an Eagle"
+                        },
+                        {
+                            "title": "Label",
+                            "text": "Steve Miller - Owned"
+                        },
+                        {
+                            "title": "Released",
+                            "text": "1976"
+                        }
+                    ]
+                },
+                {
+                    "type": "RELATED",
+                    "url": "https://cdn.shazam.com/shazam/v3/en/US/iphone/-/tracks/track-similarities-id-10015269?startFrom=0&pageSize=20&connected=",
+                    "tabname": "Related"
+                }
+            ],
+            "url": "https://www.shazam.com/track/10015269/fly-like-an-eagle",
+            "artists": [
+                {
+                    "id": "42",
+                    "adamid": "488933"
+                }
+            ],
+            "isrc": "USCA28700717",
+            "genres": {
+                "primary": "Rock"
+            },
+            "urlparams": {
+                "{tracktitle}": "Fly+Like+an+Eagle",
+                "{trackartist}": "Steve+Miller+Band"
+            },
+            "myshazam": {
+                "apple": {
+                    "actions": [
+                        {
+                            "name": "myshazam:apple",
+                            "type": "uri",
+                            "uri": "https://music.apple.com/us/album/fly-like-an-eagle/1440832463?i=1440832763&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                        }
+                    ]
+                }
+            },
+            "highlightsurls": {},
+            "relatedtracksurl": "https://cdn.shazam.com/shazam/v3/en/US/iphone/-/tracks/track-similarities-id-10015269?startFrom=0&pageSize=20&connected=",
+            "albumadamid": "1440832463"
+        }
+    },
+    {
+        "title": "Yakuza",
+        "artist": "Szymon",
+        "date": 1715939178023,
+        "data": {
+            "layout": "5",
+            "type": "MUSIC",
+            "key": "491039356",
+            "title": "Yakuza",
+            "subtitle": "Szymon",
+            "images": {
+                "background": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/0b/f9/39/0bf93955-dcb6-ce1b-a8bf-84e8b0116204/mzl.cvqrotnt.jpg/800x800cc.jpg",
+                "coverart": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/ee/6b/57/ee6b57b6-b3a5-1fe0-840c-fb460d25432e/859734115197_cover.jpg/400x400cc.jpg",
+                "coverarthq": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/ee/6b/57/ee6b57b6-b3a5-1fe0-840c-fb460d25432e/859734115197_cover.jpg/400x400cc.jpg",
+                "joecolor": "b:245e3ep:fcfcfcs:ebad43t:d1dcd6q:c39d42"
+            },
+            "share": {
+                "subject": "Yakuza - Szymon",
+                "text": "Yakuza by Szymon",
+                "href": "https://www.shazam.com/track/491039356/yakuza",
+                "image": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/ee/6b/57/ee6b57b6-b3a5-1fe0-840c-fb460d25432e/859734115197_cover.jpg/400x400cc.jpg",
+                "twitter": "I used @Shazam to discover Yakuza by Szymon.",
+                "html": "https://www.shazam.com/snippets/email-share/491039356?lang=en&country=US",
+                "avatar": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/0b/f9/39/0bf93955-dcb6-ce1b-a8bf-84e8b0116204/mzl.cvqrotnt.jpg/800x800cc.jpg",
+                "snapchat": "https://www.shazam.com/partner/sc/track/491039356"
+            },
+            "hub": {
+                "type": "APPLEMUSIC",
+                "image": "https://images.shazam.com/static/icons/hub/ios/v5/applemusic_{scalefactor}.png",
+                "actions": [
+                    {
+                        "name": "apple",
+                        "type": "applemusicplay",
+                        "id": "1478120350"
+                    },
+                    {
+                        "name": "apple",
+                        "type": "uri",
+                        "uri": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e4/dc/a4/e4dca4d0-da13-f88f-ab27-9cf366429fcc/mzaf_8980097846142306679.plus.aac.ep.m4a"
+                    }
+                ],
+                "options": [
+                    {
+                        "caption": "OPEN IN",
+                        "actions": [
+                            {
+                                "name": "hub:applemusic:deeplink",
+                                "type": "applemusicopen",
+                                "uri": "https://music.apple.com/us/album/yakuza/1478120343?i=1478120350&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                            },
+                            {
+                                "name": "hub:applemusic:deeplink",
+                                "type": "uri",
+                                "uri": "https://music.apple.com/us/album/yakuza/1478120343?i=1478120350&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                            }
+                        ],
+                        "beacondata": {
+                            "type": "open",
+                            "providername": "applemusic"
+                        },
+                        "image": "https://images.shazam.com/static/icons/hub/ios/v5/overflow-open-option_{scalefactor}.png",
+                        "type": "open",
+                        "listcaption": "Open in Apple Music",
+                        "overflowimage": "https://images.shazam.com/static/icons/hub/ios/v5/applemusic-overflow_{scalefactor}.png",
+                        "colouroverflowimage": false,
+                        "providername": "applemusic"
+                    },
+                    {
+                        "caption": "BUY",
+                        "actions": [
+                            {
+                                "type": "uri",
+                                "uri": "https://itunes.apple.com/us/album/yakuza/1478120343?i=1478120350&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=itunes&itsct=Shazam_ios"
+                            }
+                        ],
+                        "beacondata": {
+                            "type": "buy",
+                            "providername": "itunes"
+                        },
+                        "image": "https://images.shazam.com/static/icons/hub/ios/v5/itunes-overflow-buy_{scalefactor}.png",
+                        "type": "buy",
+                        "listcaption": "Buy on iTunes",
+                        "overflowimage": "https://images.shazam.com/static/icons/hub/ios/v5/itunes-overflow-buy_{scalefactor}.png",
+                        "colouroverflowimage": false,
+                        "providername": "itunes"
+                    }
+                ],
+                "providers": [
+                    {
+                        "caption": "Open in Spotify",
+                        "images": {
+                            "overflow": "https://images.shazam.com/static/icons/hub/ios/v5/spotify-overflow_{scalefactor}.png",
+                            "default": "https://images.shazam.com/static/icons/hub/ios/v5/spotify_{scalefactor}.png"
+                        },
+                        "actions": [
+                            {
+                                "name": "hub:spotify:searchdeeplink",
+                                "type": "uri",
+                                "uri": "spotify:search:Yakuza%20Szymon"
+                            }
+                        ],
+                        "type": "SPOTIFY"
+                    },
+                    {
+                        "caption": "Open in Deezer",
+                        "images": {
+                            "overflow": "https://images.shazam.com/static/icons/hub/ios/v5/deezer-overflow_{scalefactor}.png",
+                            "default": "https://images.shazam.com/static/icons/hub/ios/v5/deezer_{scalefactor}.png"
+                        },
+                        "actions": [
+                            {
+                                "name": "hub:deezer:searchdeeplink",
+                                "type": "uri",
+                                "uri": "deezer-query://www.deezer.com/play?query=%7Btrack%3A%27Yakuza%27%20artist%3A%27Szymon%27%7D"
+                            }
+                        ],
+                        "type": "DEEZER"
+                    }
+                ],
+                "explicit": false,
+                "displayname": "APPLE MUSIC"
+            },
+            "sections": [
+                {
+                    "type": "SONG",
+                    "metapages": [
+                        {
+                            "image": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/0b/f9/39/0bf93955-dcb6-ce1b-a8bf-84e8b0116204/mzl.cvqrotnt.jpg/800x800cc.jpg",
+                            "caption": "Szymon"
+                        },
+                        {
+                            "image": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/ee/6b/57/ee6b57b6-b3a5-1fe0-840c-fb460d25432e/859734115197_cover.jpg/400x400cc.jpg",
+                            "caption": "Yakuza"
+                        }
+                    ],
+                    "tabname": "Song",
+                    "metadata": [
+                        {
+                            "title": "Album",
+                            "text": "Blue Coloured Mountain"
+                        },
+                        {
+                            "title": "Label",
+                            "text": "Eloper Music"
+                        },
+                        {
+                            "title": "Released",
+                            "text": "2019"
+                        }
+                    ]
+                },
+                {
+                    "type": "RELATED",
+                    "url": "https://cdn.shazam.com/shazam/v3/en/US/iphone/-/tracks/track-similarities-id-491039356?startFrom=0&pageSize=20&connected=",
+                    "tabname": "Related"
+                }
+            ],
+            "url": "https://www.shazam.com/track/491039356/yakuza",
+            "artists": [
+                {
+                    "id": "42",
+                    "adamid": "663866874"
+                }
+            ],
+            "isrc": "AUMXD1800014",
+            "genres": {
+                "primary": "Alternative"
+            },
+            "urlparams": {
+                "{tracktitle}": "Yakuza",
+                "{trackartist}": "Szymon"
+            },
+            "myshazam": {
+                "apple": {
+                    "actions": [
+                        {
+                            "name": "myshazam:apple",
+                            "type": "uri",
+                            "uri": "https://music.apple.com/us/album/yakuza/1478120343?i=1478120350&mttnagencyid=s2n&mttnsiteid=125115&mttn3pid=Apple-Shazam&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios"
+                        }
+                    ]
+                }
+            },
+            "highlightsurls": {},
+            "relatedtracksurl": "https://cdn.shazam.com/shazam/v3/en/US/iphone/-/tracks/track-similarities-id-491039356?startFrom=0&pageSize=20&connected=",
+            "albumadamid": "1478120343"
+        }
+    }
+]

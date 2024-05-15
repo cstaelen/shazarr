@@ -9,10 +9,9 @@ export default function HistoryList() {
   const { recordingStatus } = useShazarrProvider();
   const { history } = useHistoryProvider();
   const [listOpen, setListOpen] = useState<boolean>();
+  const { palette } = useTheme();
 
   if (!history || history?.length === 0) return null;
-
-  const { palette } = useTheme();
 
   return (
     <Box marginBottom={2}>
@@ -33,7 +32,10 @@ export default function HistoryList() {
           keepMounted: true,
         }}
       >
-        <Box sx={{ backgroundImage: palette.background.paper, paddingTop: 1 }}>
+        <Box
+          sx={{ backgroundImage: palette.background.paper, paddingTop: 1 }}
+          data-testid="history-list"
+        >
           <Container maxWidth="xs" sx={{ padding: "0 0.5rem" }}>
             {history?.map((item, index) => (
               <HistoryCard

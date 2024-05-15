@@ -8,6 +8,7 @@ import { Shazam } from "shazam-api";
 import { useConfigProvider } from "../Config/Provider";
 import { transcodePCM16 } from "./utils";
 import { ShazamRoot, ShazamTrack } from "shazam-api/dist/types";
+import { mockRecordBase64 } from "./mock/recordBase64";
 
 export type RecordingStatusType =
   | "start"
@@ -40,7 +41,10 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [recordingError, setRecordingError] = useState<ErrorCodeType>();
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
+
   const [historySearch, setHistorySearch] = useState<number>();
+  // Use state mutation to delete old offline records
+  const [cleanHistorySearch, setCleanHistorySearch] = useState<number>();
 
   const { isNetworkConnected } = useConfigProvider();
   const {
@@ -73,13 +77,25 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
               value: { recordDataBase64 },
             } = await VoiceRecorder.stopRecording();
 
-            setAudio(recordDataBase64);
+            // CI testing mock (with mic interface)
+            if (process.env.REACT_APP_STAGE === "testing") {
+              setAudio(mockRecordBase64);
+            } else {
+              setAudio(recordDataBase64);
+            }
+
             setRecordingStatus("searching");
             await vibrateAction();
           }
         }, duration);
       }
-    } catch {
+    } catch (e: unknown) {
+      // CI testing mock (no mic interface)
+      if (process.env.REACT_APP_STAGE === "testing") {
+        setAudio(mockRecordBase64);
+        setRecordingStatus("searching");
+        return;
+      }
       resetSearch();
       setRecordingError("ERROR_RECORDING");
     }
@@ -125,8 +141,10 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             date: Date.now(),
             data: response,
           });
+
           if (historySearch) {
-            deleteHistoryItem(historySearch);
+            // Use state to not override previous "add" action mutation
+            setCleanHistorySearch(historySearch);
           }
         } else {
           setShazarrResponse(undefined);
@@ -134,6 +152,14 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch(() => {
+        if (!historySearch) {
+          addItemToHistory({
+            title: "Offline record",
+            artist: "Not discovered",
+            date: Date.now(),
+            stream: audio,
+          });
+        }
         setRecordingError("SHAZAM_API_ERROR");
       })
       .finally(async () => {
@@ -187,6 +213,12 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         break;
     }
   }, [recordingStatus]);
+
+  useEffect(() => {
+    if (cleanHistorySearch) {
+      deleteHistoryItem(cleanHistorySearch);
+    }
+  }, [deleteHistoryItem]);
 
   const value = {
     recordingError,

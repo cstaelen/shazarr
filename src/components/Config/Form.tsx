@@ -67,7 +67,10 @@ export default function ConfigForm() {
                 rel="noreferrer"
                 fontSize={12}
               >
-                Github page - {process.env.REACT_APP_CURRENT_VERSION}
+                Github page -{" "}
+                {process.env.REACT_APP_STAGE === "testing"
+                  ? "v0.0.0"
+                  : process.env.REACT_APP_CURRENT_VERSION}
               </Link>
             </Box>
             <Box>
