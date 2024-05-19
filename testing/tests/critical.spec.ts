@@ -20,7 +20,12 @@ test("Critical: Should be able to record, recognize and display result", async (
 
   // Expect result
   await expect(page.getByText("Found !")).toBeVisible();
-  await expect(page.locator("img.loading")).not.toBeVisible({ timeout: 10000 });
+  const loader = await page.locator("img.loading")?.isVisible();
+  if (loader) {
+    await expect(page.locator("img.loading")).not.toBeVisible({
+      timeout: 10000,
+    });
+  }
   await page.waitForTimeout(1000);
 
   await expect(page.getByText("Chillin'")).toHaveCount(2);
