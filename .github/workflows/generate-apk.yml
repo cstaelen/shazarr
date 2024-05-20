@@ -1,0 +1,84 @@
+name: APK deployment Workflow
+on:
+  # workflow_dispatch:
+  push:
+    branches-ignore: [main, gh-pages]
+
+  # branches: master
+  #   tags:
+  #     - v*
+
+# Job 1 - Build Signed AAB
+
+jobs:
+  build:
+    name: Build Signed APK
+    runs-on: ubuntu-latest
+    # if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+      - name: Install app dependencies
+        run: npm install
+
+      - name: Build project app
+        run: npm run build
+
+      - name: Capacitor copy
+        run: npx cap copy android
+
+      - name: Capacitor update
+        run: npx cap update android
+
+      - name: Setup JDK 20
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 20
+      - name: Make gradlew executable
+        working-directory: ./android
+        run: chmod +x gradlew
+
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Execute Gradle build
+        working-directory: ./android
+        run: ./gradlew build --scan
+
+      - name: Sign APK
+        id: sign_app
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/apk/release/
+          signingKeyBase64: ${{ secrets.KEYSTORE }}
+          alias: ${{ secrets.SIGNING_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+      - name: Upload app apk as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-bundle
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+      # - name: Create Github Release
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     generate_release_notes: true
+      #     prerelease: true
+      #     files: |
+      #       app/build/outputs/apk/release/app-release.apk
+
+      - run: echo Build status report=${{ job.status }}

@@ -3,6 +3,8 @@ import { Preferences } from "@capacitor/preferences";
 import { HISTORY_STORE_KEY } from "../../constant";
 import { ShazamTrack } from "shazam-api/dist/types";
 
+// import mock from "./history.json";
+
 type HistoryContextType = {
   history: HistoryItem[] | undefined;
   actions: {

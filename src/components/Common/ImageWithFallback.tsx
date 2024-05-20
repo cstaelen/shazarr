@@ -21,12 +21,14 @@ export const ImageWithFallback = ({
 
   return (
     <ImgStyled
+      className="loading"
       alt={alt}
       onError={(e) => setError(e.toString())}
       src={fallbackImage}
       onLoad={(e) => {
-        if (src) {
+        if (src && src !== (e.target as HTMLImageElement).src) {
           (e.target as HTMLImageElement).src = src;
+          (e.target as HTMLImageElement).classList.remove("loading");
         }
       }}
       {...props}
