@@ -1,12 +1,13 @@
 name: APK deployment Workflow
 on:
   # workflow_dispatch:
+  # push:
+  #   branches-ignore: [main, gh-pages]
   push:
-    branches-ignore: [main, gh-pages]
-
-  # branches: master
-  #   tags:
-  #     - v*
+    branches:
+      - main
+    tags:
+      - v*
 
 # Job 1 - Build Signed AAB
 
@@ -14,7 +15,7 @@ jobs:
   build:
     name: Build Signed APK
     runs-on: ubuntu-latest
-    # if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -67,18 +68,22 @@ jobs:
           keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename APK
+        run: mv ${{steps.sign_app.outputs.signedReleaseFile}} android/app/build/outputs/apk/release/shazarr-signed.apk
+
       - name: Upload app apk as artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-bundle
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          path: android/app/build/outputs/apk/release/shazarr-signed.apk
 
-      # - name: Create Github Release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     generate_release_notes: true
-      #     prerelease: true
-      #     files: |
-      #       app/build/outputs/apk/release/app-release.apk
+      - name: Create Github Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          prerelease: true
+          files: |
+            android/app/build/outputs/apk/release/shazarr-signed.apk
 
       - run: echo Build status report=${{ job.status }}
