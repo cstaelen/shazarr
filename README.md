@@ -39,10 +39,6 @@ Get last release  :
 - **Custom service URL**: `http://<service-url>?query=`
 - **Custom service name**: `My custom music service`
 
-FYI you will find your lidarr music path in web ui :
-
-<img src="https://github.com/cstaelen/docker-shazarr/blob/c30c348adedabb62e760a344a5347e90cc1b1056/.github/lidarr-path.png" width="500"/>
-
 ### Android APP
   APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs/shazarr-app.apk)
 
@@ -65,8 +61,7 @@ XCode should open project.
 - [x] Android app
 - [x] Record history: access last shazamed songs
 - [x] Offline record: record without API access, recognize song later
-- [ ] Update notifications 
-- [ ] Update ffmpeg and use WASM version
+- [x] Update notifications 
 - [ ] iOS app: find a way to distribute packaged app without using app store and without have to clone and build it
 
 ## Development
