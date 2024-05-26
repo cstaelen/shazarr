@@ -5,6 +5,7 @@ test("Offline: Should save record for further recognition", async ({
 }) => {
   await page.context().setOffline(false);
   await page.goto("/");
+
   await expect(page.getByText("Shazarr")).toBeVisible();
 
   // Run song recognition and cut internet connection

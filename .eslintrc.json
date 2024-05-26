@@ -2,6 +2,8 @@
   "parser": "@typescript-eslint/parser",
   "extends": [
     "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:jsx-a11y/strict",
     "prettier"
@@ -13,5 +15,6 @@
   ],
   "rules": {
     "prettier/prettier": "error"
-  }
+  },
+  "ignorePatterns": ["node_modules", "public", "build", "android", "ios"]
 }

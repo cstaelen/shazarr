@@ -1,3 +1,4 @@
+import React from "react";
 import { Close } from "@mui/icons-material";
 import { Stack, Divider, Box, Button } from "@mui/material";
 import TidarrButton from "./ui/TidarrButton";

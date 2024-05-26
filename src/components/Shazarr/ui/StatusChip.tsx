@@ -1,3 +1,4 @@
+import React from "react";
 import { Check, MicOutlined, NetworkPing } from "@mui/icons-material";
 import { Chip, CircularProgress } from "@mui/material";
 import { useShazarrProvider } from "../Provider";

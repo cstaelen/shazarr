@@ -52,10 +52,6 @@ export default defineConfig({
       name: "Android Chrome",
       use: { ...devices["Nexus 6"] },
     },
-    // {
-    //   name: "Mobile Safari",
-    //   use: { ...devices["iPhone 12"] },
-    // },
   ],
   // Run your local dev server before starting the tests.
   webServer: {

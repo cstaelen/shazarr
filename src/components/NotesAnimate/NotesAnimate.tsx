@@ -1,5 +1,4 @@
-"use client";
-
+import React from "react";
 import { Stack } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
 import styled from "@emotion/styled";
@@ -35,11 +34,11 @@ const Note = () => {
     transform: "translate(-50%, -50%)",
   };
   const Icons = [
-    <IconNote1 sx={styles} />,
-    <IconNote2 sx={styles} />,
-    <IconNote3 sx={styles} />,
-    <IconNote4 sx={styles} />,
-    <IconNote5 sx={styles} />,
+    <IconNote1 key="note1" sx={styles} />,
+    <IconNote2 key="note2" sx={styles} />,
+    <IconNote3 key="note3" sx={styles} />,
+    <IconNote4 key="note4" sx={styles} />,
+    <IconNote5 key="note5" sx={styles} />,
   ];
 
   return Icons[iconIndex];

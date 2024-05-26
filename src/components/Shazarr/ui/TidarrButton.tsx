@@ -1,3 +1,4 @@
+import React from "react";
 import { Album } from "@mui/icons-material";
 import { Button, styled } from "@mui/material";
 import { useConfigProvider } from "../../Config/Provider";

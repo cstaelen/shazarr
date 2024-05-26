@@ -54,7 +54,7 @@ test("Options: Should see options panel and use service buttons", async ({
     .click();
 
   await waitForImgLoaded(page);
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1000);
   await expect(page.getByText("Download with LidarrDownload")).toHaveScreenshot(
     { maxDiffPixelRatio: 0.05 },
   );

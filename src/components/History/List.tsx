@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Button, Container, Drawer, useTheme } from "@mui/material";
 import HistoryCard from "./Card";
 import { useHistoryProvider } from "./Provider";

@@ -1,3 +1,4 @@
+import React from "react";
 import { useShazarrProvider } from "../Shazarr/Provider";
 import ApiErrorAlert from "./Alert";
 import { useConfigProvider } from "./Provider";
