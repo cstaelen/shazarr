@@ -1,16 +1,18 @@
 import React from "react";
+import { FormEvent, useState } from "react";
+import styled from "@emotion/styled";
 import {
   Box,
-  Input,
   Button,
-  Paper,
   Dialog,
   DialogContent,
+  Input,
   Link,
+  Paper,
 } from "@mui/material";
-import { useState, FormEvent } from "react";
+
 import { useShazarrProvider } from "../Shazarr/Provider";
-import styled from "@emotion/styled";
+
 import { useConfigProvider } from "./Provider";
 
 export default function ConfigForm() {

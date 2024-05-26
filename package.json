@@ -2,6 +2,9 @@
   "name": "shazarr-app",
   "version": "0.1.0",
   "private": true,
+  "engines" : { 
+    "node" : ">=20.0.0"
+  },
   "dependencies": {
     "@capacitor/android": "5.6.0",
     "@capacitor/app": "^5.0.7",
@@ -39,6 +42,7 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "4.6.2",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
     "prettier": "^3.2.5",
     "ts-prune": "^0.10.3",
     "typescript": "^4"
@@ -62,11 +66,6 @@
     "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.0-jammy npx playwright test",
     "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.0-jammy npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
     "testing:update-snapshots": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.0-jammy npx playwright test --update-snapshots"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
   },
   "browserslist": {
     "production": [

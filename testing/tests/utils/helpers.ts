@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test";
+
 import historyFixtures from "../fixtures/history.json";
 
 export async function gotoWithLocalStorage(url, page) {

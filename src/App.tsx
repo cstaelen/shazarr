@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
-import ShazarrButton from "./components/Shazarr/Button";
-import { ThemeProvider } from "@emotion/react";
 import { Device } from "@capacitor/device";
+import { ThemeProvider } from "@emotion/react";
+import styled from "@emotion/styled";
 import {
-  CssBaseline,
+  Box,
   Container,
   createTheme,
+  CssBaseline,
   Stack,
-  Box,
   Typography,
 } from "@mui/material";
-import styled from "@emotion/styled";
-import { HistoryProvider } from "./components/History/Provider";
-import { ShazarrProvider } from "./components/Shazarr/Provider";
+
 import Config from "./components/Config";
-import HistoryList from "./components/History/List";
-import StatusChip from "./components/Shazarr/ui/StatusChip";
 import { ConfigProvider } from "./components/Config/Provider";
+import HistoryList from "./components/History/List";
+import { HistoryProvider } from "./components/History/Provider";
+import ShazarrButton from "./components/Shazarr/Button";
+import { ShazarrProvider } from "./components/Shazarr/Provider";
+import StatusChip from "./components/Shazarr/ui/StatusChip";
 
 const darkTheme = createTheme({
   palette: {

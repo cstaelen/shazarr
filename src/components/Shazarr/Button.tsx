@@ -1,13 +1,15 @@
 import React from "react";
-import { Box, IconButton } from "@mui/material";
-import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import skullImage from "../../resources/skull.png";
+import { MoreHorizOutlined } from "@mui/icons-material";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
+import { Box, IconButton } from "@mui/material";
+
+import { RECORD_DURATION } from "../../constant";
+import skullImage from "../../resources/skull.png";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
+
 import { useShazarrProvider } from "./Provider";
 import ShazarrResults from "./Result";
-import { RECORD_DURATION } from "../../constant";
 
 export default function ShazarrButton() {
   const {

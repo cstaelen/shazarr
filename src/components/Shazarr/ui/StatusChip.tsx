@@ -1,8 +1,9 @@
 import React from "react";
 import { Check, MicOutlined, NetworkPing } from "@mui/icons-material";
 import { Chip, CircularProgress } from "@mui/material";
-import { useShazarrProvider } from "../Provider";
+
 import { useConfigProvider } from "../../Config/Provider";
+import { useShazarrProvider } from "../Provider";
 
 export default function StatusChip() {
   const { shazarrLoading, shazarrResponse, recordingStatus } =

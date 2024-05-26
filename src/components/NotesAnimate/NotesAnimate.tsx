@@ -1,7 +1,8 @@
 import React from "react";
-import { Stack } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
 import styled from "@emotion/styled";
+import { Stack } from "@mui/material";
+
 import { IconNote1, IconNote2, IconNote3, IconNote4, IconNote5 } from "./Icons";
 
 const Math2 = {

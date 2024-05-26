@@ -1,7 +1,8 @@
-import React, { useContext, useState, ReactNode, useEffect } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { Preferences } from "@capacitor/preferences";
-import { HISTORY_STORE_KEY } from "../../constant";
 import { ShazamTrack } from "shazam-api/dist/types";
+
+import { HISTORY_STORE_KEY } from "../../constant";
 
 // import mock from "./history.json";
 
