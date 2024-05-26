@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ShazarrButton from "./components/Shazarr/Button";
 import { ThemeProvider } from "@emotion/react";
 import { Device } from "@capacitor/device";

@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@mui/material";
 import { useConfigProvider } from "../../Config/Provider";
 import lidarrLogo from "../../../resources/lidarr.png";

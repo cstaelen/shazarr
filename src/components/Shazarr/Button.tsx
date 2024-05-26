@@ -1,5 +1,4 @@
-"use client";
-
+import React from "react";
 import { Box, IconButton } from "@mui/material";
 import { MoreHorizOutlined } from "@mui/icons-material";
 import styled from "@emotion/styled";
