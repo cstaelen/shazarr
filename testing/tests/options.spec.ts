@@ -1,4 +1,5 @@
-import test, { Page, expect } from "@playwright/test";
+import test, { expect, Page } from "@playwright/test";
+
 import { gotoWithLocalStorage, waitForImgLoaded } from "./utils/helpers";
 
 let serviceUrlExpected: string;

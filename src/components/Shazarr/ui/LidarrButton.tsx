@@ -1,7 +1,8 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { useConfigProvider } from "../../Config/Provider";
+
 import lidarrLogo from "../../../resources/lidarr.png";
+import { useConfigProvider } from "../../Config/Provider";
 
 export default function LidarrButton({
   searchTerms,

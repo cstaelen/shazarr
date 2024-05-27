@@ -1,10 +1,12 @@
 import React from "react";
-import { Box, Button, Container, Drawer, useTheme } from "@mui/material";
-import HistoryCard from "./Card";
-import { useHistoryProvider } from "./Provider";
 import { useState } from "react";
 import { Close, List } from "@mui/icons-material";
+import { Box, Button, Container, Drawer, useTheme } from "@mui/material";
+
 import { useShazarrProvider } from "../Shazarr/Provider";
+
+import HistoryCard from "./Card";
+import { useHistoryProvider } from "./Provider";
 
 export default function HistoryList() {
   const { recordingStatus } = useShazarrProvider();

@@ -1,4 +1,5 @@
 import test, { expect } from "@playwright/test";
+
 import { gotoWithLocalStorage } from "./utils/helpers";
 
 const expectedHistory = [

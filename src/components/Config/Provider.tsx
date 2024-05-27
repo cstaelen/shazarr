@@ -1,9 +1,16 @@
-import { Preferences } from "@capacitor/preferences";
-import React, { useContext, useState, ReactNode, useEffect } from "react";
-import { SHAZARR_STORE_KEY } from "../../constant";
-import { Network } from "@capacitor/network";
-import { usePrevious } from "@uidotdev/usehooks";
+import React, {
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import { Network } from "@capacitor/network";
+import { Preferences } from "@capacitor/preferences";
+import { usePrevious } from "@uidotdev/usehooks";
+
+import { SHAZARR_STORE_KEY } from "../../constant";
 
 type ConfigContextType = {
   config?: ConfigStoreType | null;
@@ -42,7 +49,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
 
   const configPrevious = usePrevious(config);
 
-  async function loadConfig() {
+  const loadConfig = useCallback(async () => {
     const store = await getStorageValue(SHAZARR_STORE_KEY);
 
     let storeData: ConfigStoreType = {} as ConfigStoreType;
@@ -51,9 +58,9 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     }
 
     setConfig(storeData);
-  }
+  }, []);
 
-  function loadForm() {
+  const loadForm = useCallback(() => {
     if (!config) return null;
 
     const formFields: ConfigFieldsType = {
@@ -79,7 +86,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
       },
     };
     setFormConfig(formFields);
-  }
+  }, [config]);
 
   async function getStorageValue(key: string) {
     const { value } = await Preferences.get({
@@ -89,18 +96,21 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     return value;
   }
 
-  async function setStorageValue(key: string, value: string) {
-    if (!value) return;
-    await Preferences.set({ key: key, value: value });
-    loadForm();
-  }
+  const setStorageValue = useCallback(
+    async (key: string, value: string) => {
+      if (!value) return;
+      await Preferences.set({ key: key, value: value });
+      loadForm();
+    },
+    [loadForm],
+  );
 
   async function logCurrentNetworkStatus() {
     const status = await Network.getStatus();
     setIsNetworkConnected(status.connected);
   }
 
-  async function checkForUpdates() {
+  const checkForUpdates = useCallback(async () => {
     if (process.env.REACT_APP_CURRENT_VERSION) {
       try {
         const response = await fetch(
@@ -125,7 +135,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
         console.log("fetch github issue", e);
       }
     }
-  }
+  }, []);
 
   async function sendNotification() {
     let allowed = false;
@@ -169,7 +179,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     if (config !== configPrevious) {
       setStorageValue(SHAZARR_STORE_KEY, JSON.stringify(config));
     }
-  }, [config, configPrevious]);
+  }, [config, configPrevious, setStorageValue]);
 
   useEffect(() => {
     checkForUpdates();
@@ -180,7 +190,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     return () => {
       clearInterval(logInterval);
     };
-  }, []);
+  }, [checkForUpdates, loadConfig]);
 
   const value = {
     config,
