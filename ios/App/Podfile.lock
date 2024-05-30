@@ -1,18 +1,20 @@
 PODS:
-  - Capacitor (5.7.5):
+  - Capacitor (6.0.0):
     - CapacitorCordova
-  - CapacitorApp (5.0.7):
+  - CapacitorApp (6.0.0):
     - Capacitor
-  - CapacitorCordova (5.7.5)
-  - CapacitorDevice (5.0.7):
+  - CapacitorCordova (6.0.0)
+  - CapacitorDevice (6.0.0):
     - Capacitor
-  - CapacitorHaptics (5.0.7):
+  - CapacitorHaptics (6.0.0):
     - Capacitor
-  - CapacitorLocalNotifications (5.0.7):
+  - CapacitorLocalNotifications (6.0.0):
     - Capacitor
-  - CapacitorNetwork (5.0.7):
+  - CapacitorNetwork (6.0.0):
     - Capacitor
-  - CapacitorPreferences (5.0.7):
+  - CapacitorPreferences (6.0.0):
+    - Capacitor
+  - CapacitorScreenOrientation (6.0.0):
     - Capacitor
   - CapacitorVoiceRecorder (5.0.0):
     - Capacitor
@@ -26,6 +28,7 @@ DEPENDENCIES:
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - "CapacitorNetwork (from `../../node_modules/@capacitor/network`)"
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
+  - "CapacitorScreenOrientation (from `../../node_modules/@capacitor/screen-orientation`)"
   - CapacitorVoiceRecorder (from `../../node_modules/capacitor-voice-recorder`)
 
 EXTERNAL SOURCES:
@@ -45,20 +48,23 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/network"
   CapacitorPreferences:
     :path: "../../node_modules/@capacitor/preferences"
+  CapacitorScreenOrientation:
+    :path: "../../node_modules/@capacitor/screen-orientation"
   CapacitorVoiceRecorder:
     :path: "../../node_modules/capacitor-voice-recorder"
 
 SPEC CHECKSUMS:
-  Capacitor: 7d42085cb786b2d3ea9ac8a17ebd7e3305be7b72
-  CapacitorApp: 17fecd0e6cb23feafac7eb0939417389038b0979
-  CapacitorCordova: c946a6052b547e1e185fc46862003f7b9130ead1
-  CapacitorDevice: fc91bdb484dc0e70755e9b621cd557afe642613a
-  CapacitorHaptics: 7c7c206f0c96a628fed073830c96d28c4b2e772e
-  CapacitorLocalNotifications: c58afadd159f6bc540ef9b3cbdbc82510a2bf112
-  CapacitorNetwork: 81ef9728aa7a65cac8c1181ce79e578162b57b57
-  CapacitorPreferences: 77ac427e98db83bace772455f8ba447430382c4c
+  Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
+  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
+  CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
+  CapacitorDevice: f8fd88f9edd1261c55a109f32015b09bbbfdc4a0
+  CapacitorHaptics: 9ebc9363f0e9b8eb4295088a0b474530acf1859b
+  CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
+  CapacitorNetwork: f15a94c16a33cba7c47a17814cb6bcfe3ea34ded
+  CapacitorPreferences: c9b839a80baa72e4ed4bdb117618e1950d3046b5
+  CapacitorScreenOrientation: d78ce2b710bfcd1c32d3a090d32b6686c1c95e4f
   CapacitorVoiceRecorder: 872ea857b497ce2c71afe3e4eb5de0a74290c0db
 
-PODFILE CHECKSUM: 4ed71b9840802318387ac9461d8e85f0e97ddd89
+PODFILE CHECKSUM: 8814b064c6a28c0f8680cac7ab4e756f5bf9c2ab
 
 COCOAPODS: 1.14.3

@@ -129,7 +129,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           latestVersion !== currentVersion &&
           latestVersion > currentVersion
         ) {
-          sendNotification();
+          sendNotification(data[0].tag_name, data[0].prerelease);
         }
       } catch (e) {
         console.log("fetch github issue", e);
@@ -137,7 +137,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  async function sendNotification() {
+  async function sendNotification(name: string, prerelease: boolean) {
     let allowed = false;
 
     const { display: currentPerm } =
@@ -164,8 +164,8 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     LocalNotifications.schedule({
       notifications: [
         {
-          title: "Update available !",
-          body: "A new version of Shazarr is available. Download it on github.",
+          title: `${prerelease ? "’[prerelease]" : ""} Update available !`,
+          body: `A new ${prerelease ? "prerelease" : "version"} of Shazarr is available (${name}). Click to download it on Github.`,
           id: 1,
           largeIcon: "ic_stat_name/ic_stat_name",
           smallIcon: "ic_stat_name/ic_stat_name",

@@ -3,6 +3,19 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 [Unreleased]
+### 🖍 Changed
+* Change notification message to specify prerelease ou release update status
+### 🐛 Fixed
+* Fix display issue on screen orientation change
+* Fix readme apk download link
+### 🧹 Renovate
+* Update node deps
+* Migrate capacitor from v5 to v6
+* Typescript 5
+* Eslint 9
+
+
 ## 📦 0.0.9
 ### 🚀 Added
 * Playwright testing
