@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Haptics } from "@capacitor/haptics";
+import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { VoiceRecorder } from "capacitor-voice-recorder";
 import { Shazam } from "shazam-api";
 import { ShazamRoot, ShazamTrack } from "shazam-api/dist/types";
@@ -75,9 +76,13 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             return;
           }
         }
+
+        // Start recording lock screen
+        // await ScreenOrientation.lock({ orientation: "natural" });
         setRecordingStatus("recording");
         vibrateAction();
         const { value: isRecording } = await VoiceRecorder.startRecording();
+
         if (isRecording) {
           setTimeout(async () => {
             const { status } = await VoiceRecorder.getCurrentStatus();
@@ -152,6 +157,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         })
         .finally(async () => {
           await vibrateAction();
+          await ScreenOrientation.unlock();
           setRecordingStatus("inactive");
           setShazarrLoading(false);
         });
@@ -196,6 +202,8 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     setRecordingStatus("inactive");
     setShazarrLoading(false);
     setHistorySearch(undefined);
+
+    await ScreenOrientation.unlock();
 
     try {
       const { status } = await VoiceRecorder.getCurrentStatus();

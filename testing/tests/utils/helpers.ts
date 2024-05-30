@@ -1,9 +1,9 @@
-import { expect } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 
 import historyFixtures from "../fixtures/history.json";
 
-export async function gotoWithLocalStorage(url, page) {
-  page.goto("/");
+export async function gotoWithLocalStorage(url: string, page: Page) {
+  page.goto(url);
   await expect(page.getByText("Shazarr")).toBeVisible();
 
   const stringifiedData = JSON.stringify(historyFixtures);
@@ -19,7 +19,7 @@ export async function gotoWithLocalStorage(url, page) {
   page.reload();
 }
 
-export async function waitForImgLoaded(page) {
+export async function waitForImgLoaded(page: Page) {
   await page.waitForFunction(() => {
     const images = Array.from(document.querySelectorAll("img"));
     return images.every((img) => img.complete);

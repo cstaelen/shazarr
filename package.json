@@ -2,20 +2,20 @@
   "name": "shazarr-app",
   "version": "0.1.0",
   "private": true,
-  "engines" : { 
-    "node" : ">=20.0.0"
+  "engines": {
+    "node": ">=20.0.0"
   },
   "dependencies": {
-    "@capacitor/android": "5.6.0",
-    "@capacitor/app": "^5.0.7",
-    "@capacitor/cli": "^5.6.0",
-    "@capacitor/core": "^5.6.0",
-    "@capacitor/device": "^5.0.6",
-    "@capacitor/haptics": "^5.0.6",
-    "@capacitor/ios": "^5.6.0",
-    "@capacitor/local-notifications": "^5.0.7",
-    "@capacitor/network": "^5.0.6",
-    "@capacitor/preferences": "^5.0.6",
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/app": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/device": "^6.0.0",
+    "@capacitor/haptics": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@capacitor/local-notifications": "^6.0.0",
+    "@capacitor/network": "^6.0.0",
+    "@capacitor/preferences": "^6.0.0",
+    "@capacitor/screen-orientation": "^6.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.18",
@@ -28,24 +28,27 @@
     "shazam-api": "0.2.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@capacitor/assets": "^3.0.5",
-    "@playwright/test": "^1.44.0",
-    "@types/node": "^16.18.70",
-    "@types/react": "^18.2.47",
-    "@types/react-dom": "^18.2.18",
-    "@typescript-eslint/eslint-plugin": "^7.0.1",
-    "@typescript-eslint/parser": "^7.0.1",
+    "@capacitor/cli": "^6.0.0",
+    "@ionic/cli": "^7.2.0",
+    "@playwright/test": "^1.44.1",
+    "@types/node": "^20.12.13",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
     "depcheck": "^1.4.7",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-prettier": "^5.1.3",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "4.6.2",
+    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-simple-import-sort": "^12.1.0",
     "prettier": "^3.2.5",
     "ts-prune": "^0.10.3",
-    "typescript": "^4"
+    "typescript": "^5.4.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -61,11 +64,15 @@
     "quality:depcheck": "npx depcheck",
     "quality:eslint": "eslint .",
     "quality:eslint-fix": "eslint --fix .",
-    "testing:run": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.0-jammy npx playwright test",
+    "testing:run": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.1-jammy npx playwright test",
     "testing:ui": "npx playwright test --ui",
-    "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.0-jammy npx playwright test",
-    "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.0-jammy npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
-    "testing:update-snapshots": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.0-jammy npx playwright test --update-snapshots"
+    "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.1-jammy npx playwright test",
+    "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.1-jammy npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
+    "testing:update-snapshots": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.44.1-jammy npx playwright test --update-snapshots"
+  },
+  "overrides": {
+    "typescript": "^5.4.5",
+    "@capacitor/core": "^6.0.0"
   },
   "browserslist": {
     "production": [

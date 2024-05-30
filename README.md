@@ -2,7 +2,7 @@
 [![GitHub Release](https://img.shields.io/github/release-date/cstaelen/shazarr-app?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr-app/releases)
 [![GitHub Release](https://img.shields.io/github/release/cstaelen/shazarr-app?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr-app/releases)
 ![Playwright CI](https://img.shields.io/github/actions/workflow/status/cstaelen/shazarr-app/playwright.yml?label=Playwright%20CI&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)
-[![Download APK](https://img.shields.io/github/downloads/cstaelen/shazarr-app/latest/shazarr-signed.apk?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=android)](https://github.com/downloads/cstaelen/shazarr-app/latest/shazarr-signed.apk)
+[![Download APK](https://img.shields.io/github/downloads/cstaelen/shazarr-app/latest/shazarr-signed.apk?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=android)](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
 
 # Shazarr - Unofficial Shazam mobile app web UI
 Shazarr project is a mobile app (android, ios) providing Shazam song recognition service with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
@@ -25,8 +25,8 @@ Shazarr project is a mobile app (android, ios) providing Shazam song recognition
 
 ## Get started
 
-- **android**: ✅ APK download
-- **ios**: ⚠️ build app from Xcode ONLY (needs xcode and paired device)
+- **Android**: ✅ APK Download APK [here](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
+- **iOS**: ⚠️ build app from Xcode ONLY (needs xcode and paired device)
 
 Get last release  :
 
@@ -39,11 +39,8 @@ Get last release  :
 - **Custom service URL**: `http://<service-url>?query=`
 - **Custom service name**: `My custom music service`
 
-### Android APP
-  APK available [here](https://github.com/cstaelen/docker-shazarr/raw/main/outputs/shazarr-app.apk)
-
 #### iOS ( /!\ source build only )
-Requirements: `npm`, `ionic`, `xcode`.
+Requirements: `npm`, `xcode`.
 
 1. Git clone project first
 2. in project folder run:
