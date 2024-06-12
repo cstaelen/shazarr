@@ -29,24 +29,15 @@ jobs:
 
       - name: Install ESLint + Prettier
         run: |
-          npm install eslint@8.56.0
-          npm install @typescript-eslint/eslint-plugin@latest
+          npm install @eslint/js@9.4.0
+          npm install typescript-eslint@latest
           npm install @microsoft/eslint-formatter-sarif@3.1
           npm install eslint-plugin-jsx-a11y
           npm install eslint-config-prettier
           npm install eslint-plugin-prettier
           npm install prettier
-
-      - name: Check code lint and format
-        run: npx eslint .
-          --config ./.eslintrc.json
-          --ext .js,.jsx,.ts,.tsx
-          --format @microsoft/eslint-formatter-sarif
-          --output-file eslint-results.sarif
-        continue-on-error: true
-
-      - name: Upload analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v3
+      - uses: sibiraj-s/action-eslint@v3
         with:
-          sarif_file: eslint-results.sarif
-          wait-for-processing: true
+          token: ${{ secrets.GITHUB_TOKEN }} # optional
+          extensions: 'js,jsx,ts,tsx,mjs'
+          annotations: true

@@ -146,7 +146,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     if (currentPerm !== "granted") {
       const { display: requestStatus } =
         await LocalNotifications.requestPermissions();
-      console.log("requestStatus", requestStatus);
+
       if (requestStatus === "granted") {
         allowed = true;
       }
