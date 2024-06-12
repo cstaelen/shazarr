@@ -99,3 +99,40 @@ test("History: Should be able to remove 2 items", async ({ page }) => {
   await expect(page.getByText(expectedHistory[1])).not.toBeVisible();
   await expect(page.getByText(expectedHistory[2])).toBeVisible();
 });
+
+test("History: Should be able to consult 2 different items", async ({
+  page,
+}) => {
+  // Load localstorage
+  gotoWithLocalStorage("/", page);
+
+  await expect(page.getByText("Ready")).toBeInViewport();
+
+  // Open history panel
+  await page.getByRole("button", { name: "Show records (3)" }).click();
+
+  // Click on history item
+  await page
+    .locator("div:nth-child(1) > .MuiCardActions-root > button")
+    .first()
+    .click();
+
+  await expect(
+    page.getByText("Chillin'ModjoPlay AlbumModjo"),
+  ).toHaveScreenshot();
+
+  // Open history panel
+  await page.getByRole("button", { name: "Show records (3)" }).click();
+
+  // Click on history item
+  await page
+    .locator("div:nth-child(2) > .MuiCardActions-root > button")
+    .first()
+    .click();
+
+  await expect(
+    page.getByText(
+      "Fly Like an EagleSteve Miller BandPlay AlbumFly Like an EagleLabelSteve Miller",
+    ),
+  ).toHaveScreenshot();
+});
