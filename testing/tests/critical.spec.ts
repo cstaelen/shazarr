@@ -13,7 +13,7 @@ test("Critical: Should be able to record, recognize and display result", async (
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 
-  // Run son recognition
+  // Run song recognition
   await page.getByRole("button").first().click();
   await expect(page.getByText("recording...")).toBeVisible();
   await page.waitForTimeout(5000);
