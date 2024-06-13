@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
+import eslintConfigPrettier from "eslint-config-prettier";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import reactEslint from "eslint-plugin-react";
@@ -9,6 +10,7 @@ import typescriptEslint from "typescript-eslint";
 
 export default [
   js.configs.recommended,
+  eslintConfigPrettier,
   eslintPluginPrettierRecommended,
   ...typescriptEslint.configs.recommended,
   {
@@ -20,6 +22,9 @@ export default [
       "**/android",
       "**/ios",
     ],
+  },
+  {
+    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs"],
   },
   {
     plugins: {
@@ -44,8 +49,8 @@ export default [
     },
 
     rules: {
+      ...jsxA11Y.configs.recommended.rules,
       "prettier/prettier": "error",
-
       "simple-import-sort/imports": [
         "error",
         {
@@ -67,7 +72,6 @@ export default [
           ],
         },
       ],
-
       "simple-import-sort/exports": "error",
     },
   },
