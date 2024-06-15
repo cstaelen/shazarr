@@ -12,4 +12,5 @@ export const data = {
 };
 
 export type ErrorCodeType = keyof typeof data;
+
 export default data;
