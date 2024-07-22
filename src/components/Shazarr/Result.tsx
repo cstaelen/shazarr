@@ -22,7 +22,7 @@ export default function ShazarrResults() {
 
   const albumName = shazarrResponse?.sections?.[0]?.metadata?.filter(
     (m: { title: string }) => m?.title === "Album",
-  )?.[0].text;
+  )?.[0]?.text;
 
   if (!shazarrResponse) return null;
 
