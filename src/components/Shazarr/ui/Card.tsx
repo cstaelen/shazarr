@@ -58,7 +58,8 @@ export default function CardResult({ data }: { data: ShazamTrack }) {
       setLyrics(dataLyrics);
     }
 
-    const sampleURI = data?.hub.actions.filter((action) => !!action.uri)[0].uri;
+    const sampleURI = data?.hub?.actions?.filter((action) => !!action.uri)?.[0]
+      ?.uri;
     if (!sampleURI) return;
     const player = new Audio(sampleURI);
     setSample(player);

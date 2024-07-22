@@ -3,6 +3,13 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.1.1
+### 🐛 Fixed
+* Fix application crash when track result does not have album information
+### 🧹 Renovate
+* Add Matomo cookie free and anonimyzed data
+
+
 ## 📦 0.1.0
 ### 🖍 Changed
 * Change notification message to specify prerelease ou release update status
