@@ -7,26 +7,26 @@
     "npm": ">=10"
   },
   "dependencies": {
-    "@capacitor/android": "^6.1.0",
-    "@capacitor/app": "^6.0.0",
-    "@capacitor/core": "^6.1.0",
-    "@capacitor/device": "^6.0.0",
-    "@capacitor/haptics": "^6.0.0",
-    "@capacitor/ios": "^6.1.0",
-    "@capacitor/local-notifications": "^6.0.0",
-    "@capacitor/network": "^6.0.0",
-    "@capacitor/preferences": "^6.0.0",
-    "@capacitor/screen-orientation": "^6.0.0",
+    "@capacitor/android": "^7.0.1",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/core": "^7.0.1",
+    "@capacitor/device": "^7.0.0",
+    "@capacitor/haptics": "^7.0.0",
+    "@capacitor/ios": "^7.0.1",
+    "@capacitor/local-notifications": "^7.0.0",
+    "@capacitor/network": "^7.0.0",
+    "@capacitor/preferences": "^7.0.0",
+    "@capacitor/screen-orientation": "^7.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
     "@uidotdev/usehooks": "^2.4.1",
-    "capacitor-voice-recorder": "^5.0.0",
+    "capacitor-voice-recorder": "^6.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "^5.0.1",
-    "shazam-api": "^0.2.0"
+    "shazam-api": "^0.2.1-0"
   },
   "devDependencies": {
     "@babel/plugin-transform-private-property-in-object": "^7.24.7",
@@ -72,7 +72,7 @@
   },
   "overrides": {
     "typescript": "^5.4.5",
-    "@capacitor/core": "^6.1.0"
+    "@capacitor/core": "^7.0.1"
   },
   "browserslist": {
     "production": [

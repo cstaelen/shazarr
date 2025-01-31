@@ -3,6 +3,10 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.1.2
+### 🧹 Renovate
+* Update Capacitor from version 6 to 7
+
 ## 📦 0.1.1
 ### 🐛 Fixed
 * Fix application crash when track result does not have album information
