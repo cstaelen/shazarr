@@ -103,7 +103,8 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             }
           }, duration);
         }
-      } catch (e: unknown) {
+      } catch (err: unknown) {
+        console.error(err);
         // CI testing mock (no mic interface)
         if (process.env.REACT_APP_STAGE === "testing") {
           setAudio(mockRecordBase64);

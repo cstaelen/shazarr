@@ -6,6 +6,8 @@ Shazarr notable changes.
 ## 📦 0.1.2
 ### 🧹 Renovate
 * Update Capacitor from version 6 to 7
+* Update React from version 18 to 19
+* Update other dependencies
 
 ## 📦 0.1.1
 ### 🐛 Fixed
