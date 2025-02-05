@@ -1,4 +1,3 @@
-import React from "react";
 import { DeleteForever, RemoveRedEye, Search } from "@mui/icons-material";
 import { ButtonBase, CardActions, CardMedia, IconButton } from "@mui/material";
 import Card from "@mui/material/Card";

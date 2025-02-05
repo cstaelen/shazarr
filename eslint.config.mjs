@@ -1,56 +1,41 @@
 import js from "@eslint/js";
-import tsParser from "@typescript-eslint/parser";
-import eslintConfigPrettier from "eslint-config-prettier";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
-import reactEslint from "eslint-plugin-react";
 import reactHooksEslint from "eslint-plugin-react-hooks";
+import reactRefresh from 'eslint-plugin-react-refresh'
 import simpleImportSort from "eslint-plugin-simple-import-sort";
-import typescriptEslint from "typescript-eslint";
 
-export default [
-  js.configs.recommended,
-  eslintConfigPrettier,
-  eslintPluginPrettierRecommended,
-  ...typescriptEslint.configs.recommended,
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
+
+export default tseslint.config(
+  { ignores: [
+    "**/node_modules",
+    "**/public",
+    "**/playwright-report",
+    "**/dist",
+    "**/android",
+    "**/ios",
+  ], },
   {
-    ignores: [
-      "**/node_modules",
-      "**/public",
-      "**/playwright-report",
-      "**/build",
-      "**/android",
-      "**/ios",
-    ],
-  },
-  {
-    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs"],
-  },
-  {
+    extends: [js.configs.recommended, 
+      ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
     plugins: {
+      'react-hooks': reactHooksEslint,
+      'react-refresh': reactRefresh,
       "jsx-a11y": jsxA11Y,
       "simple-import-sort": simpleImportSort,
-      react: reactEslint.configs.recommended,
-      "react-hooks": reactHooksEslint.configs.recommended,
     },
-
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        tsconfigRootDir: "src/",
-      },
-      sourceType: "module",
-    },
-
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
-
     rules: {
-      ...jsxA11Y.configs.recommended.rules,
-      "prettier/prettier": "error",
+      ...reactHooksEslint.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
       "simple-import-sort/imports": [
         "error",
         {
@@ -75,4 +60,4 @@ export default [
       "simple-import-sort/exports": "error",
     },
   },
-];
+)

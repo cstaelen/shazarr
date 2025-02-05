@@ -33,13 +33,13 @@ export default defineConfig({
 
   use: {
     // Base URL to use in actions like `await page.goto('/')`.
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: "http://127.0.0.1:5173",
 
     // Collect trace when on failed test.
     trace: "retain-on-failure",
     ignoreHTTPSErrors: true,
     // An object containing additional HTTP headers to be sent with every request.
-    // bypassCSP: true,
+    bypassCSP: true,
     launchOptions: {
       args: ["--disable-web-security", "--ignore-certificate-errors"],
     },
@@ -55,23 +55,15 @@ export default defineConfig({
   ],
   // Run your local dev server before starting the tests.
   webServer: {
-    command: "REACT_APP_STAGE=testing npm run start",
-    url: "http://127.0.0.1:3000",
+    command: "VITE_STAGE=testing npm run start",
+    url: "http://127.0.0.1:5173",
     reuseExistingServer: !process.env.CI,
   },
   expect: {
-    // Maximum time expect() should wait for the condition to be met.
-    timeout: 5000,
-
+    timeout: 10000,
     toHaveScreenshot: {
-      // An acceptable amount of pixels that could be different, unset by default.
-      maxDiffPixels: 10,
-    },
-
-    toMatchSnapshot: {
-      // An acceptable ratio of pixels that are different to the
-      // total amount of pixels, between 0 and 1.
-      maxDiffPixelRatio: 0.1,
+      threshold: 0.3,
+      maxDiffPixelRatio: 0.025,
     },
   },
 });

@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import { Close, List } from "@mui/icons-material";
 import { Box, Button, Container, Drawer, useTheme } from "@mui/material";
@@ -13,8 +12,6 @@ export default function HistoryList() {
   const { history } = useHistoryProvider();
   const [listOpen, setListOpen] = useState<boolean>();
   const { palette } = useTheme();
-
-  console.log(history);
 
   if (!history || history?.length === 0) return null;
 
