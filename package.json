@@ -66,7 +66,7 @@
     "quality:depcheck": "npx depcheck",
     "quality:eslint": "eslint .",
     "quality:eslint-fix": "eslint --fix .",
-    "testing:run": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.50.0-noble npx playwright test",
+    "testing:run": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.50.0-noble npm i && npx playwright test",
     "testing:ui": "npx playwright test --ui",
     "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.50.0-noble npx playwright test",
     "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.50.0-noble npx playwright show-report ./testing/playwright-report --host 0.0.0.0",

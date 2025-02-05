@@ -1,9 +1,5 @@
 import js from "@eslint/js";
-import tsParser from "@typescript-eslint/parser";
-import eslintConfigPrettier from "eslint-config-prettier";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
-import reactEslint from "eslint-plugin-react";
 import reactHooksEslint from "eslint-plugin-react-hooks";
 import reactRefresh from 'eslint-plugin-react-refresh'
 import simpleImportSort from "eslint-plugin-simple-import-sort";
@@ -22,22 +18,20 @@ export default tseslint.config(
   ], },
   {
     extends: [js.configs.recommended, 
-      ...tseslint.configs.recommended,
-      eslintConfigPrettier,
-      eslintPluginPrettierRecommended],
+      ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
     },
     plugins: {
-      'react-hooks': reactHooks,
+      'react-hooks': reactHooksEslint,
       'react-refresh': reactRefresh,
       "jsx-a11y": jsxA11Y,
       "simple-import-sort": simpleImportSort,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
+      ...reactHooksEslint.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
