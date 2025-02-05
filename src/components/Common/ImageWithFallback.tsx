@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 
-import fallbackImage from "../../resources/img-placeholder.png";
+import fallbackImage from "../../resources/img-placeholder.png?inline";
 
 export const ImageWithFallback = ({
   alt,

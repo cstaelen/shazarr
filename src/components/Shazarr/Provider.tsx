@@ -77,8 +77,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           }
         }
 
-        // Start recording lock screen
-        // await ScreenOrientation.lock({ orientation: "natural" });
         setRecordingStatus("recording");
         vibrateAction();
         const { value: isRecording } = await VoiceRecorder.startRecording();
@@ -92,7 +90,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
               } = await VoiceRecorder.stopRecording();
 
               // CI testing mock (with mic interface)
-              if (process.env.REACT_APP_STAGE === "testing") {
+              if (import.meta.env.VITE_STAGE === "testing") {
                 setAudio(mockRecordBase64);
               } else {
                 setAudio(recordDataBase64);
@@ -103,10 +101,10 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             }
           }, duration);
         }
-      } catch (err: unknown) {
+      } catch (err) {
         console.error(err);
         // CI testing mock (no mic interface)
-        if (process.env.REACT_APP_STAGE === "testing") {
+        if (import.meta.env.VITE_STAGE === "testing") {
           setAudio(mockRecordBase64);
           setRecordingStatus("searching");
           return;
@@ -145,7 +143,8 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             setRecordingError("SHAZARR_NOT_FOUND");
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error(err);
           if (!historySearch) {
             addItemToHistory({
               title: "Offline record",
@@ -217,7 +216,11 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   };
 
   const vibrateAction = async () => {
-    await Haptics.vibrate();
+    try {
+      await Haptics.vibrate();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const searchOfflineRecord = (item: HistoryItem) => {

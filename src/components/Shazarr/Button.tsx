@@ -5,7 +5,7 @@ import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import { Box, IconButton } from "@mui/material";
 
 import { RECORD_DURATION } from "../../constant";
-import skullImage from "../../resources/skull.png";
+import skullImage from "../../resources/skull.png?inline";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
 
 import { useShazarrProvider } from "./Provider";

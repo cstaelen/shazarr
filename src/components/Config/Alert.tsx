@@ -1,4 +1,3 @@
-import React from "react";
 import { Alert, Box } from "@mui/material";
 
 import errorCode, { ErrorCodeType } from "./errorCode";

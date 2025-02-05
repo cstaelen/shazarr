@@ -1,4 +1,3 @@
-import React from "react";
 import { FormEvent, useState } from "react";
 import styled from "@emotion/styled";
 import {
@@ -71,9 +70,9 @@ export default function ConfigForm() {
                 fontSize={12}
               >
                 Github page -{" "}
-                {process.env.REACT_APP_STAGE === "testing"
+                {import.meta.env.VITE_STAGE === "testing"
                   ? "v0.0.0"
-                  : process.env.REACT_APP_CURRENT_VERSION}
+                  : import.meta.env.VITE_CURRENT_VERSION}
               </Link>
             </Box>
             <Box>
