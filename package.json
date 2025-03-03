@@ -21,7 +21,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.6",
     "@mui/material": "^6.4.4",
-    "@typescript-eslint/parser": "^8.22.0",
+    "@typescript-eslint/parser": "^8.25.0",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^6.0.3",
     "react": "^19.0.0",
