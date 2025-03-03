@@ -19,7 +19,7 @@
     "@capacitor/screen-orientation": "^7.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^6.4.5",
+    "@mui/icons-material": "^6.4.6",
     "@mui/material": "^6.4.4",
     "@typescript-eslint/parser": "^8.22.0",
     "@uidotdev/usehooks": "^2.4.1",
