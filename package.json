@@ -31,7 +31,7 @@
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^7.0.1",
-    "@eslint/js": "^9.19.0",
+    "@eslint/js": "^9.22.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@ionic/cli": "^7.2.0",
@@ -40,14 +40,14 @@
     "depcheck": "^1.4.7",
     "eslint": "^9.21.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^15.14.0",
     "prettier": "^3.5.3",
     "ts-prune": "^0.10.3",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.24.0",
+    "typescript-eslint": "^8.26.0",
     "vite": "^6.2.0"
 
   },
@@ -66,11 +66,11 @@
     "quality:depcheck": "npx depcheck",
     "quality:eslint": "eslint .",
     "quality:eslint-fix": "eslint --fix .",
-    "testing:run": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.50.0-noble npm i && npx playwright test",
+    "testing:run": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.51.0-noble npm i && npx playwright test",
     "testing:ui": "npx playwright test --ui",
-    "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.50.0-noble npx playwright test",
-    "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.50.0-noble npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
-    "testing:update-snapshots": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.50.0-noble npx playwright test --update-snapshots"
+    "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.51.0-noble npx playwright test",
+    "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.51.0-noble npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
+    "testing:update-snapshots": "docker run --rm -it  -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.51.0-noble npx playwright test --update-snapshots"
   },
   "overrides": {
     "typescript": "^5.7.3",
