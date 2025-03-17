@@ -12,7 +12,7 @@
     "@capacitor/core": "^7.0.1",
     "@capacitor/device": "^7.0.0",
     "@capacitor/haptics": "^7.0.0",
-    "@capacitor/ios": "^7.0.1",
+    "@capacitor/ios": "^7.1.0",
     "@capacitor/local-notifications": "^7.0.0",
     "@capacitor/network": "^7.0.0",
     "@capacitor/preferences": "^7.0.0",
