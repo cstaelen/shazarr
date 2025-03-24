@@ -31,7 +31,7 @@
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^7.0.1",
-    "@eslint/js": "^9.22.0",
+    "@eslint/js": "^9.23.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@ionic/cli": "^7.2.0",
