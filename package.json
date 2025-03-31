@@ -19,13 +19,13 @@
     "@capacitor/screen-orientation": "^7.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^7.0.0",
+    "@mui/icons-material": "^7.0.1",
     "@mui/material": "^7.0.0",
     "@typescript-eslint/parser": "^8.28.0",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.5",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "shazam-api": "^0.2.1-0"
   },
   "devDependencies": {
