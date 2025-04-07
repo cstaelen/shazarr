@@ -2,7 +2,7 @@
     "appId": "io.ionic.shazarr",
     "appName": "Shazarr",
     "bundledWebRuntime": false,
-    "npmClient": "npm",
+    "npmClient": "pnpm",
     "webDir": "dist",
     "cordova": {}
   }
