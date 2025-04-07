@@ -3,6 +3,12 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.1.3
+### 🧹 Renovate
+* Update `Android SDK` from version 34 to 35
+* Move from `npm`to `pnpm`
+* Update other node dependencies
+
 ## 📦 0.1.2
 ### 🧹 Renovate
 * Update `capacitor` from version 6 to 7

@@ -40,13 +40,13 @@ Get last release  :
 - **Custom service name**: `My custom music service`
 
 #### iOS ( /!\ source build only )
-Requirements: `npm`, `xcode`.
+Requirements: `pnpm`, `xcode`.
 
 1. Git clone project first
 2. in project folder run:
 ```
 cd docker-shazarr
-npm run ios:build
+pnpm run ios:build
 ```
 XCode should open project.
 
@@ -67,15 +67,15 @@ XCode should open project.
 ### Watch mode
 Start app in watch mode :
 ```sh
-npm run start # Listening on http://localhost:3000/
-npm run android:live # Listening on http://localhost:8100/ + emulate
-npm run ios:live # Listening on http://localhost:8100/ + emulate
+pnpm run start # Listening on http://localhost:3000/
+pnpm run android:live # Listening on http://localhost:8100/ + emulate
+pnpm run ios:live # Listening on http://localhost:8100/ + emulate
 ```
 
 ### Build
 Build APK with Android studio:
 ```
-npm run android:build
+pnpm run android:build
 ```
 Build ios app with Xcode:
 ```

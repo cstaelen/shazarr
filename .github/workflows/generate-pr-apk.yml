@@ -1,24 +1,17 @@
-name: APK deployment Workflow
+name: Build APK
+
 on:
-  # workflow_dispatch:
-  # push:
-  #   branches-ignore: [main, gh-pages]
-  push:
+  pull_request:
     branches:
       - main
-    tags:
-      - v*
-
-# Job 1 - Build Signed AAB
 
 jobs:
   build:
     name: Build Signed APK
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
@@ -84,13 +77,4 @@ jobs:
         with:
           name: app-bundle
           path: android/app/build/outputs/apk/release/shazarr-signed.apk
-
-      - name: Create Github Release
-        uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
-          prerelease: true
-          files: |
-            android/app/build/outputs/apk/release/shazarr-signed.apk
-
-      - run: echo Build status report=${{ job.status }}
+      
