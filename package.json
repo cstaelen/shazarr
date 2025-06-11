@@ -35,7 +35,7 @@
     "@types/react": "^19.1.7",
     "@types/react-dom": "^19.1.6",
     "@ionic/cli": "^7.2.1",
-    "@playwright/test": "^1.52.0",
+    "@playwright/test": "^1.53.0",
     "@vitejs/plugin-react": "^4.5.2",
     "depcheck": "^1.4.7",
     "eslint": "^9.27.0",
