@@ -9,35 +9,35 @@ importers:
   .:
     dependencies:
       '@capacitor/android':
-        specifier: ^7.3.0
-        version: 7.3.0(@capacitor/core@7.3.0)
+        specifier: ^7.4.0
+        version: 7.4.0(@capacitor/core@7.4.0)
       '@capacitor/app':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.3.0)
+        version: 7.0.1(@capacitor/core@7.4.0)
       '@capacitor/core':
-        specifier: ^7.3.0
-        version: 7.3.0
+        specifier: ^7.4.0
+        version: 7.4.0
       '@capacitor/device':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.3.0)
+        version: 7.0.1(@capacitor/core@7.4.0)
       '@capacitor/haptics':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.3.0)
+        version: 7.0.1(@capacitor/core@7.4.0)
       '@capacitor/ios':
-        specifier: ^7.3.0
-        version: 7.3.0(@capacitor/core@7.3.0)
+        specifier: ^7.4.0
+        version: 7.4.0(@capacitor/core@7.4.0)
       '@capacitor/local-notifications':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.3.0)
+        version: 7.0.1(@capacitor/core@7.4.0)
       '@capacitor/network':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.3.0)
+        version: 7.0.1(@capacitor/core@7.4.0)
       '@capacitor/preferences':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.3.0)
+        version: 7.0.1(@capacitor/core@7.4.0)
       '@capacitor/screen-orientation':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.3.0)
+        version: 7.0.1(@capacitor/core@7.4.0)
       '@emotion/react':
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.1.8)(react@19.1.0)
@@ -58,7 +58,7 @@ importers:
         version: 2.4.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       capacitor-voice-recorder:
         specifier: ^7.0.6
-        version: 7.0.6(@capacitor/core@7.3.0)(@capacitor/filesystem@7.0.1(@capacitor/core@7.3.0))
+        version: 7.0.6(@capacitor/core@7.4.0)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.0))
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -73,8 +73,8 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5(@types/node@22.14.0)(typescript@5.8.3)
       '@capacitor/cli':
-        specifier: ^7.3.0
-        version: 7.3.0
+        specifier: ^7.4.0
+        version: 7.4.0
       '@eslint/js':
         specifier: ^9.29.0
         version: 9.29.0
@@ -82,8 +82,8 @@ importers:
         specifier: ^7.2.1
         version: 7.2.1
       '@playwright/test':
-        specifier: ^1.53.0
-        version: 1.53.0
+        specifier: ^1.53.1
+        version: 1.53.1
       '@types/react':
         specifier: ^19.1.8
         version: 19.1.8
@@ -263,10 +263,10 @@ packages:
     resolution: {integrity: sha512-ETyHEk2VHHvl9b9jZP5IHPavHYk57EhanlRRuae9XCpb/j5bDCbPPMOBfCWhnl/7EDJz0jEMCi/RhccCE8r1+Q==}
     engines: {node: '>=6.9.0'}
 
-  '@capacitor/android@7.3.0':
-    resolution: {integrity: sha512-TqUm+Z3Uk7/rET+adNDKD63JtA0AN+pMQlFRcLPmZJHFmJl6bUOWWELVL0Ixl5XaweTxofNKeDAjjLRIs+wd3g==}
+  '@capacitor/android@7.4.0':
+    resolution: {integrity: sha512-HVCQsnUobviGt/MR5qCfXsfkSyZ5gjJVW6Jbn0CI5NHhsvUkBtazGjaMjdt5JueIz1pfKXpiuZc/njfRHwjx6Q==}
     peerDependencies:
-      '@capacitor/core': ^7.3.0
+      '@capacitor/core': ^7.4.0
 
   '@capacitor/app@7.0.1':
     resolution: {integrity: sha512-ArlVZAAla4MwQoKh26x2AaTDOBh5Vhp1VhMKR3RwqZSsZnazKTFGNrPbr9Ez5r1knnEDfApyjwp1uZnXK1WTYQ==}
@@ -283,13 +283,13 @@ packages:
     engines: {node: '>=16.0.0'}
     hasBin: true
 
-  '@capacitor/cli@7.3.0':
-    resolution: {integrity: sha512-p0E1ayxw0Njpid8xwOrnuBncdakWxDMbUL2JhDUft38q8tscF2beIIMVhdna1t4Ow55H0r8sdTurwtSjtomrVw==}
+  '@capacitor/cli@7.4.0':
+    resolution: {integrity: sha512-RXmsW067r9sz7K1qtXGNB12w2aJtt86J3Jc4vOvmvpA+GyVYkVY1UhAMRnuVrXHjGZEVlwBORHunwrmv30HoZg==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
-  '@capacitor/core@7.3.0':
-    resolution: {integrity: sha512-t/DdTyBchQ2eAZuCmAARlqQsrEm0WyeNwh5zeRuv+cR6gnAsw+86/EWvJ/em5dTnZyaqEy8vlmOMdWarrUbnuQ==}
+  '@capacitor/core@7.4.0':
+    resolution: {integrity: sha512-P6NnjoHyobZgTjynlZSn27d0SUj6j38inlNxFnKZr9qwU7/r6+0Sg2nWkGkIH/pMmXHsvGD8zVe6KUq1UncIjA==}
 
   '@capacitor/device@7.0.1':
     resolution: {integrity: sha512-ImjR2LmCEhbckYtOHXTfi5v6B7d4HPX9uKIAQs7wzzmE+yRRXuUTEzARBQ00dZDInAInkbuyQRdjwPTSHZUpnw==}
@@ -306,10 +306,10 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor/ios@7.3.0':
-    resolution: {integrity: sha512-gHEERjA8wG/GBBZJD8i7eiX0QwGY2HMh3H3KPw5a1CGhmNhtr/1bsrgwF7s6LP+KC4kKWseYo+ZrHjw1JC3JGA==}
+  '@capacitor/ios@7.4.0':
+    resolution: {integrity: sha512-xajNljo39eu0+Bw3eVnnMc73VRzWkp0m55S3dqJJOaT2GjqoWl1x0PrnnhYcDMp0X8aDPDBL8oz+XFpMjQiM1Q==}
     peerDependencies:
-      '@capacitor/core': ^7.3.0
+      '@capacitor/core': ^7.4.0
 
   '@capacitor/local-notifications@7.0.1':
     resolution: {integrity: sha512-GJewoiqiTLXNNRxqeJDi6vxj1Y37jLFI3KSdAM2Omvxew4ewyBSCjwOtXMQaEg+lvzGHtK6FPrSc2v/2EcL0wA==}
@@ -813,8 +813,8 @@ packages:
   '@paralleldrive/cuid2@2.2.2':
     resolution: {integrity: sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==}
 
-  '@playwright/test@1.53.0':
-    resolution: {integrity: sha512-15hjKreZDcp7t6TL/7jkAo6Df5STZN09jGiv5dbP9A6vMVncXRqE7/B2SncsyOwrkZRBH2i6/TPOL8BVmm3c7w==}
+  '@playwright/test@1.53.1':
+    resolution: {integrity: sha512-Z4c23LHV0muZ8hfv4jw6HngPJkbbtZxTkxPNIg7cJcTc9C28N/p2q7g3JZS2SiKBBHJ3uM1dgDye66bB7LEk5w==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -2126,8 +2126,8 @@ packages:
     resolution: {integrity: sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==}
     engines: {node: '>=10.13.0'}
 
-  glob@11.0.2:
-    resolution: {integrity: sha512-YT7U7Vye+t5fZ/QMkBFrTJ7ZQxInIUjwyAjVj84CYXqgBdv30MFUPGnBR6sQaVq6Is15wYJUsnzTuWaGRBhBAQ==}
+  glob@11.0.3:
+    resolution: {integrity: sha512-2Nim7dha1KVkaiF4q6Dj+ngPPMdfvLJEOpZk/jKiUAkqKebpGAWQXAq9z1xu9HKu5lWfqw/FASuccEjyznjPaA==}
     engines: {node: 20 || >=22}
     hasBin: true
 
@@ -3015,13 +3015,13 @@ packages:
     resolution: {integrity: sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==}
     engines: {node: '>=4'}
 
-  playwright-core@1.53.0:
-    resolution: {integrity: sha512-mGLg8m0pm4+mmtB7M89Xw/GSqoNC+twivl8ITteqvAndachozYe2ZA7srU6uleV1vEdAHYqjq+SV8SNxRRFYBw==}
+  playwright-core@1.53.1:
+    resolution: {integrity: sha512-Z46Oq7tLAyT0lGoFx4DOuB1IA9D1TPj0QkYxpPVUnGDqHHvDpCftu1J2hM2PiWsNMoZh8+LQaarAWcDfPBc6zg==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.53.0:
-    resolution: {integrity: sha512-ghGNnIEYZC4E+YtclRn4/p6oYbdPiASELBIYkBXfaTVKreQUYbMUYQDwS12a8F0/HtIjr/CkGjtwABeFPGcS4Q==}
+  playwright@1.53.1:
+    resolution: {integrity: sha512-LJ13YLr/ocweuwxyGf1XNFWIU4M2zUSo149Qbp+A4cpwDjsxRPj7k6H25LBrEHiEwxvRbD8HdwvQmRMSvquhYw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4105,13 +4105,13 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@capacitor/android@7.3.0(@capacitor/core@7.3.0)':
+  '@capacitor/android@7.4.0(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
-  '@capacitor/app@7.0.1(@capacitor/core@7.3.0)':
+  '@capacitor/app@7.0.1(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
   '@capacitor/assets@3.0.5(@types/node@22.14.0)(typescript@5.8.3)':
     dependencies:
@@ -4158,7 +4158,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/cli@7.3.0':
+  '@capacitor/cli@7.4.0':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
       '@ionic/utils-subprocess': 3.0.1
@@ -4180,41 +4180,41 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/core@7.3.0':
+  '@capacitor/core@7.4.0':
     dependencies:
       tslib: 2.8.1
 
-  '@capacitor/device@7.0.1(@capacitor/core@7.3.0)':
+  '@capacitor/device@7.0.1(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
-  '@capacitor/filesystem@7.0.1(@capacitor/core@7.3.0)':
+  '@capacitor/filesystem@7.0.1(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
-  '@capacitor/haptics@7.0.1(@capacitor/core@7.3.0)':
+  '@capacitor/haptics@7.0.1(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
-  '@capacitor/ios@7.3.0(@capacitor/core@7.3.0)':
+  '@capacitor/ios@7.4.0(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
-  '@capacitor/local-notifications@7.0.1(@capacitor/core@7.3.0)':
+  '@capacitor/local-notifications@7.0.1(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
-  '@capacitor/network@7.0.1(@capacitor/core@7.3.0)':
+  '@capacitor/network@7.0.1(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
-  '@capacitor/preferences@7.0.1(@capacitor/core@7.3.0)':
+  '@capacitor/preferences@7.0.1(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
-  '@capacitor/screen-orientation@7.0.1(@capacitor/core@7.3.0)':
+  '@capacitor/screen-orientation@7.0.1(@capacitor/core@7.4.0)':
     dependencies:
-      '@capacitor/core': 7.3.0
+      '@capacitor/core': 7.4.0
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -4771,9 +4771,9 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
 
-  '@playwright/test@1.53.0':
+  '@playwright/test@1.53.1':
     dependencies:
-      playwright: 1.53.0
+      playwright: 1.53.1
 
   '@popperjs/core@2.11.8': {}
 
@@ -5364,15 +5364,15 @@ snapshots:
 
   caniuse-lite@1.0.30001721: {}
 
-  capacitor-blob-writer@1.1.19(@capacitor/core@7.3.0)(@capacitor/filesystem@7.0.1(@capacitor/core@7.3.0)):
+  capacitor-blob-writer@1.1.19(@capacitor/core@7.4.0)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.0)):
     dependencies:
-      '@capacitor/core': 7.3.0
-      '@capacitor/filesystem': 7.0.1(@capacitor/core@7.3.0)
+      '@capacitor/core': 7.4.0
+      '@capacitor/filesystem': 7.0.1(@capacitor/core@7.4.0)
 
-  capacitor-voice-recorder@7.0.6(@capacitor/core@7.3.0)(@capacitor/filesystem@7.0.1(@capacitor/core@7.3.0)):
+  capacitor-voice-recorder@7.0.6(@capacitor/core@7.4.0)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.0)):
     dependencies:
-      '@capacitor/core': 7.3.0
-      capacitor-blob-writer: 1.1.19(@capacitor/core@7.3.0)(@capacitor/filesystem@7.0.1(@capacitor/core@7.3.0))
+      '@capacitor/core': 7.4.0
+      capacitor-blob-writer: 1.1.19(@capacitor/core@7.4.0)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.0))
       get-blob-duration: 1.2.0
     transitivePeerDependencies:
       - '@capacitor/filesystem'
@@ -6282,7 +6282,7 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  glob@11.0.2:
+  glob@11.0.3:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 4.1.1
@@ -7151,11 +7151,11 @@ snapshots:
 
   pify@3.0.0: {}
 
-  playwright-core@1.53.0: {}
+  playwright-core@1.53.1: {}
 
-  playwright@1.53.0:
+  playwright@1.53.1:
     dependencies:
-      playwright-core: 1.53.0
+      playwright-core: 1.53.1
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -7391,7 +7391,7 @@ snapshots:
 
   rimraf@6.0.1:
     dependencies:
-      glob: 11.0.2
+      glob: 11.0.3
       package-json-from-dist: 1.0.1
 
   rollup@4.40.1:
