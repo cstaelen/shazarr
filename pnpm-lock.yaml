@@ -9,35 +9,35 @@ importers:
   .:
     dependencies:
       '@capacitor/android':
-        specifier: ^7.4.1
-        version: 7.4.1(@capacitor/core@7.4.1)
+        specifier: ^7.4.2
+        version: 7.4.2(@capacitor/core@7.4.2)
       '@capacitor/app':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.1)
+        version: 7.0.1(@capacitor/core@7.4.2)
       '@capacitor/core':
-        specifier: ^7.4.1
-        version: 7.4.1
+        specifier: ^7.4.2
+        version: 7.4.2
       '@capacitor/device':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.1)
+        version: 7.0.1(@capacitor/core@7.4.2)
       '@capacitor/haptics':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.1)
+        version: 7.0.1(@capacitor/core@7.4.2)
       '@capacitor/ios':
-        specifier: ^7.4.1
-        version: 7.4.1(@capacitor/core@7.4.1)
+        specifier: ^7.4.2
+        version: 7.4.2(@capacitor/core@7.4.2)
       '@capacitor/local-notifications':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.1)
+        version: 7.0.1(@capacitor/core@7.4.2)
       '@capacitor/network':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.1)
+        version: 7.0.1(@capacitor/core@7.4.2)
       '@capacitor/preferences':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.1)
+        version: 7.0.1(@capacitor/core@7.4.2)
       '@capacitor/screen-orientation':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.1)
+        version: 7.0.1(@capacitor/core@7.4.2)
       '@emotion/react':
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.1.8)(react@19.1.0)
@@ -58,7 +58,7 @@ importers:
         version: 2.4.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       capacitor-voice-recorder:
         specifier: ^7.0.6
-        version: 7.0.6(@capacitor/core@7.4.1)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.1))
+        version: 7.0.6(@capacitor/core@7.4.2)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.2))
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -73,8 +73,8 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5(@types/node@22.14.0)(typescript@5.8.3)
       '@capacitor/cli':
-        specifier: ^7.4.1
-        version: 7.4.1
+        specifier: ^7.4.2
+        version: 7.4.2
       '@eslint/js':
         specifier: ^9.30.1
         version: 9.30.1
@@ -82,8 +82,8 @@ importers:
         specifier: ^7.2.1
         version: 7.2.1
       '@playwright/test':
-        specifier: ^1.53.2
-        version: 1.53.2
+        specifier: ^1.54.0
+        version: 1.54.0
       '@types/react':
         specifier: ^19.1.8
         version: 19.1.8
@@ -92,7 +92,7 @@ importers:
         version: 19.1.6(@types/react@19.1.8)
       '@vitejs/plugin-react':
         specifier: ^4.6.0
-        version: 4.6.0(vite@7.0.3(@types/node@22.14.0))
+        version: 4.6.0(vite@7.0.4(@types/node@22.14.0))
       depcheck:
         specifier: ^1.4.7
         version: 1.4.7
@@ -127,8 +127,8 @@ importers:
         specifier: ^8.36.0
         version: 8.36.0(eslint@9.30.1)(typescript@5.8.3)
       vite:
-        specifier: ^7.0.3
-        version: 7.0.3(@types/node@22.14.0)
+        specifier: ^7.0.4
+        version: 7.0.4(@types/node@22.14.0)
 
 packages:
 
@@ -272,8 +272,8 @@ packages:
     resolution: {integrity: sha512-8OLQgDScAOHXnAz2cV+RfzzNMipuLVBz2biuAJFMV9bfkNf393je3VM8CLkjQodW5+iWsSJdSgSWT6rsZoXHPw==}
     engines: {node: '>=6.9.0'}
 
-  '@capacitor/android@7.4.1':
-    resolution: {integrity: sha512-/LxreKsXt6oZnS7gOpHz2WvRuZzwaLpGOKqomvBTliISTQaKEwqLkX1k665fqZquuJjP8RKnkz8thO6UZJTfbg==}
+  '@capacitor/android@7.4.2':
+    resolution: {integrity: sha512-FZ7M9NwFkljR7EP5eXiE32mAIfZNcYw2CzRMCG3rQu0u0ZaIoeOeq5/oK4YcDnGpNmu8jpngKJqZ+9OiSQSwDg==}
     peerDependencies:
       '@capacitor/core': ^7.4.0
 
@@ -292,13 +292,13 @@ packages:
     engines: {node: '>=16.0.0'}
     hasBin: true
 
-  '@capacitor/cli@7.4.1':
-    resolution: {integrity: sha512-pN5SCj5SAA54yHj8XKJNhRXjjHNKrSfUuSS7a8GKQl/+OeaG0aA2hNJmM5RQJMBQ5MtU0sQqSLWpTkSW9nd7YA==}
+  '@capacitor/cli@7.4.2':
+    resolution: {integrity: sha512-ckcRbg/kBSnJsuCTCLzowBxvgDTI+dcIN7LK+Nt71fbaUG3judpF279ymJRrgRDJshFR5D5dfcvTFh5N1z8liA==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
-  '@capacitor/core@7.4.1':
-    resolution: {integrity: sha512-0ap4FzPJItaeg3QiiS1WguPNHY2aD67fQ9wr7DojCRzTFuNXQPvFB6lBkqlrVeQyJ9jCw0KV/LXv25oXjDcsyA==}
+  '@capacitor/core@7.4.2':
+    resolution: {integrity: sha512-akCf9A1FUR8AWTtmgGjHEq6LmGsjA2U7igaJ9PxiCBfyxKqlDbuGHrlNdpvHEjV5tUPH3KYtkze6gtFcNKPU9A==}
 
   '@capacitor/device@7.0.1':
     resolution: {integrity: sha512-ImjR2LmCEhbckYtOHXTfi5v6B7d4HPX9uKIAQs7wzzmE+yRRXuUTEzARBQ00dZDInAInkbuyQRdjwPTSHZUpnw==}
@@ -315,8 +315,8 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor/ios@7.4.1':
-    resolution: {integrity: sha512-KIvpCi2Hi5nWHGjGBLOCMrF46jDafu8s79dkZCPdK+4myy/pnzLpdj8xSic6umTHYOKThJMBYX42ZCBT2Cjt2w==}
+  '@capacitor/ios@7.4.2':
+    resolution: {integrity: sha512-Edd4aZ6IJi4O/7dJIsSIuuo6LXvVVP5V++0Vs1w5bWOGbGhWZXLF0lt0KGFgSUxTuyL6xURGUygkD6dCp35QAQ==}
     peerDependencies:
       '@capacitor/core': ^7.4.0
 
@@ -828,8 +828,8 @@ packages:
   '@paralleldrive/cuid2@2.2.2':
     resolution: {integrity: sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==}
 
-  '@playwright/test@1.53.2':
-    resolution: {integrity: sha512-tEB2U5z74ebBeyfGNZ3Jfg29AnW+5HlWhvHtb/Mqco9pFdZU1ZLNdVb2UtB5CvmiilNr2ZfVH/qMmAROG/XTzw==}
+  '@playwright/test@1.54.0':
+    resolution: {integrity: sha512-6Mnd5daQmLivaLu5kxUg6FxPtXY4sXsS5SUwKjWNy4ISe4pKraNHoFxcsaTFiNUULbjy0Vlb5HT86QuM0Jy1pQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3022,13 +3022,13 @@ packages:
     resolution: {integrity: sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==}
     engines: {node: '>=4'}
 
-  playwright-core@1.53.2:
-    resolution: {integrity: sha512-ox/OytMy+2w1jcYEYlOo1Hhp8hZkLCximMTUTMBXjGUA1KoFfiSZ+DU+3a739jsPY0yoKH2TFy9S2fsJas8yAw==}
+  playwright-core@1.54.0:
+    resolution: {integrity: sha512-uiWpWaJh3R3etpJ0QrpligEMl62Dk1iSAB6NUXylvmQz+e3eipXHDHvOvydDAssb5Oqo0E818qdn0L9GcJSTyA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.53.2:
-    resolution: {integrity: sha512-6K/qQxVFuVQhRQhFsVZ9fGeatxirtrpPgxzBYWyZLEXJzqYwuL4fuNmfOfD5et1tJE4GScKyPNeLhZeRwuTU3A==}
+  playwright@1.54.0:
+    resolution: {integrity: sha512-y9yzHmXRwEUOpghM7XGcA38GjWuTOUMaTIcm/5rHcYVjh5MSp9qQMRRMc/+p1cx+csoPnX4wkxAF61v5VKirxg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3743,8 +3743,8 @@ packages:
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
-  vite@7.0.3:
-    resolution: {integrity: sha512-y2L5oJZF7bj4c0jgGYgBNSdIu+5HF+m68rn2cQXFbGoShdhV1phX9rbnxy9YXj82aS8MMsCLAAFkRxZeWdldrQ==}
+  vite@7.0.4:
+    resolution: {integrity: sha512-SkaSguuS7nnmV7mfJ8l81JGBFV7Gvzp8IzgE8A8t23+AxuNX61Q5H1Tpz5efduSN7NHC8nQXD3sKQKZAu5mNEA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -4127,13 +4127,13 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@capacitor/android@7.4.1(@capacitor/core@7.4.1)':
+  '@capacitor/android@7.4.2(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
-  '@capacitor/app@7.0.1(@capacitor/core@7.4.1)':
+  '@capacitor/app@7.0.1(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
   '@capacitor/assets@3.0.5(@types/node@22.14.0)(typescript@5.8.3)':
     dependencies:
@@ -4180,7 +4180,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/cli@7.4.1':
+  '@capacitor/cli@7.4.2':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
       '@ionic/utils-subprocess': 3.0.1
@@ -4202,41 +4202,41 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/core@7.4.1':
+  '@capacitor/core@7.4.2':
     dependencies:
       tslib: 2.8.1
 
-  '@capacitor/device@7.0.1(@capacitor/core@7.4.1)':
+  '@capacitor/device@7.0.1(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
-  '@capacitor/filesystem@7.0.1(@capacitor/core@7.4.1)':
+  '@capacitor/filesystem@7.0.1(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
-  '@capacitor/haptics@7.0.1(@capacitor/core@7.4.1)':
+  '@capacitor/haptics@7.0.1(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
-  '@capacitor/ios@7.4.1(@capacitor/core@7.4.1)':
+  '@capacitor/ios@7.4.2(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
-  '@capacitor/local-notifications@7.0.1(@capacitor/core@7.4.1)':
+  '@capacitor/local-notifications@7.0.1(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
-  '@capacitor/network@7.0.1(@capacitor/core@7.4.1)':
+  '@capacitor/network@7.0.1(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
-  '@capacitor/preferences@7.0.1(@capacitor/core@7.4.1)':
+  '@capacitor/preferences@7.0.1(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
-  '@capacitor/screen-orientation@7.0.1(@capacitor/core@7.4.1)':
+  '@capacitor/screen-orientation@7.0.1(@capacitor/core@7.4.2)':
     dependencies:
-      '@capacitor/core': 7.4.1
+      '@capacitor/core': 7.4.2
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -4796,9 +4796,9 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
 
-  '@playwright/test@1.53.2':
+  '@playwright/test@1.54.0':
     dependencies:
-      playwright: 1.53.2
+      playwright: 1.54.0
 
   '@popperjs/core@2.11.8': {}
 
@@ -5076,7 +5076,7 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@vitejs/plugin-react@4.6.0(vite@7.0.3(@types/node@22.14.0))':
+  '@vitejs/plugin-react@4.6.0(vite@7.0.4(@types/node@22.14.0))':
     dependencies:
       '@babel/core': 7.27.4
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.27.4)
@@ -5084,7 +5084,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.19
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 7.0.3(@types/node@22.14.0)
+      vite: 7.0.4(@types/node@22.14.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -5385,15 +5385,15 @@ snapshots:
 
   caniuse-lite@1.0.30001724: {}
 
-  capacitor-blob-writer@1.1.19(@capacitor/core@7.4.1)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.1)):
+  capacitor-blob-writer@1.1.19(@capacitor/core@7.4.2)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.2)):
     dependencies:
-      '@capacitor/core': 7.4.1
-      '@capacitor/filesystem': 7.0.1(@capacitor/core@7.4.1)
+      '@capacitor/core': 7.4.2
+      '@capacitor/filesystem': 7.0.1(@capacitor/core@7.4.2)
 
-  capacitor-voice-recorder@7.0.6(@capacitor/core@7.4.1)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.1)):
+  capacitor-voice-recorder@7.0.6(@capacitor/core@7.4.2)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.2)):
     dependencies:
-      '@capacitor/core': 7.4.1
-      capacitor-blob-writer: 1.1.19(@capacitor/core@7.4.1)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.1))
+      '@capacitor/core': 7.4.2
+      capacitor-blob-writer: 1.1.19(@capacitor/core@7.4.2)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.2))
       get-blob-duration: 1.2.0
     transitivePeerDependencies:
       - '@capacitor/filesystem'
@@ -7173,11 +7173,11 @@ snapshots:
 
   pify@3.0.0: {}
 
-  playwright-core@1.53.2: {}
+  playwright-core@1.54.0: {}
 
-  playwright@1.53.2:
+  playwright@1.54.0:
     dependencies:
-      playwright-core: 1.53.2
+      playwright-core: 1.54.0
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -8006,7 +8006,7 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  vite@7.0.3(@types/node@22.14.0):
+  vite@7.0.4(@types/node@22.14.0):
     dependencies:
       esbuild: 0.25.6
       fdir: 6.4.6(picomatch@4.0.2)
