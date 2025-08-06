@@ -12,32 +12,32 @@ importers:
         specifier: ^7.4.2
         version: 7.4.2(@capacitor/core@7.4.2)
       '@capacitor/app':
-        specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.2)
+        specifier: ^7.0.2
+        version: 7.0.2(@capacitor/core@7.4.2)
       '@capacitor/core':
         specifier: ^7.4.2
         version: 7.4.2
       '@capacitor/device':
-        specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.2)
+        specifier: ^7.0.2
+        version: 7.0.2(@capacitor/core@7.4.2)
       '@capacitor/haptics':
-        specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.2)
+        specifier: ^7.0.2
+        version: 7.0.2(@capacitor/core@7.4.2)
       '@capacitor/ios':
         specifier: ^7.4.2
         version: 7.4.2(@capacitor/core@7.4.2)
       '@capacitor/local-notifications':
-        specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.2)
+        specifier: ^7.0.2
+        version: 7.0.2(@capacitor/core@7.4.2)
       '@capacitor/network':
-        specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.2)
+        specifier: ^7.0.2
+        version: 7.0.2(@capacitor/core@7.4.2)
       '@capacitor/preferences':
-        specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.2)
+        specifier: ^7.0.2
+        version: 7.0.2(@capacitor/core@7.4.2)
       '@capacitor/screen-orientation':
-        specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.2)
+        specifier: ^7.0.2
+        version: 7.0.2(@capacitor/core@7.4.2)
       '@emotion/react':
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.1.9)(react@19.1.1)
@@ -272,8 +272,8 @@ packages:
     peerDependencies:
       '@capacitor/core': ^7.4.0
 
-  '@capacitor/app@7.0.1':
-    resolution: {integrity: sha512-ArlVZAAla4MwQoKh26x2AaTDOBh5Vhp1VhMKR3RwqZSsZnazKTFGNrPbr9Ez5r1knnEDfApyjwp1uZnXK1WTYQ==}
+  '@capacitor/app@7.0.2':
+    resolution: {integrity: sha512-kRWBF6Wc6OQxhL+N6rsegyfJY37Lj9/VJhtrmgmH+y+rdxQLQwUOpMyxXStym7cF+QzGeVpItyVxyUT9fE5ByQ==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
@@ -295,8 +295,8 @@ packages:
   '@capacitor/core@7.4.2':
     resolution: {integrity: sha512-akCf9A1FUR8AWTtmgGjHEq6LmGsjA2U7igaJ9PxiCBfyxKqlDbuGHrlNdpvHEjV5tUPH3KYtkze6gtFcNKPU9A==}
 
-  '@capacitor/device@7.0.1':
-    resolution: {integrity: sha512-ImjR2LmCEhbckYtOHXTfi5v6B7d4HPX9uKIAQs7wzzmE+yRRXuUTEzARBQ00dZDInAInkbuyQRdjwPTSHZUpnw==}
+  '@capacitor/device@7.0.2':
+    resolution: {integrity: sha512-OMGMBjLbh7ApaqW1oOJIV73iyrFK/T5v2MzuQYq3GLT+jnGvCuj/y82Ofq2Fz9/hlJ2fukztPwG1K80jyk0i6w==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
@@ -305,8 +305,8 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor/haptics@7.0.1':
-    resolution: {integrity: sha512-ewZmspE5krgDUj5ZvUDcfNZvgerAIr+3bDSk6DLzyvBZ/dYmr/tMLu5H6WtYaaKYZJ32aZAudGpIal5epDyBYA==}
+  '@capacitor/haptics@7.0.2':
+    resolution: {integrity: sha512-vqfeEM6s2zMgLjpITCTUIy7P/hadq/Gr5E/RClFgMJPB41Y5FsqOKD+j85/uwh8N2cf/aWaPeXUmjnTzJbEB2g==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
@@ -315,23 +315,23 @@ packages:
     peerDependencies:
       '@capacitor/core': ^7.4.0
 
-  '@capacitor/local-notifications@7.0.1':
-    resolution: {integrity: sha512-GJewoiqiTLXNNRxqeJDi6vxj1Y37jLFI3KSdAM2Omvxew4ewyBSCjwOtXMQaEg+lvzGHtK6FPrSc2v/2EcL0wA==}
+  '@capacitor/local-notifications@7.0.2':
+    resolution: {integrity: sha512-U83dKWZjqpD3BBc9nSW24/3rdzpCMgVgcenOmjtc5eee0OSdE3hFAB9RmmRFZbvg0XE3BmrBt595BnzcAEeqaQ==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor/network@7.0.1':
-    resolution: {integrity: sha512-jKyhTUqegKHjHKkK8e3t0TgwAYpKb3ocYpZkJrB3uXL5figkG06UEhQE4Cp25Dfb4LIjDxTSDLLsDEteKarmyg==}
+  '@capacitor/network@7.0.2':
+    resolution: {integrity: sha512-KKkiUvGfMVKIcYaG+KlGAxrQtoRnwJtT+9yhTkCFzZWeYrY91sBZKOVOfnNHO8RiOxqbKn5VSUlyFLQQiyyfyg==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor/preferences@7.0.1':
-    resolution: {integrity: sha512-XF9jOHzvoIBZLwZr/EX6aVaUO1d8Mx7TwBLQS33pYHOliCW5knT5KUkFOXNNYxh9qqODYesee9xuQIKNJpQBag==}
+  '@capacitor/preferences@7.0.2':
+    resolution: {integrity: sha512-JVCy0/oc6RsRencLOZ8rMqjNxAlHs7awPJU/MXqangsJ48oO2PnYGHfCvci6WgIJlqyC0QhvWZaO1BR1lVkHWQ==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor/screen-orientation@7.0.1':
-    resolution: {integrity: sha512-6s2CLPAy7xFCzAXtj///xR1/BqqsX0NBt1BkhffPAh6jOs3n3CZsbh+YnPEptyeBBUtpsWWOE9rrvgtvy6iKJg==}
+  '@capacitor/screen-orientation@7.0.2':
+    resolution: {integrity: sha512-73+ZeD0eZYJjTL/gcSCBuqmlCdO3LqIMcHgS21olrQE5MAmOodmmDwPV523OJbs8T0Ye3FXK7TSsq0BCZ3EQdQ==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
@@ -4114,7 +4114,7 @@ snapshots:
     dependencies:
       '@capacitor/core': 7.4.2
 
-  '@capacitor/app@7.0.1(@capacitor/core@7.4.2)':
+  '@capacitor/app@7.0.2(@capacitor/core@7.4.2)':
     dependencies:
       '@capacitor/core': 7.4.2
 
@@ -4189,7 +4189,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@capacitor/device@7.0.1(@capacitor/core@7.4.2)':
+  '@capacitor/device@7.0.2(@capacitor/core@7.4.2)':
     dependencies:
       '@capacitor/core': 7.4.2
 
@@ -4197,7 +4197,7 @@ snapshots:
     dependencies:
       '@capacitor/core': 7.4.2
 
-  '@capacitor/haptics@7.0.1(@capacitor/core@7.4.2)':
+  '@capacitor/haptics@7.0.2(@capacitor/core@7.4.2)':
     dependencies:
       '@capacitor/core': 7.4.2
 
@@ -4205,19 +4205,19 @@ snapshots:
     dependencies:
       '@capacitor/core': 7.4.2
 
-  '@capacitor/local-notifications@7.0.1(@capacitor/core@7.4.2)':
+  '@capacitor/local-notifications@7.0.2(@capacitor/core@7.4.2)':
     dependencies:
       '@capacitor/core': 7.4.2
 
-  '@capacitor/network@7.0.1(@capacitor/core@7.4.2)':
+  '@capacitor/network@7.0.2(@capacitor/core@7.4.2)':
     dependencies:
       '@capacitor/core': 7.4.2
 
-  '@capacitor/preferences@7.0.1(@capacitor/core@7.4.2)':
+  '@capacitor/preferences@7.0.2(@capacitor/core@7.4.2)':
     dependencies:
       '@capacitor/core': 7.4.2
 
-  '@capacitor/screen-orientation@7.0.1(@capacitor/core@7.4.2)':
+  '@capacitor/screen-orientation@7.0.2(@capacitor/core@7.4.2)':
     dependencies:
       '@capacitor/core': 7.4.2
 
