@@ -3,6 +3,12 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.1.4
+### 🐛 Fixed
+* Update tidarr search url according version 0.3.0
+### 🧹 Renovate
+* Update dependencies
+
 ## 📦 0.1.3
 ### 🧹 Renovate
 * Update `Android SDK` from version 34 to 35

@@ -85,7 +85,7 @@ test("Options: Should see options panel and use service buttons", async ({
   );
   await testExternalServiceButtons(
     "Download with Tidarr",
-    "http://tidarr.server.docker/?query=Yakuza%20Szymon",
+    "http://tidarr.server.docker/search/Yakuza%20Szymon",
     page,
   );
 
