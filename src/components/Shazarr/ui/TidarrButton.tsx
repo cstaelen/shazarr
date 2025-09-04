@@ -14,7 +14,7 @@ export default function TidarrButton({
   const { isNetworkConnected } = useConfigProvider();
 
   function openTidar() {
-    window.open(`${url}/?query=${encodeURIComponent(searchTerms)}`, "_blank");
+    window.open(`${url}/search/${encodeURIComponent(searchTerms)}`, "_blank");
   }
 
   return (
