@@ -3,6 +3,7 @@
 [![GitHub Release](https://img.shields.io/github/release/cstaelen/shazarr-app?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr-app/releases)
 ![Playwright CI](https://img.shields.io/github/actions/workflow/status/cstaelen/shazarr-app/playwright.yml?label=Playwright%20CI&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)
 [![Download APK](https://img.shields.io/github/downloads/cstaelen/shazarr-app/latest/shazarr-signed.apk?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=android)](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
+<a href="https://www.buymeacoffee.com/clst" target="_blank" title="Buy Me A Coffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 28px !important;width: 110px !important;" ></a>
 
 # Shazarr - Unofficial Shazam mobile app web UI
 Shazarr project is a mobile app (android, ios) providing Shazam song recognition service with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
@@ -81,6 +82,12 @@ Build ios app with Xcode:
 ```
 make ios/build
 ```
+
+## Support
+
+If you like this project you can support here:
+
+<a href="https://www.buymeacoffee.com/clst" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="40" width="160"></a>
 
 ## Credits
 - Big thanks to the [node-shazam-api](https://github.com/asivery/node-shazam-api) team for the awesome works and reactivness 👏💪🙏
