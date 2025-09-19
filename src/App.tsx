@@ -70,7 +70,7 @@ function App() {
                   >
                     <ShazarrButton />
                   </Box>
-                  <Box>
+                  <Box sx={{pb: 4}}>
                     <Config />
                     <HistoryList />
                   </Box>
