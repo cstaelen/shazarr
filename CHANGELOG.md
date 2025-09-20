@@ -3,6 +3,12 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.1.4
+### 🐛 Fixed
+* Fix issue with android navigation button overlap
+### 🧹 Renovate
+* Update other node dependencies
+
 ## 📦 0.1.3
 ### 🐛 Fixed
 * Update tidarr search url according version 0.3.0
