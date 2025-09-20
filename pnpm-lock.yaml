@@ -59,6 +59,9 @@ importers:
       capacitor-voice-recorder:
         specifier: ^7.0.6
         version: 7.0.6(@capacitor/core@7.4.3)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.3))
+      node:
+        specifier: ^24.8.0
+        version: 24.8.0
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -2832,6 +2835,9 @@ packages:
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
 
+  node-bin-setup@1.1.4:
+    resolution: {integrity: sha512-vWNHOne0ZUavArqPP5LJta50+S8R261Fr5SvGul37HbEDcowvLjwdvd0ZeSr0r2lTSrPxl6okq9QUw8BFGiAxA==}
+
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
@@ -2846,6 +2852,11 @@ packages:
 
   node-releases@2.0.21:
     resolution: {integrity: sha512-5b0pgg78U3hwXkCM8Z9b2FJdPZlr9Psr9V2gQPESdGHqbntyFJKFW4r5TeWGFzafGY3hzs1JC62VEQMbl1JFkw==}
+
+  node@24.8.0:
+    resolution: {integrity: sha512-96VUgFV6DNxMQwi/V/mwSFLUDId93eHJQIA4XNZ3PTGHdek7EeY1bAHEUX51hpBcA5YT9kU7Yn6LP+6TmsMtlw==}
+    engines: {npm: '>=5.0.0'}
+    hasBin: true
 
   normalize-package-data@2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
@@ -6984,6 +6995,8 @@ snapshots:
 
   node-addon-api@6.1.0: {}
 
+  node-bin-setup@1.1.4: {}
+
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
@@ -6994,6 +7007,10 @@ snapshots:
       he: 1.2.0
 
   node-releases@2.0.21: {}
+
+  node@24.8.0:
+    dependencies:
+      node-bin-setup: 1.1.4
 
   normalize-package-data@2.5.0:
     dependencies:
