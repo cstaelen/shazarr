@@ -35,7 +35,7 @@ export default function HistoryList() {
         }}
       >
         <Box
-          sx={{ backgroundImage: palette.background.paper, paddingTop: 1 }}
+          sx={{ backgroundImage: palette.background.paper, paddingTop: 1, mb: 5 }}
           data-testid="history-list"
         >
           <Container maxWidth="xs" sx={{ padding: "0 0.5rem" }}>
