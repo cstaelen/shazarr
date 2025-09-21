@@ -3,6 +3,10 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.1.5
+### 🐛 Fixed
+* Fix issue with android navigation button overlap in history
+
 ## 📦 0.1.4
 ### 🐛 Fixed
 * Fix issue with android navigation button overlap
