@@ -70,7 +70,7 @@ export default function ConfigForm() {
                 fontSize={12}
               >
                 Github page -{" "}
-                {import.meta.env.VITE_STAGE === "testing"
+                {import.meta.env.VITE_STAGE === "testing" || import.meta.env.MODE === "development"
                   ? "v0.0.0"
                   : import.meta.env.VITE_CURRENT_VERSION}
               </Link>
