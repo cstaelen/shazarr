@@ -1,6 +1,5 @@
 {
   "name": "shazarr-app",
-  "version": "0.1.5",
   "private": true,
   "engines": {
     "node": ">=18",

@@ -19,6 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Set VITE_CURRENT_VERSION
+        run: echo "VITE_CURRENT_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
@@ -55,7 +58,6 @@ jobs:
       - name: Make gradlew executable
         working-directory: ./android
         run: chmod +x gradlew
-
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -94,3 +96,4 @@ jobs:
             android/app/build/outputs/apk/release/shazarr-signed.apk
 
       - run: echo Build status report=${{ job.status }}
+

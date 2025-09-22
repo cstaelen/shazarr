@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set VITE_CURRENT_VERSION
+        run: echo "VITE_CURRENT_VERSION=v0.0.0-testing" >> $GITHUB_ENV
+
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
