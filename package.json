@@ -18,8 +18,8 @@
     "@capacitor/screen-orientation": "^7.0.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.3",
-    "@mui/material": "^7.3.3",
+    "@mui/icons-material": "^7.3.4",
+    "@mui/material": "^7.3.4",
     "@typescript-eslint/parser": "^8.45.0",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
@@ -48,7 +48,7 @@
     "ts-prune": "^0.10.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.45.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.9"
   },
   "scripts": {
     "start": "vite dev",
