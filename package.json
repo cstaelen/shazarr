@@ -23,7 +23,7 @@
     "@typescript-eslint/parser": "^8.46.1",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
-    "node": "^24.10.0",
+    "node": "^25.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "shazam-api": "^0.3.0"
@@ -41,7 +41,7 @@
     "eslint": "^9.37.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.0.0",
-    "eslint-plugin-react-refresh": "^0.4.23",
+    "eslint-plugin-react-refresh": "^0.4.24",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.4.0",
     "prettier": "^3.6.2",
