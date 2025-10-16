@@ -60,8 +60,8 @@ importers:
         specifier: ^7.0.6
         version: 7.0.6(@capacitor/core@7.4.3)(@capacitor/filesystem@7.0.1(@capacitor/core@7.4.3))
       node:
-        specifier: ^24.10.0
-        version: 24.10.0
+        specifier: ^25.0.0
+        version: 25.0.0
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -109,8 +109,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0(eslint@9.37.0)
       eslint-plugin-react-refresh:
-        specifier: ^0.4.23
-        version: 0.4.23(eslint@9.37.0)
+        specifier: ^0.4.24
+        version: 0.4.24(eslint@9.37.0)
       eslint-plugin-simple-import-sort:
         specifier: ^12.1.1
         version: 12.1.1(eslint@9.37.0)
@@ -1882,8 +1882,8 @@ packages:
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
 
-  eslint-plugin-react-refresh@0.4.23:
-    resolution: {integrity: sha512-G4j+rv0NmbIR45kni5xJOrYvCtyD3/7LjpVH8MPPcudXDcNu8gv+4ATTDXTtbRR8rTCM5HxECvCSsRmxKnWDsA==}
+  eslint-plugin-react-refresh@0.4.24:
+    resolution: {integrity: sha512-nLHIW7TEq3aLrEYWpVaJ1dRgFR+wLDPN8e8FpYAql/bMV2oBEfC37K0gLEGgv9fy66juNShSMV8OkTqzltcG/w==}
     peerDependencies:
       eslint: '>=8.40'
 
@@ -2864,8 +2864,8 @@ packages:
   node-releases@2.0.23:
     resolution: {integrity: sha512-cCmFDMSm26S6tQSDpBCg/NR8NENrVPhAJSf+XbxBG4rPFaaonlEoE9wHQmun+cls499TQGSb7ZyPBRlzgKfpeg==}
 
-  node@24.10.0:
-    resolution: {integrity: sha512-jsObvvoMWjG70ZwudX/m3k0Lr/qpErRoadtL/mLsSI6SvQ0ib3OizTjVR4NWOw500ZwBxi3G5jO8GR3FXli2Iw==}
+  node@25.0.0:
+    resolution: {integrity: sha512-ANfM7zVW8sGj1yxSKSsBE41ZfRAdbsCMMNjbXc/LhsuItMCD9b3Luv/En6YUf4Dg/zZB9xdzunNKgjk7HIrnGQ==}
     engines: {npm: '>=5.0.0'}
     hasBin: true
 
@@ -6041,7 +6041,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-react-refresh@0.4.23(eslint@9.37.0):
+  eslint-plugin-react-refresh@0.4.24(eslint@9.37.0):
     dependencies:
       eslint: 9.37.0
 
@@ -7051,7 +7051,7 @@ snapshots:
 
   node-releases@2.0.23: {}
 
-  node@24.10.0:
+  node@25.0.0:
     dependencies:
       node-bin-setup: 1.1.4
 
