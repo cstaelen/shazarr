@@ -6,12 +6,12 @@
     "npm": ">=10"
   },
   "dependencies": {
-    "@capacitor/android": "^8.0.0",
+    "@capacitor/android": "^8.0.1",
     "@capacitor/app": "^8.0.0",
-    "@capacitor/core": "^8.0.0",
+    "@capacitor/core": "^8.0.1",
     "@capacitor/device": "^8.0.0",
     "@capacitor/haptics": "^8.0.0",
-    "@capacitor/ios": "^8.0.0",
+    "@capacitor/ios": "^8.0.1",
     "@capacitor/local-notifications": "^8.0.0",
     "@capacitor/network": "^8.0.0",
     "@capacitor/preferences": "^8.0.0",
@@ -23,14 +23,14 @@
     "@typescript-eslint/parser": "^8.53.0",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
-    "node": "^25.2.1",
+    "node": "^25.3.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "shazam-api": "^0.3.0"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
-    "@capacitor/cli": "^8.0.0",
+    "@capacitor/cli": "^8.0.1",
     "@eslint/js": "^9.39.2",
     "@ionic/cli": "^7.2.1",
     "@playwright/test": "^1.57.0",
