@@ -21,8 +21,8 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1(@capacitor/core@8.1.0)
       '@capacitor/haptics':
-        specifier: ^8.0.0
-        version: 8.0.0(@capacitor/core@8.1.0)
+        specifier: ^8.0.1
+        version: 8.0.1(@capacitor/core@8.1.0)
       '@capacitor/ios':
         specifier: ^8.1.0
         version: 8.1.0(@capacitor/core@8.1.0)
@@ -60,8 +60,8 @@ importers:
         specifier: ^7.0.6
         version: 7.0.6(@capacitor/core@8.1.0)(@capacitor/filesystem@7.0.1(@capacitor/core@8.1.0))
       node:
-        specifier: ^25.6.1
-        version: 25.6.1
+        specifier: ^25.7.0
+        version: 25.7.0
       react:
         specifier: ^19.2.4
         version: 19.2.4
@@ -355,8 +355,8 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor/haptics@8.0.0':
-    resolution: {integrity: sha512-DY1IUOjke1T4ITl7mFHQIKCaJJyHYAYRYHG9bVApU7PDOZiMVGMp48Yjzdqjya+wv/AHS5mDabSTUmhJ5uDvBA==}
+  '@capacitor/haptics@8.0.1':
+    resolution: {integrity: sha512-8v8rowLBMeb3CryqoQvXndwyUsoi4pPXf0qFw7IGA4D32Uk7+K6juN2SjRowqunoovkvvbFmU9TD7JIAz2zmFw==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
@@ -2899,8 +2899,8 @@ packages:
   node-releases@2.0.27:
     resolution: {integrity: sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==}
 
-  node@25.6.1:
-    resolution: {integrity: sha512-+R9ppZxVUFaFjeYnZOzGyWNLE2uVq5HDXS0NF5Rhy9+mIlPECrFNgewMg0lrEiqukXxcbOd+FeoNSK6dL6UCzg==}
+  node@25.7.0:
+    resolution: {integrity: sha512-C4iA3H4ldvQc8P6o0lCik0PCHimX5Yd+qknA/GmgmW2EsNkWek+8YQ0IEqi8vutuk+JNa4Pit94bMTzpSeA5Vg==}
     engines: {npm: '>=5.0.0'}
     hasBin: true
 
@@ -4359,7 +4359,7 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.1.0
 
-  '@capacitor/haptics@8.0.0(@capacitor/core@8.1.0)':
+  '@capacitor/haptics@8.0.1(@capacitor/core@8.1.0)':
     dependencies:
       '@capacitor/core': 8.1.0
 
@@ -7128,7 +7128,7 @@ snapshots:
 
   node-releases@2.0.27: {}
 
-  node@25.6.1:
+  node@25.7.0:
     dependencies:
       node-bin-setup: 1.1.4
 
