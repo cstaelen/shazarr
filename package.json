@@ -10,7 +10,7 @@
     "@capacitor/app": "^8.0.1",
     "@capacitor/core": "^8.1.0",
     "@capacitor/device": "^8.0.1",
-    "@capacitor/haptics": "^8.0.0",
+    "@capacitor/haptics": "^8.0.1",
     "@capacitor/ios": "^8.1.0",
     "@capacitor/local-notifications": "^8.0.1",
     "@capacitor/network": "^8.0.1",
@@ -23,7 +23,7 @@
     "@typescript-eslint/parser": "^8.56.1",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
-    "node": "^25.6.1",
+    "node": "^25.7.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "shazam-api": "^0.3.0"
