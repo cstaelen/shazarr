@@ -18,9 +18,9 @@
     "@capacitor/screen-orientation": "^8.0.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.9",
-    "@mui/material": "^7.3.9",
-    "@typescript-eslint/parser": "^8.58.0",
+    "@mui/icons-material": "^9.0.0",
+    "@mui/material": "^9.0.0",
+    "@typescript-eslint/parser": "^8.58.1",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
     "node": "^25.9.0",
@@ -47,8 +47,8 @@
     "prettier": "^3.8.1",
     "ts-prune": "^0.10.3",
     "typescript": "^6.0.2",
-    "typescript-eslint": "^8.58.0",
-    "vite": "^8.0.5"
+    "typescript-eslint": "^8.58.1",
+    "vite": "^8.0.7"
   },
   "scripts": {
     "start": "vite dev",
