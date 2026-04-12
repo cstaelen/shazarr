@@ -52,7 +52,7 @@ export default function HistoryCard({
       </CardMedia>
       <CardContent sx={{ padding: "0.5rem", flex: "1 1 0" }}>
         <ButtonBase sx={{ textAlign: "left" }} onClick={handleClickItem}>
-          <Typography variant="body2" color="text.secondary" lineHeight={1.2}>
+          <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
             <strong>{item.title}</strong> {`- ${item.artist}`}
             <br />
             <small>

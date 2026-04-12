@@ -16,7 +16,7 @@ export default function HistoryList() {
   if (!history || history?.length === 0) return null;
 
   return (
-    <Box marginBottom={2}>
+    <Box sx={{ marginBottom: 2 }}>
       <Button
         startIcon={<List />}
         variant="outlined"

@@ -56,17 +56,19 @@ function App() {
                 <StackStyled direction="column" os={devideOS}>
                   <Box>
                     <H1>Shazarr</H1>
-                    <Typography component="h2" marginBottom={2}>
+                    <Typography component="h2" sx={{ marginBottom: 2 }}>
                       - Offroad Shazam app -
                     </Typography>
                     <StatusChip />
                   </Box>
                   <Box
-                    marginTop={3}
-                    flex="1 1 0"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                    sx={{
+                      marginTop: 3,
+                      flex: "1 1 0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                   >
                     <ShazarrButton />
                   </Box>

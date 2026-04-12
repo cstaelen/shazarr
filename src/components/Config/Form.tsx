@@ -49,7 +49,7 @@ export default function ConfigForm() {
         <DialogContent sx={{ padding: 2 }}>
           <Box component="form" onSubmit={(e) => saveConfig(e)}>
             {Object.entries(formConfig)?.map((field, index) => (
-              <Box marginBottom={2} key={`form-field-${index}`}>
+              <Box sx={{ marginBottom: 2 }} key={`form-field-${index}`}>
                 <Paper sx={{ padding: "0.5rem" }}>
                   <Input
                     name={field[0]}

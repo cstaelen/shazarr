@@ -146,7 +146,7 @@ export default function CardResult({ data }: { data: ShazamTrack }) {
       </TableContainer>
 
       {lyrics && lyrics?.length > 0 && (
-        <Box marginTop={2}>
+        <Box sx={{ marginTop: 2 }}>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMore />}

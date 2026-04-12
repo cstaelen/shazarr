@@ -30,7 +30,7 @@ export default function ShazarrResults() {
     <>
       <CardResult data={shazarrResponse} />
       <br />
-      <Stack spacing={2} marginBottom={2}>
+      <Stack spacing={2} sx={{ marginBottom: 2 }}>
         {config?.lidarr_url && (
           <LidarrButton
             searchTerms={`${albumName} ${shazarrResponse.subtitle}`}
