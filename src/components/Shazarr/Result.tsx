@@ -1,16 +1,15 @@
-import React from "react";
 import { Close } from "@mui/icons-material";
 import { Box, Button, Divider, Stack } from "@mui/material";
 import { ShazamProvider } from "shazam-api/dist/types";
 
-import { useConfigProvider } from "../Config/Provider";
+import { useConfigProvider } from "../Config/useConfig";
 
 import CardResult from "./ui/Card";
 import CustomServiceButton from "./ui/CustomServiceButton";
 import LidarrButton from "./ui/LidarrButton";
 import StreamProviderButton from "./ui/StreamProviderButton";
 import TidarrButton from "./ui/TidarrButton";
-import { useShazarrProvider } from "./Provider";
+import { useShazarrProvider } from "./useShazarr";
 
 export default function ShazarrResults() {
   const {

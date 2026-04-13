@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 
 import fallbackImage from "../../resources/img-placeholder.png?inline";
@@ -14,11 +14,9 @@ export const ImageWithFallback = ({
   height?: string;
   width?: string;
 }) => {
-  const [, setError] = useState<string>();
   const ImgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    setError(undefined);
     if (ImgRef.current) {
       ImgRef.current.src = fallbackImage;
     }
@@ -29,7 +27,6 @@ export const ImageWithFallback = ({
       className="loading"
       alt={alt}
       ref={ImgRef}
-      onError={(e) => setError(e.toString())}
       src={fallbackImage}
       onLoad={(e) => {
         if (src && src !== (e.target as HTMLImageElement).src) {

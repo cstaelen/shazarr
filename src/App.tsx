@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Device } from "@capacitor/device";
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
@@ -30,20 +30,11 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [appLoaded, setAppLoaded] = useState(false);
   const [devideOS, setDevideOS] = useState<"ios" | "android" | "web">();
 
-  const getDeviceOS = async () => {
-    const { platform } = await Device.getInfo();
-    setDevideOS(platform);
-  };
-
   useEffect(() => {
-    setAppLoaded(true);
-    getDeviceOS();
+    Device.getInfo().then(({ platform }) => setDevideOS(platform));
   }, []);
-
-  if (!appLoaded) return null;
 
   return (
     <ThemeProvider theme={darkTheme}>

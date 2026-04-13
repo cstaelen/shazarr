@@ -1,66 +1,38 @@
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Preferences } from "@capacitor/preferences";
-import { ShazamTrack } from "shazam-api/dist/types";
 
 import { HISTORY_STORE_KEY } from "../../constant";
 
-// import mock from "./history.json";
+import { HistoryContext, HistoryItem } from "./context";
 
-type HistoryContextType = {
-  history: HistoryItem[] | undefined;
-  actions: {
-    addItemToHistory: (item: HistoryItem) => void;
-    deleteHistoryItem: (date: number) => void;
-  };
-};
-
-export type HistoryItem = {
-  title: string;
-  artist: string;
-  date: number;
-  data?: ShazamTrack;
-  stream?: string;
-};
-
-const HistoryContext = React.createContext<HistoryContextType>(
-  {} as HistoryContextType,
-);
+export type { HistoryItem } from "./context";
 
 export function HistoryProvider({ children }: { children: ReactNode }) {
   const [history, setHistory] = useState<HistoryItem[]>();
+  const initialized = useRef(false);
 
-  function addItemToHistory(item: HistoryItem) {
-    setHistory([...(history || []), item]);
-  }
-
-  function deleteHistoryItem(date: number) {
-    const clone = [...(history || [])].filter((item) => item.date !== date);
-    setHistory([...clone]);
-  }
-
-  async function getStorageHistory() {
-    const { value } = await Preferences.get({
-      key: HISTORY_STORE_KEY,
+  useEffect(() => {
+    Preferences.get({ key: HISTORY_STORE_KEY }).then(({ value }) => {
+      setHistory(value ? JSON.parse(value) : []);
+      initialized.current = true;
     });
-    if (value) {
-      setHistory(JSON.parse(value));
-    }
-  }
+  }, []);
 
-  async function setStorageHistory(history: HistoryItem[]) {
-    await Preferences.set({
+  useEffect(() => {
+    if (!initialized.current || history === undefined) return;
+    Preferences.set({
       key: HISTORY_STORE_KEY,
       value: JSON.stringify(history),
     });
+  }, [history]);
+
+  function addItemToHistory(item: HistoryItem) {
+    setHistory((prev) => [...(prev || []), item]);
   }
 
-  useEffect(() => {
-    if (!history) {
-      getStorageHistory();
-    } else {
-      setStorageHistory(history);
-    }
-  }, [history]);
+  function deleteHistoryItem(date: number) {
+    setHistory((prev) => (prev || []).filter((item) => item.date !== date));
+  }
 
   const value = {
     history,
@@ -74,7 +46,3 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
     <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>
   );
 }
-
-export const useHistoryProvider = () => {
-  return useContext(HistoryContext);
-};

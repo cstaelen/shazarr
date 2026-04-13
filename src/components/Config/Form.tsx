@@ -10,9 +10,9 @@ import {
   Paper,
 } from "@mui/material";
 
-import { useShazarrProvider } from "../Shazarr/Provider";
+import { useShazarrProvider } from "../Shazarr/useShazarr";
 
-import { useConfigProvider } from "./Provider";
+import { useConfigProvider } from "./useConfig";
 
 export default function ConfigForm() {
   const [showApiForm, setShowApiForm] = useState<boolean>();
@@ -67,7 +67,7 @@ export default function ConfigForm() {
                 href="https://github.com/cstaelen/shazarr-app"
                 target="_blank"
                 rel="noreferrer"
-                fontSize={12}
+                sx={{fontSize: 12}}
               >
                 Github page -{" "}
                 {import.meta.env.VITE_STAGE === "testing" || import.meta.env.MODE === "development"

@@ -5,9 +5,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 import { ImageWithFallback } from "../Common/ImageWithFallback";
-import { useShazarrProvider } from "../Shazarr/Provider";
+import { useShazarrProvider } from "../Shazarr/useShazarr";
 
-import { HistoryItem, useHistoryProvider } from "./Provider";
+import { HistoryItem } from "./context";
+import { useHistoryProvider } from "./useHistory";
 
 export default function HistoryCard({
   item,

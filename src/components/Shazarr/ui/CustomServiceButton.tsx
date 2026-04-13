@@ -1,9 +1,8 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { Search } from "@mui/icons-material";
 import { Button } from "@mui/material";
 
-import { useConfigProvider } from "../../Config/Provider";
+import { useConfigProvider } from "../../Config/useConfig";
 
 export default function CustomServiceButton({
   searchTerms,

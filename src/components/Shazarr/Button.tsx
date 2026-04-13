@@ -8,8 +8,8 @@ import { RECORD_DURATION } from "../../constant";
 import skullImage from "../../resources/skull.png?inline";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
 
-import { useShazarrProvider } from "./Provider";
 import ShazarrResults from "./Result";
+import { useShazarrProvider } from "./useShazarr";
 
 export default function ShazarrButton() {
   const {
