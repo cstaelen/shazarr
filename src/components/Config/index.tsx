@@ -1,8 +1,8 @@
-import { useShazarrProvider } from "../Shazarr/Provider";
+import { useShazarrProvider } from "../Shazarr/useShazarr";
 
 import ApiErrorAlert from "./Alert";
 import ConfigForm from "./Form";
-import { useConfigProvider } from "./Provider";
+import { useConfigProvider } from "./useConfig";
 
 export default function Config() {
   const { recordingStatus, recordingError } = useShazarrProvider();

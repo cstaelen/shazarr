@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Close, List } from "@mui/icons-material";
 import { Box, Button, Container, Drawer, useTheme } from "@mui/material";
 
-import { useShazarrProvider } from "../Shazarr/Provider";
+import { useShazarrProvider } from "../Shazarr/useShazarr";
 
 import HistoryCard from "./Card";
-import { useHistoryProvider } from "./Provider";
+import { useHistoryProvider } from "./useHistory";
 
 export default function HistoryList() {
   const { recordingStatus } = useShazarrProvider();
@@ -16,7 +16,7 @@ export default function HistoryList() {
   if (!history || history?.length === 0) return null;
 
   return (
-    <Box marginBottom={2}>
+    <Box sx={{ marginBottom: 2 }}>
       <Button
         startIcon={<List />}
         variant="outlined"

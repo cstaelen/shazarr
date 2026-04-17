@@ -5,9 +5,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 import { ImageWithFallback } from "../Common/ImageWithFallback";
-import { useShazarrProvider } from "../Shazarr/Provider";
+import { useShazarrProvider } from "../Shazarr/useShazarr";
 
-import { HistoryItem, useHistoryProvider } from "./Provider";
+import { HistoryItem } from "./context";
+import { useHistoryProvider } from "./useHistory";
 
 export default function HistoryCard({
   item,
@@ -52,7 +53,7 @@ export default function HistoryCard({
       </CardMedia>
       <CardContent sx={{ padding: "0.5rem", flex: "1 1 0" }}>
         <ButtonBase sx={{ textAlign: "left" }} onClick={handleClickItem}>
-          <Typography variant="body2" color="text.secondary" lineHeight={1.2}>
+          <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
             <strong>{item.title}</strong> {`- ${item.artist}`}
             <br />
             <small>

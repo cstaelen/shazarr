@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { App } from "@capacitor/app";
 import {
   ExpandMore,
@@ -26,12 +26,25 @@ import Typography from "@mui/material/Typography";
 import { ShazamTrack } from "shazam-api/dist/types";
 
 import { ImageWithFallback } from "../../Common/ImageWithFallback";
-import { useShazarrProvider } from "../Provider";
+import { useShazarrProvider } from "../useShazarr";
 
 export default function CardResult({ data }: { data: ShazamTrack }) {
-  const [sample, setSample] = useState<HTMLAudioElement>();
-  const [lyrics, setLyrics] = useState<string[]>();
   const [isPlaying, setIsPlaying] = useState<boolean>();
+
+  const lyrics = useMemo(
+    () => data?.sections?.filter((section) => section.type === "LYRICS")?.[0]?.text,
+    [data],
+  );
+
+  const sampleURI = useMemo(
+    () => data?.hub?.actions?.filter((action) => !!action.uri)?.[0]?.uri,
+    [data],
+  );
+
+  const sample = useMemo(
+    () => (sampleURI ? new Audio(sampleURI) : undefined),
+    [sampleURI],
+  );
   const {
     actions: { resetSearch },
   } = useShazarrProvider();
@@ -49,24 +62,11 @@ export default function CardResult({ data }: { data: ShazamTrack }) {
   }
 
   useEffect(() => {
-    if (!data) return;
-
-    const dataLyrics = data?.sections?.filter(
-      (section) => section.type === "LYRICS",
-    )?.[0]?.text;
-    if (dataLyrics) {
-      setLyrics(dataLyrics);
-    }
-
-    const sampleURI = data?.hub?.actions?.filter((action) => !!action.uri)?.[0]
-      ?.uri;
-    if (!sampleURI) return;
-    const player = new Audio(sampleURI);
-    setSample(player);
+    if (!sample) return;
 
     function pausePlayer() {
-      player?.pause();
-      player?.remove();
+      sample?.pause();
+      sample?.remove();
       setIsPlaying(false);
     }
 
@@ -76,7 +76,7 @@ export default function CardResult({ data }: { data: ShazamTrack }) {
     return () => {
       pausePlayer();
     };
-  }, [data]);
+  }, [sample]);
 
   return (
     <>
@@ -146,7 +146,7 @@ export default function CardResult({ data }: { data: ShazamTrack }) {
       </TableContainer>
 
       {lyrics && lyrics?.length > 0 && (
-        <Box marginTop={2}>
+        <Box sx={{ marginTop: 2 }}>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMore />}
