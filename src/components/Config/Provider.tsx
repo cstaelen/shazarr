@@ -19,10 +19,20 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
         placeholder: "Lidarr URL (http://...)",
         type: "url",
       },
+      lidarr_api_key: {
+        value: currentConfig.lidarr_api_key,
+        placeholder: "Lidarr API key (optional, enables auto-search)",
+        type: "text",
+      },
       tidarr_url: {
         value: currentConfig.tidarr_url,
         placeholder: "Tidarr URL (http://...)",
         type: "url",
+      },
+      tidarr_api_key: {
+        value: currentConfig.tidarr_api_key,
+        placeholder: "Tidarr API key (optional, enables auto-search)",
+        type: "text",
       },
       custom_service_url: {
         value: currentConfig.custom_service_url,

@@ -31,7 +31,9 @@ export default function ConfigForm() {
     setConfig({
       ...config,
       lidarr_url: data.get("lidarr_url")?.toString() || "",
+      lidarr_api_key: data.get("lidarr_api_key")?.toString() || "",
       tidarr_url: data.get("tidarr_url")?.toString() || "",
+      tidarr_api_key: data.get("tidarr_api_key")?.toString() || "",
       custom_service_url: data.get("custom_service_url")?.toString() || "",
       custom_service_name: data.get("custom_service_name")?.toString() || "",
     });
