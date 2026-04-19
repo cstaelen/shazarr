@@ -2,7 +2,6 @@ import test, { expect, Page } from "@playwright/test";
 
 import { gotoWithLocalStorage, waitForImgLoaded } from "./utils/helpers";
 
-let serviceUrlExpected: string;
 
 async function testExternalServiceButtons(
   label: string,
@@ -12,12 +11,14 @@ async function testExternalServiceButtons(
   // Run service button test
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 
+  let requestedUrl = "";
+  page.context().once("request", (req) => { requestedUrl = req.url(); });
+  const pagePromise = page.context().waitForEvent("page");
   await page.getByText(label).click();
+  const newPage = await pagePromise;
   await page.waitForTimeout(200);
-  const pages = await page.context().pages();
-  await expect(serviceUrlExpected).toEqual(url);
-
-  await pages[1].close();
+  await newPage.close();
+  await expect(requestedUrl).toEqual(url);
 }
 
 test("Options: Should see options panel and use service buttons", async ({
@@ -59,18 +60,6 @@ test("Options: Should see options panel and use service buttons", async ({
   await expect(page.getByText("Download with LidarrDownload")).toHaveScreenshot(
     { maxDiffPixelRatio: 0.05 },
   );
-
-  // init new frame index to listen future events
-  await page.evaluate(() => {
-    window.open("http://init.test");
-  });
-  await page.waitForTimeout(200);
-  const pages = await page.context().pages();
-  pages[1].context().on("request", (error) => {
-    serviceUrlExpected = error.url();
-  });
-
-  await pages[1].close();
 
   // Test button availability on result screen
   await testExternalServiceButtons(
