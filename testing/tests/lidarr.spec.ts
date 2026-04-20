@@ -29,20 +29,29 @@ async function openYakuzaResult(page: Page) {
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 }
 
-function mockLidarrRoutes(page: Page, overrides: { artistLookup?: unknown[]; albums?: unknown[] } = {}) {
+function mockLidarrRoutes(
+  page: Page,
+  overrides: {
+    artistLookup?: unknown[];
+    albums?: unknown[];
+  } = {},
+) {
   return page.route(`${LIDARR_URL}/**`, async (route) => {
     const url = route.request().url();
     const method = route.request().method();
 
     if (url.includes("/api/v1/artist") && !url.includes("lookup") && method === "GET") {
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([]) });
+      const body: unknown[] = [];
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
     } else if (url.includes("/api/v1/artist/lookup")) {
       const body = overrides.artistLookup ?? [{ foreignArtistId: "abc-123", artistName: "Szymon" }];
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
     } else if (url.includes("/api/v1/artist") && method === "POST") {
       await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: 1 }) });
-    } else if (url.includes("/api/v1/album") && url.includes("artistId=1")) {
-      const body = overrides.albums ?? [{ id: 10, title: "Blue Coloured Mountain", artistId: 1 }];
+    } else if (url.includes("/api/v1/album") && url.includes("artistId=")) {
+      const body = overrides.albums ?? [
+        { id: 10, title: "Blue Coloured Mountain", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } },
+      ];
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
     } else if (url.includes("/api/v1/qualityprofile")) {
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ id: 1, name: "Any" }]) });
@@ -87,18 +96,19 @@ test("Lidarr: With API key — calls API and shows success", async ({ page }) =>
 
   await page.getByRole("button", { name: "Download with Lidarr" }).click();
   await expect(page.getByRole("button", { name: /Searching/i })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Added to Lidarr!" })).toBeVisible({
+  await expect(page.getByRole("button", { name: "Search triggered in Lidarr!" })).toBeVisible({
     timeout: 15000,
   });
 });
 
-test("Lidarr: With API key — shows error when not found", async ({ page }) => {
+test("Lidarr: With API key — shows error when artist not found", async ({ page }) => {
   await mockLidarrRoutes(page, { artistLookup: [] });
   await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
   await openYakuzaResult(page);
 
   await page.getByRole("button", { name: "Download with Lidarr" }).click();
   await expect(
-    page.getByRole("button", { name: "Not found — try manually" }),
+    page.getByRole("button", { name: "Artist not found" }),
   ).toBeVisible({ timeout: 10000 });
 });
+

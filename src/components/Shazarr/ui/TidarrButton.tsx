@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Album, Download, Favorite } from "@mui/icons-material";
+import { Album, Download, Favorite, OpenInNew } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -7,8 +7,10 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  IconButton,
   Stack,
   styled,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
@@ -22,6 +24,18 @@ import {
   tidarrQueueTrack,
   tidarrSearchAlbums,
 } from "../api/tidarr";
+
+function formatTidarrError(message: string): string {
+  if (/failed to fetch|network|networkerror/i.test(message)) return "Tidarr unreachable";
+  if (/<!doctype|not valid json|unexpected token/i.test(message)) return "Tidarr unreachable";
+  if (/401|unauthorized/i.test(message)) return "Invalid API key";
+  if (/403|forbidden/i.test(message)) return "Access denied";
+  if (/404/i.test(message)) return "Tidarr not found — check URL";
+  if (/5\d\d|service unavailable|bad gateway/i.test(message)) return "Tidarr unreachable";
+  if (/track not found/i.test(message)) return "Track not found on Tidal";
+  if (/credentials/i.test(message)) return "Tidal not logged in — check Tidarr";
+  return message || "Error — try manually";
+}
 
 type TidarrStatus = "idle" | "loading" | "success" | "error";
 
@@ -39,10 +53,17 @@ export default function TidarrButton({
   const { isNetworkConnected, config } = useConfigProvider();
   const [status, setStatus] = useState<TidarrStatus>("idle");
   const [successMessage, setSuccessMessage] = useState("Added to Tidarr!");
+  const [errorMessage, setErrorMessage] = useState("Error — try manually");
   const [albums, setAlbums] = useState<TidalAlbum[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const apiKey = config?.tidarr_api_key;
+
+  function setError(msg: string) {
+    setErrorMessage(formatTidarrError(msg));
+    setStatus("error");
+    setTimeout(() => setStatus("idle"), 3000);
+  }
 
   async function handleClick() {
     if (!apiKey) {
@@ -57,16 +78,14 @@ export default function TidarrButton({
     try {
       const results = await tidarrSearchAlbums(url, apiKey, artistName, albumTitle, trackTitle);
       if (results.length === 0) {
-        setStatus("error");
-        setTimeout(() => setStatus("idle"), 3000);
+        setError("Track not found on Tidal");
         return;
       }
       setAlbums(results);
       setDialogOpen(true);
       setStatus("idle");
-    } catch {
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 3000);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "");
     }
   }
 
@@ -74,35 +93,41 @@ export default function TidarrButton({
     setDialogOpen(false);
     setStatus("loading");
 
-    let result: TidarrQueueResult;
-    if (type === "album") {
-      result = await tidarrQueueAlbum(url, apiKey!, album, artistName);
-    } else if (type === "track") {
-      result = await tidarrQueueTrack(url, apiKey!, album.id, trackTitle);
-    } else {
-      result = await tidarrFavoriteTrack(url, apiKey!, album.id, trackTitle);
-    }
+    try {
+      let result: TidarrQueueResult;
+      if (type === "album") {
+        result = await tidarrQueueAlbum(url, apiKey!, album, artistName);
+      } else if (type === "track") {
+        result = await tidarrQueueTrack(url, apiKey!, album.id, trackTitle);
+      } else {
+        result = await tidarrFavoriteTrack(url, apiKey!, album.id, trackTitle);
+      }
 
-    if (result.success) {
-      if (result.message) setSuccessMessage(result.message);
-      setStatus("success");
-    } else {
-      setStatus("error");
+      if (result.success) {
+        if (result.message) setSuccessMessage(result.message);
+        setStatus("success");
+        setTimeout(() => setStatus("idle"), 3000);
+      } else {
+        setError(result.message);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "");
     }
-    setTimeout(() => setStatus("idle"), 3000);
   }
 
   const label = {
     idle: "Download with Tidarr",
     loading: "Searching...",
     success: successMessage,
-    error: "Not found — try manually",
+    error: errorMessage,
   }[status];
 
   return (
     <>
+      <Stack direction="row" spacing={1}>
       <Button
         variant="contained"
+        fullWidth
         disabled={!isNetworkConnected || status === "loading"}
         startIcon={
           status === "loading" ? (
@@ -122,6 +147,21 @@ export default function TidarrButton({
       >
         <strong>{label}</strong>
       </Button>
+      {apiKey && (
+        <Tooltip title="Open Tidarr search">
+          <span>
+            <IconButton
+              color="primary"
+              onClick={() => window.open(`${url}/search/${encodeURIComponent(`${trackTitle} ${artistName}`)}`, "_blank")}
+              disabled={!isNetworkConnected}
+              sx={{ border: 2, borderRadius: 1 }}
+            >
+              <OpenInNew />
+            </IconButton>
+          </span>
+        </Tooltip>
+      )}
+      </Stack>
 
       <Dialog
         open={dialogOpen}

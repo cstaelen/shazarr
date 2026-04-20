@@ -47,17 +47,20 @@ async function openYakuzaResult(page: Page) {
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 }
 
-function mockTidarrRoutes(page: Page, overrides: Record<string, unknown> = {}) {
+function mockTidarrRoutes(
+  page: Page,
+  overrides: { search?: unknown; albumTracks?: unknown } = {},
+) {
   return page.route(`${TIDARR_URL}/**`, async (route) => {
     const url = route.request().url();
 
     if (url.includes("/proxy/tidal/v2/search")) {
-      const body = (overrides.search ?? { albums: { items: [MOCK_ALBUM] } });
+      const body = overrides.search ?? { albums: { items: [MOCK_ALBUM] } };
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
     } else if (url.includes("/proxy/tidal/v1/pages/album")) {
-      const body = (overrides.albumTracks ?? {
+      const body = overrides.albumTracks ?? {
         rows: [null, { modules: [{ pagedList: { items: [{ item: MOCK_TRACK }] } }] }],
-      });
+      };
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
     } else if (url.includes("/api/settings")) {
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(MOCK_SETTINGS) });
@@ -112,6 +115,7 @@ test("Tidarr: With API key — shows error when no albums found", async ({ page 
 
   await page.getByRole("button", { name: "Download with Tidarr" }).click();
   await expect(
-    page.getByRole("button", { name: "Not found — try manually" }),
+    page.getByRole("button", { name: "Track not found on Tidal" }),
   ).toBeVisible({ timeout: 10000 });
 });
+

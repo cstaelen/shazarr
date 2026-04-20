@@ -47,9 +47,12 @@ async function request<T>(
       ...(options.headers ?? {}),
     },
   });
-  if (!res.ok) throw new Error(`Tidarr API error (${res.status}): ${await res.text()}`);
   const contentType = res.headers.get("content-type") ?? "";
-  if (!contentType.includes("application/json")) return undefined as T;
+  if (!res.ok) {
+    const body = contentType.includes("application/json") ? await res.text() : "";
+    throw new Error(`Tidarr API error (${res.status})${body ? `: ${body}` : ""}`);
+  }
+  if (!contentType.includes("application/json")) throw new Error("Tidarr unreachable");
   const text = await res.text();
   return text ? JSON.parse(text) : (undefined as T);
 }
