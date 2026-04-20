@@ -9,6 +9,8 @@ type LidarrAlbum = {
   id: number;
   title: string;
   artistId: number;
+  monitored: boolean;
+  statistics?: { percentOfTracks: number };
 };
 
 type LidarrArtistLookup = {
@@ -30,7 +32,7 @@ type LidarrArtist = {
 };
 
 export type LidarrAutoSearchResult =
-  | { success: true }
+  | { success: true; status?: "queued" | "wanted" | "available" }
   | { success: false; message: string };
 
 function delay(ms: number) {
@@ -136,6 +138,14 @@ async function ensureArtist(
   return { success: true, artistId: created.id, created: true };
 }
 
+function getAlbumStatus(album: LidarrAlbum): "available" | "wanted" | "queued" {
+  const pct = album.statistics?.percentOfTracks ?? 0;
+  if (pct === 100) return "available";
+  if (album.monitored) return "wanted";
+  return "queued";
+}
+
+
 async function getAlbumsByArtist(
   config: LidarrConfig,
   artistId: number
@@ -147,7 +157,7 @@ async function waitForAlbum(
   config: LidarrConfig,
   artistId: number,
   normalizedAlbum: string,
-  timeoutMs = 30_000,
+  timeoutMs = 60_000,
   pollIntervalMs = 2_500
 ): Promise<LidarrAlbum | null> {
   const started = Date.now();
@@ -204,8 +214,10 @@ export async function lidarrAutoSearch(
       const albums = await getAlbumsByArtist(config, matchedLocal.id);
       const album = albums.find((a) => normalize(a.title) === normalizedAlbum);
       if (album) {
+        const albumStatus = getAlbumStatus(album);
+        if (albumStatus === "available") return { success: true, status: "available" };
         await triggerAlbumSearch(config, album.id);
-        return { success: true };
+        return { success: true, status: albumStatus };
       }
       return { success: false, message: "Album not found" };
     }
@@ -234,8 +246,10 @@ export async function lidarrAutoSearch(
       );
 
       if (album) {
+        const albumStatus = getAlbumStatus(album);
+        if (albumStatus === "available") return { success: true, status: "available" };
         await triggerAlbumSearch(config, album.id);
-        return { success: true };
+        return { success: true, status: albumStatus };
       }
 
       if (ensured.created) {
