@@ -11,5 +11,8 @@ updates:
       interval: "daily"
     groups:
       root-dependencies:
-        patterns: 
+        patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
