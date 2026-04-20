@@ -2,23 +2,27 @@ import test, { expect, Page } from "@playwright/test";
 
 import { gotoWithLocalStorage, waitForImgLoaded } from "./utils/helpers";
 
-
 async function testExternalServiceButtons(
   label: string,
   url: string,
   page: Page,
 ) {
-  // Run service button test
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 
-  let requestedUrl = "";
-  page.context().once("request", (req) => { requestedUrl = req.url(); });
-  const pagePromise = page.context().waitForEvent("page");
+  const ctx = page.context();
+  const nonLocalPattern = /^(?!.*127\.0\.0\.1)(?!.*localhost).*$/;
+  const capturedUrl = new Promise<string>((resolve) => {
+    void ctx.route(nonLocalPattern, (route) => {
+      resolve(route.request().url());
+      route.abort();
+    });
+  });
+
+  const pagePromise = ctx.waitForEvent("page");
   await page.getByText(label).click();
-  const newPage = await pagePromise;
-  await page.waitForTimeout(200);
-  await newPage.close();
-  await expect(requestedUrl).toEqual(url);
+  await pagePromise;
+  await ctx.unroute(nonLocalPattern);
+  await expect(await capturedUrl).toEqual(url);
 }
 
 test("Options: Should see options panel and use service buttons", async ({

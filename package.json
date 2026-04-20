@@ -10,6 +10,7 @@
     "@capacitor/app": "^8.1.0",
     "@capacitor/core": "^8.3.1",
     "@capacitor/device": "^8.0.2",
+    "@capacitor/filesystem": "^8.0.0",
     "@capacitor/haptics": "^8.0.2",
     "@capacitor/ios": "^8.3.1",
     "@capacitor/local-notifications": "^8.0.2",
@@ -65,11 +66,11 @@
     "quality:depcheck": "npx depcheck",
     "quality:eslint": "eslint .",
     "quality:eslint-fix": "eslint --fix .",
-    "testing:run": "docker run --rm -it -v .:/srv -v /srv/node_modules -w /srv mcr.microsoft.com/playwright:v1.59.1-noble sh -c 'npm i --legacy-peer-deps && rm -rf node_modules/.vite && npx playwright test'",
+    "testing:run": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.59.1-noble sh -c 'npm i -g pnpm && pnpm install && npx playwright test'",
     "testing:ui": "npx playwright test --ui",
-    "testing:ci": "docker run --rm -e CI=true -v .:/srv -v /srv/node_modules -w /srv mcr.microsoft.com/playwright:v1.59.1-noble sh -c 'npm i --legacy-peer-deps && rm -rf node_modules/.vite && npx playwright test'",
+    "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.59.1-noble sh -c 'npm i -g pnpm && pnpm install && npx playwright test'",
     "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.59.1-noble npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
-    "testing:update-snapshots": "docker run --rm -it -v .:/srv -v /srv/node_modules -w /srv mcr.microsoft.com/playwright:v1.59.1-noble sh -c 'npm i --legacy-peer-deps && rm -rf node_modules/.vite && npx playwright test --update-snapshots'"
+    "testing:update-snapshots": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.59.1-noble sh -c 'npm i -g pnpm && pnpm install && npx playwright test --update-snapshots'"
   },
   "browserslist": {
     "production": [
