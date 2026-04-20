@@ -3,7 +3,7 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
-## 📦 0.1.7
+## 📦 0.2.0
 ### 🚀 Added
 * Lidarr button now auto seearch if API key is set #241
 * Tidarr search is now integrated in the app if API key is set
