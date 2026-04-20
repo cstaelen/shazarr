@@ -32,13 +32,16 @@ export default function ShazarrResults() {
       <Stack spacing={2} sx={{ marginBottom: 2 }}>
         {config?.lidarr_url && (
           <LidarrButton
-            searchTerms={`${albumName} ${shazarrResponse.subtitle}`}
+            albumTitle={albumName || shazarrResponse.title}
+            artistName={shazarrResponse.subtitle}
             url={config.lidarr_url as string}
           />
         )}
         {config?.tidarr_url && (
           <TidarrButton
-            searchTerms={`${shazarrResponse.title} ${shazarrResponse.subtitle}`}
+            albumTitle={albumName || shazarrResponse.title}
+            trackTitle={shazarrResponse.title}
+            artistName={shazarrResponse.subtitle}
             url={config.tidarr_url as string}
           />
         )}

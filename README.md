@@ -11,8 +11,8 @@ Shazarr project is a mobile app (android, ios) providing Shazam song recognition
 
 ## Features
 - Audio microphone capture and song recognition using reverse Shazam API with [node-shazam-api](https://github.com/asivery/node-shazam-api).
-- Download discovered album with [Lidarr](https://github.com/linuxserver/docker-lidarr)
-- Download discovered song/album with [Tidarr](https://github.com/cstaelen/tidarr)
+- Download discovered album with [Lidarr](https://github.com/linuxserver/docker-lidarr), auto-search via API (with browser fallback if no API key)
+- Download discovered track or album with [Tidarr](https://github.com/cstaelen/tidarr), search Tidal content in-app, pick the album, queue track or full album download, or with Tidarr 1.2.1 or higher, add track to Tidal favorites
 - Add custom search service
 - Listen on streaming app Spotify, Apple Music and Deezer
 - Show lyrics
