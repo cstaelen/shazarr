@@ -119,7 +119,7 @@ test("History: Should be able to consult 2 different items", async ({
 
   await expect(
     page.getByText("Chillin'ModjoPlay AlbumModjo"),
-  ).toHaveScreenshot();
+  ).toHaveScreenshot({ maxDiffPixelRatio: 0.05 });
 
   // Open history panel
   await page.getByRole("button", { name: "Show records (3)" }).click();

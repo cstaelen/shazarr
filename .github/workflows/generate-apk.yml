@@ -19,8 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set VITE_CURRENT_VERSION
-        run: echo "VITE_CURRENT_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Set version env vars
+        run: |
+          TAG=${GITHUB_REF#refs/tags/v}
+          echo "VITE_CURRENT_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "VERSION_NAME=${TAG}" >> $GITHUB_ENV
+          MAJOR=$(echo $TAG | cut -d. -f1)
+          MINOR=$(echo $TAG | cut -d. -f2)
+          PATCH=$(echo $TAG | cut -d. -f3)
+          echo "VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))" >> $GITHUB_ENV
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm

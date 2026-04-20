@@ -10,7 +10,7 @@ export default function ApiErrorAlert({
   severity?: "info" | "error" | "warning" | "success";
 }) {
   return (
-    <Box marginY={2} textAlign="left">
+    <Box sx={{ marginY: 2, textAlign: "left" }}>
       <Alert severity={severity}>
         {message
           ? errorCode[message]

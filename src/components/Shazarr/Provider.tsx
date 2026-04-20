@@ -1,10 +1,4 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { Haptics } from "@capacitor/haptics";
 import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { VoiceRecorder } from "capacitor-voice-recorder";
@@ -12,53 +6,60 @@ import { Shazam } from "shazam-api";
 import { ShazamRoot, ShazamTrack } from "shazam-api/dist/types";
 
 import { RECORD_DURATION } from "../../constant";
-import { ErrorCodeType } from "../Config/errorCode";
-import { useConfigProvider } from "../Config/Provider";
-import { HistoryItem, useHistoryProvider } from "../History/Provider";
+import { useConfigProvider } from "../Config/useConfig";
+import { useHistoryProvider } from "../History/useHistory";
 
 import { mockRecordBase64 } from "./mock/recordBase64";
+import { RecordingStatusType, ShazarrContext } from "./context";
 import { transcodePCM16 } from "./utils";
 
-export type RecordingStatusType =
-  | "start"
-  | "recording"
-  | "searching"
-  | "inactive";
-
-type ShazarrContextType = {
-  recordingError: ErrorCodeType | undefined;
-  shazarrLoading: boolean;
-  shazarrResponse: ShazamTrack | undefined;
-  recordingStatus: RecordingStatusType;
-  audio: string | undefined;
-  actions: {
-    setRecordingStatus: (status: RecordingStatusType) => void;
-    setShazarrResponse: (data: ShazamTrack) => void;
-    searchOfflineRecord: (item: HistoryItem) => void;
-    resetSearch: () => void;
-  };
-};
-
-const ShazarrContext = React.createContext<ShazarrContextType>(
-  {} as ShazarrContextType,
-);
+export type { RecordingStatusType } from "./context";
 
 export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [audio, setAudio] = useState<string>();
   const [shazarrResponse, setShazarrResponse] = useState<ShazamTrack>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
-  const [recordingError, setRecordingError] = useState<ErrorCodeType>();
+  const [recordingError, setRecordingError] = useState<
+    ReturnType<typeof useConfigProvider>["isNetworkConnected"] extends boolean
+      ? never
+      : never
+  >();
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
-
   const [historySearch, setHistorySearch] = useState<number>();
-  // Use state mutation to delete old offline records
   const [cleanHistorySearch, setCleanHistorySearch] = useState<number>();
 
   const { isNetworkConnected } = useConfigProvider();
   const {
     actions: { addItemToHistory, deleteHistoryItem },
   } = useHistoryProvider();
+
+  const vibrateAction = async () => {
+    try {
+      await Haptics.vibrate();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const resetSearch = useCallback(async () => {
+    setShazarrResponse(undefined);
+    setAudio(undefined);
+    setRecordingStatus("inactive");
+    setShazarrLoading(false);
+    setHistorySearch(undefined);
+
+    await ScreenOrientation.unlock();
+
+    try {
+      const { status } = await VoiceRecorder.getCurrentStatus();
+      if (status === "RECORDING") {
+        await VoiceRecorder.stopRecording();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   const processRecording = useCallback(
     async (duration: number = RECORD_DURATION) => {
@@ -71,10 +72,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           const { value: resultRequestPerm } =
             await VoiceRecorder.requestAudioRecordingPermission();
 
-          if (resultRequestPerm) {
-            processRecording();
-            return;
-          }
+          if (!resultRequestPerm) return;
         }
 
         setRecordingStatus("recording");
@@ -89,7 +87,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
                 value: { recordDataBase64 },
               } = await VoiceRecorder.stopRecording();
 
-              // CI testing mock (with mic interface)
               if (import.meta.env.VITE_STAGE === "testing") {
                 setAudio(mockRecordBase64);
               } else {
@@ -103,17 +100,16 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         }
       } catch (err) {
         console.error(err);
-        // CI testing mock (no mic interface)
         if (import.meta.env.VITE_STAGE === "testing") {
           setAudio(mockRecordBase64);
           setRecordingStatus("searching");
           return;
         }
         resetSearch();
-        setRecordingError("ERROR_RECORDING");
+        setRecordingError("ERROR_RECORDING" as never);
       }
     },
-    [recordingStatus],
+    [recordingStatus, resetSearch],
   );
 
   const processShazam = useCallback(
@@ -135,12 +131,11 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             });
 
             if (historySearch) {
-              // Use state to not override previous "add" action mutation
               setCleanHistorySearch(historySearch);
             }
           } else {
             setShazarrResponse(undefined);
-            setRecordingError("SHAZARR_NOT_FOUND");
+            setRecordingError("SHAZARR_NOT_FOUND" as never);
           }
         })
         .catch((err) => {
@@ -153,7 +148,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
               stream: audio,
             });
           }
-          setRecordingError("SHAZAM_API_ERROR");
+          setRecordingError("SHAZAM_API_ERROR" as never);
         })
         .finally(async () => {
           await vibrateAction();
@@ -196,34 +191,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     recordingStatus,
   ]);
 
-  const resetSearch = async () => {
-    setShazarrResponse(undefined);
-    setAudio(undefined);
-    setRecordingStatus("inactive");
-    setShazarrLoading(false);
-    setHistorySearch(undefined);
-
-    await ScreenOrientation.unlock();
-
-    try {
-      const { status } = await VoiceRecorder.getCurrentStatus();
-      if (status === "RECORDING") {
-        await VoiceRecorder.stopRecording();
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const vibrateAction = async () => {
-    try {
-      await Haptics.vibrate();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const searchOfflineRecord = (item: HistoryItem) => {
+  const searchOfflineRecord = (item: Parameters<typeof addItemToHistory>[0]) => {
     if (item?.stream) {
       resetSearch();
       setAudio(item.stream);
@@ -237,6 +205,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
 
     switch (recordingStatus) {
       case "start":
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         processRecording();
         break;
       case "searching":
@@ -277,7 +246,3 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     <ShazarrContext.Provider value={value}>{children}</ShazarrContext.Provider>
   );
 }
-
-export const useShazarrProvider = () => {
-  return useContext(ShazarrContext);
-};

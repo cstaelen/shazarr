@@ -1,5 +1,4 @@
-import React from "react";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
 
@@ -47,11 +46,11 @@ const Note = () => {
 
 export default function NotesAnimate({ duration }: { duration: number }) {
   const [notes, setNotes] = useState<ReactElement[]>([]);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const isRunning = useRef(false);
 
   useEffect(() => {
-    if (!isRunning && duration > 0) {
-      setIsRunning(true);
+    if (!isRunning.current && duration > 0) {
+      isRunning.current = true;
 
       const animationInterval = setInterval(
         () => setNotes((notes) => [...notes, <Note key={notes.length} />]),
@@ -62,7 +61,7 @@ export default function NotesAnimate({ duration }: { duration: number }) {
         clearInterval(animationInterval);
       }, duration - 1000);
     }
-  }, [isRunning, duration]);
+  }, [duration]);
 
   return (
     <Wrapper>
