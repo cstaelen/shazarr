@@ -1,4 +1,4 @@
-import { normalize } from "./utils";
+import { cleanAlbumTitle, normalize } from "./utils";
 
 type LidarrConfig = {
   url: string;
@@ -31,13 +31,18 @@ type LidarrArtist = {
   foreignArtistId: string;
 };
 
+type LidarrSearchResult = {
+  foreignId: string;
+  album: {
+    title: string;
+    foreignAlbumId: string;
+    artistId: number;
+  };
+};
+
 export type LidarrAutoSearchResult =
   | { success: true; status?: "queued" | "wanted" | "available" }
   | { success: false; message: string };
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 async function request<T>(
   config: LidarrConfig,
@@ -58,7 +63,8 @@ async function request<T>(
     const text = await res.text();
     throw new Error(`Lidarr API error (${res.status}): ${text}`);
   }
-  return res.json();
+  const text = await res.text();
+  return text ? JSON.parse(text) : (undefined as unknown as T);
 }
 
 async function getQualityProfileId(config: LidarrConfig): Promise<number> {
@@ -79,38 +85,41 @@ async function getRootFolderPath(config: LidarrConfig): Promise<string> {
   return folders[0].path;
 }
 
-async function lookupArtist(
+async function searchAlbum(
   config: LidarrConfig,
   term: string
-): Promise<LidarrArtistLookup[]> {
+): Promise<LidarrSearchResult[]> {
   if (!term?.trim()) return [];
-  return request<LidarrArtistLookup[]>(
-    config,
-    `/artist/lookup?term=${encodeURIComponent(term)}`
-  );
+  return request<LidarrSearchResult[]>(config, `/search?term=${encodeURIComponent(term)}`);
+}
+
+async function getAlbumByForeignId(
+  config: LidarrConfig,
+  foreignAlbumId: string
+): Promise<LidarrAlbum[]> {
+  return request<LidarrAlbum[]>(config, `/album?foreignAlbumId=${encodeURIComponent(foreignAlbumId)}`);
+}
+
+async function getAlbumsByArtist(
+  config: LidarrConfig,
+  artistId: number
+): Promise<LidarrAlbum[]> {
+  return request<LidarrAlbum[]>(config, `/album?artistId=${artistId}`);
 }
 
 async function ensureArtist(
   config: LidarrConfig,
   artist: LidarrArtistLookup,
   existingArtists: LidarrArtist[]
-): Promise<
-  | { success: true; artistId: number; created: boolean }
-  | { success: false; message: string }
-> {
-  const found = existingArtists.find(
-    (a) => a.foreignArtistId === artist.foreignArtistId
-  );
-  if (found?.id) {
-    return { success: true, artistId: found.id, created: false };
-  }
+): Promise<{ success: true; artistId: number } | { success: false; message: string }> {
+  const found = existingArtists.find((a) => a.foreignArtistId === artist.foreignArtistId);
+  if (found?.id) return { success: true, artistId: found.id };
 
-  const [rootFolderPath, qualityProfileId, metadataProfileId] =
-    await Promise.all([
-      getRootFolderPath(config),
-      getQualityProfileId(config),
-      getMetadataProfileId(config),
-    ]);
+  const [rootFolderPath, qualityProfileId, metadataProfileId] = await Promise.all([
+    getRootFolderPath(config),
+    getQualityProfileId(config),
+    getMetadataProfileId(config),
+  ]);
 
   const created = await request<{ id?: number }>(config, "/artist", {
     method: "POST",
@@ -128,14 +137,26 @@ async function ensureArtist(
       metadataProfileId,
       rootFolderPath,
       monitored: false,
-      addOptions: { searchForMissingAlbums: true },
+      addOptions: { searchForMissingAlbums: false },
     }),
   });
 
-  if (!created?.id) {
-    return { success: false, message: "Artist added but no id returned" };
-  }
-  return { success: true, artistId: created.id, created: true };
+  if (!created?.id) return { success: false, message: "Artist added but no id returned" };
+  return { success: true, artistId: created.id };
+}
+
+async function lookupArtist(
+  config: LidarrConfig,
+  term: string
+): Promise<LidarrArtistLookup[]> {
+  if (!term?.trim()) return [];
+  return request<LidarrArtistLookup[]>(config, `/artist/lookup?term=${encodeURIComponent(term)}`);
+}
+
+function findAlbumInList(albums: LidarrAlbum[], normalizedAlbum: string): LidarrAlbum | null {
+  const exact = albums.find((a) => normalize(a.title) === normalizedAlbum);
+  if (exact) return exact;
+  return albums.find((a) => normalize(a.title).includes(normalizedAlbum)) ?? null;
 }
 
 function getAlbumStatus(album: LidarrAlbum): "available" | "wanted" | "queued" {
@@ -145,48 +166,10 @@ function getAlbumStatus(album: LidarrAlbum): "available" | "wanted" | "queued" {
   return "queued";
 }
 
-
-async function getAlbumsByArtist(
-  config: LidarrConfig,
-  artistId: number
-): Promise<LidarrAlbum[]> {
-  return request<LidarrAlbum[]>(config, `/album?artistId=${artistId}`);
-}
-
-async function waitForAlbum(
-  config: LidarrConfig,
-  artistId: number,
-  normalizedAlbum: string,
-  timeoutMs = 60_000,
-  pollIntervalMs = 2_500
-): Promise<LidarrAlbum | null> {
-  const started = Date.now();
-  while (Date.now() - started < timeoutMs) {
-    const albums = await getAlbumsByArtist(config, artistId);
-    if (albums.length > 0) {
-      return albums.find((a) => normalize(a.title) === normalizedAlbum) ?? null;
-    }
-    await delay(pollIntervalMs);
-  }
-  return null;
-}
-
-async function triggerAlbumSearch(
-  config: LidarrConfig,
-  albumId: number
-): Promise<void> {
+async function triggerAlbumSearch(config: LidarrConfig, albumId: number): Promise<void> {
   await request(config, "/command", {
     method: "POST",
     body: JSON.stringify({ name: "AlbumSearch", albumIds: [albumId] }),
-  });
-}
-
-async function deleteArtist(
-  config: LidarrConfig,
-  artistId: number
-): Promise<void> {
-  await request(config, `/artist/${artistId}?deleteFiles=false`, {
-    method: "DELETE",
   });
 }
 
@@ -201,60 +184,51 @@ export async function lidarrAutoSearch(
   }
 
   const config: LidarrConfig = { url, apiKey };
-  const normalizedAlbum = normalize(albumTitle);
+  const cleanedAlbum = cleanAlbumTitle(albumTitle);
+  const normalizedAlbum = normalize(cleanedAlbum);
   const normalizedArtist = normalize(artistName);
 
   try {
     const allArtists = await request<LidarrArtist[]>(config, "/artist");
 
-    const matchedLocal = allArtists.find(
-      (a) => normalize(a.artistName) === normalizedArtist
-    );
+    // Check if album already exists locally
+    const matchedLocal = allArtists.find((a) => normalize(a.artistName) === normalizedArtist);
     if (matchedLocal) {
       const albums = await getAlbumsByArtist(config, matchedLocal.id);
-      const album = albums.find((a) => normalize(a.title) === normalizedAlbum);
+      const album = findAlbumInList(albums, normalizedAlbum);
       if (album) {
         const albumStatus = getAlbumStatus(album);
         if (albumStatus === "available") return { success: true, status: "available" };
         await triggerAlbumSearch(config, album.id);
         return { success: true, status: albumStatus };
       }
-      return { success: false, message: "Album not found" };
     }
 
-    const lookupResults = await lookupArtist(config, artistName);
-    if (!lookupResults?.length) {
-      return { success: false, message: "Artist not found in lookup" };
-    }
+    // Find album via /search (same as websearch — queries MusicBrainz directly)
+    const searchResults = await searchAlbum(config, `${cleanedAlbum} ${artistName}`);
+    const matched = searchResults.find((r) => normalize(r.album.title).includes(normalizedAlbum));
+    if (!matched) return { success: false, message: "Album not found" };
 
-    const candidates = lookupResults
-      .filter((a) => normalize(a.artistName) === normalizedArtist)
-      .slice(0, 3);
+    // Ensure artist exists in Lidarr
+    const artistLookup = await lookupArtist(config, artistName);
+    if (!artistLookup?.length) return { success: false, message: "Artist not found in lookup" };
 
-    const fallbackCandidates = candidates.length
-      ? candidates
-      : lookupResults.slice(0, 1);
+    const candidates = artistLookup.filter((a) => normalize(a.artistName) === normalizedArtist).slice(0, 3);
+    const fallbackCandidates = candidates.length ? candidates : artistLookup.slice(0, 3);
 
     for (const candidate of fallbackCandidates) {
       const ensured = await ensureArtist(config, candidate, allArtists);
       if (!ensured.success) continue;
 
-      const album = await waitForAlbum(
-        config,
-        ensured.artistId,
-        normalizedAlbum
-      );
+      // Fetch album by foreignAlbumId — now that artist is added, Lidarr knows this album
+      const albums = await getAlbumByForeignId(config, matched.foreignId);
+      const album = findAlbumInList(albums, normalizedAlbum);
+      if (!album) continue;
 
-      if (album) {
-        const albumStatus = getAlbumStatus(album);
-        if (albumStatus === "available") return { success: true, status: "available" };
-        await triggerAlbumSearch(config, album.id);
-        return { success: true, status: albumStatus };
-      }
-
-      if (ensured.created) {
-        await deleteArtist(config, ensured.artistId);
-      }
+      const albumStatus = getAlbumStatus(album);
+      if (albumStatus === "available") return { success: true, status: "available" };
+      await triggerAlbumSearch(config, album.id);
+      return { success: true, status: albumStatus };
     }
 
     return { success: false, message: "Album not found" };
