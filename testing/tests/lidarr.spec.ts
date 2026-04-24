@@ -37,7 +37,7 @@ async function openModjoResult(page: Page) {
 
 const DEFAULT_ARTIST = { id: 1, artistName: "Szymon", foreignArtistId: "abc-123" };
 const DEFAULT_ALBUM = { id: 10, title: "Blue Coloured Mountain", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } };
-const DEFAULT_SEARCH = [{ foreignId: "abc-album-123", album: { title: "Blue Coloured Mountain", foreignAlbumId: "abc-album-123", artistId: 1 } }];
+const DEFAULT_SEARCH = [{ foreignId: "abc-album-123", album: { id: 10, title: "Blue Coloured Mountain", foreignAlbumId: "abc-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "abc-123", artistName: "Szymon" } } }];
 
 function mockLidarrRoutes(
   page: Page,
@@ -122,7 +122,7 @@ test("Lidarr: With API key — matches album despite (Remastered) suffix in titl
     artistLookup: [modjoArtist],
     albums: [modjoAlbum],
     albumByForeignId: [modjoAlbum],
-    search: [{ foreignId: "modjo-album-123", album: { title: "Modjo", foreignAlbumId: "modjo-album-123", artistId: 1 } }],
+    search: [{ foreignId: "modjo-album-123", album: { id: 20, title: "Modjo", foreignAlbumId: "modjo-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "modjo-123", artistName: "Modjo" } } }],
   });
   await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
   await openModjoResult(page);
@@ -134,13 +134,10 @@ test("Lidarr: With API key — matches album despite (Remastered) suffix in titl
   });
 });
 
-test("Lidarr: With API key — matches single via partial album title", async ({ page }) => {
-  // Shazam returns "Blue Coloured Mountain" — Lidarr stores album as "Blue Coloured Mountain (Expanded)"
-  const expandedAlbum = { id: 11, title: "Blue Coloured Mountain (Expanded)", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } };
-  await mockLidarrRoutes(page, {
-    albums: [expandedAlbum],
-    albumByForeignId: [expandedAlbum],
-  });
+test("Lidarr: With API key — finds album via /search fallback when not in local artist albums", async ({ page }) => {
+  // Artist exists locally but album is missing (e.g. excluded by metadata profile) — found via /search
+  const searchResult = [{ foreignId: "abc-album-123", album: { id: 10, title: "Blue Coloured Mountain", foreignAlbumId: "abc-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "abc-123", artistName: "Szymon" } } }];
+  await mockLidarrRoutes(page, { albums: [], search: searchResult });
   await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
   await openYakuzaResult(page);
 
@@ -152,7 +149,8 @@ test("Lidarr: With API key — matches single via partial album title", async ({
 });
 
 test("Lidarr: With API key — shows error when album not found in search", async ({ page }) => {
-  await mockLidarrRoutes(page, { artists: [], search: [], artistLookup: [] });
+  // Artist found but album not in local list and not found via /search
+  await mockLidarrRoutes(page, { albums: [], search: [] });
   await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
   await openYakuzaResult(page);
 

@@ -1,5 +1,9 @@
 export function normalize(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]/gi, "").trim();
+  return value
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
 }
 
 const ALBUM_SUFFIX_PATTERNS = [
