@@ -39,14 +39,19 @@ async function request<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const res = await fetch(`${config.url.replace(/\/$/, "")}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      "X-Api-Key": config.apiKey,
-      ...(options.headers ?? {}),
-    },
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${config.url.replace(/\/$/, "")}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": config.apiKey,
+        ...(options.headers ?? {}),
+      },
+    });
+  } catch {
+    throw new Error("Tidarr unreachable");
+  }
   const contentType = res.headers.get("content-type") ?? "";
   if (!res.ok) {
     const body = contentType.includes("application/json") ? await res.text() : "";
