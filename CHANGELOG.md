@@ -3,6 +3,10 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.2.1
+### 🐛 Fixed
+* Fix Tidarr network error
+
 ## 📦 0.2.0
 ### 🚀 Added
 * Lidarr button now auto seearch if API key is set #241
