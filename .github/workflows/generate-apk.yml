@@ -67,26 +67,28 @@ jobs:
         run: chmod +x gradlew
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Execute Gradle build
         working-directory: ./android
-        run: ./gradlew build --scan
+        run: ./gradlew assembleRelease
 
       - name: Sign APK
-        id: sign_app
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: android/app/build/outputs/apk/release/
-          signingKeyBase64: ${{ secrets.KEYSTORE }}
-          alias: ${{ secrets.SIGNING_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
         env:
-          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
-
-      - name: Rename APK
-        run: mv ${{steps.sign_app.outputs.signedReleaseFile}} android/app/build/outputs/apk/release/shazarr-signed.apk
+          KEYSTORE_B64: ${{ secrets.KEYSTORE }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          KS_PASS: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          KEY_PASS: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 --decode > /tmp/keystore.jks
+          $ANDROID_SDK_ROOT/build-tools/$BUILD_TOOL_VERSION/apksigner sign \
+            --ks /tmp/keystore.jks \
+            --ks-key-alias "$KEY_ALIAS" \
+            --ks-pass "pass:$KS_PASS" \
+            --key-pass "pass:$KEY_PASS" \
+            --out android/app/build/outputs/apk/release/shazarr-signed.apk \
+            android/app/build/outputs/apk/release/app-release-unsigned.apk
+          rm /tmp/keystore.jks
 
       - name: Upload app apk as artifact
         uses: actions/upload-artifact@v4
