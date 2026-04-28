@@ -72,6 +72,23 @@
     "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.59.1-noble npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
     "testing:update-snapshots": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.59.1-noble sh -c 'npm i -g pnpm && pnpm install && npx playwright test --update-snapshots'"
   },
+  "pnpm": {
+    "overrides": {
+      "@babel/runtime": ">=7.26.10",
+      "@xmldom/xmldom": ">=0.8.13",
+      "basic-ftp": ">=5.3.0",
+      "brace-expansion": ">=2.0.3",
+      "diff": ">=5.2.2",
+      "handlebars": ">=4.7.9",
+      "js-yaml": ">=3.14.2",
+      "lodash": ">=4.18.0",
+      "minimatch": ">=7.4.8",
+      "qs": ">=6.14.1",
+      "tar": ">=7.5.11",
+      "tmp": ">=0.2.4",
+      "yaml": ">=1.10.3"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
