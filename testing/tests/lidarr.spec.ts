@@ -29,30 +29,42 @@ async function openYakuzaResult(page: Page) {
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 }
 
+async function openModjoResult(page: Page) {
+  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.locator("div:nth-child(1) > .MuiCardActions-root > button").first().click();
+  await expect(page.locator(".MuiTypography-h5")).toHaveText("Chillin'");
+}
+
+const DEFAULT_ARTIST = { id: 1, artistName: "Szymon", foreignArtistId: "abc-123" };
+const DEFAULT_ALBUM = { id: 10, title: "Blue Coloured Mountain", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } };
+const DEFAULT_SEARCH = [{ foreignId: "abc-album-123", album: { id: 10, title: "Blue Coloured Mountain", foreignAlbumId: "abc-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "abc-123", artistName: "Szymon" } } }];
+
 function mockLidarrRoutes(
   page: Page,
   overrides: {
+    artists?: unknown[];
     artistLookup?: unknown[];
     albums?: unknown[];
+    albumByForeignId?: unknown[];
+    search?: unknown[];
   } = {},
 ) {
   return page.route(`${LIDARR_URL}/**`, async (route) => {
     const url = route.request().url();
     const method = route.request().method();
 
-    if (url.includes("/api/v1/artist") && !url.includes("lookup") && method === "GET") {
-      const body: unknown[] = [];
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+    if (url.includes("/api/v1/search")) {
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.search ?? DEFAULT_SEARCH) });
+    } else if (url.includes("/api/v1/artist") && !url.includes("lookup") && method === "GET") {
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.artists ?? [DEFAULT_ARTIST]) });
     } else if (url.includes("/api/v1/artist/lookup")) {
-      const body = overrides.artistLookup ?? [{ foreignArtistId: "abc-123", artistName: "Szymon" }];
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.artistLookup ?? [DEFAULT_ARTIST]) });
     } else if (url.includes("/api/v1/artist") && method === "POST") {
       await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: 1 }) });
+    } else if (url.includes("/api/v1/album") && url.includes("foreignAlbumId=")) {
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.albumByForeignId ?? [DEFAULT_ALBUM]) });
     } else if (url.includes("/api/v1/album") && url.includes("artistId=")) {
-      const body = overrides.albums ?? [
-        { id: 10, title: "Blue Coloured Mountain", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } },
-      ];
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.albums ?? [DEFAULT_ALBUM]) });
     } else if (url.includes("/api/v1/qualityprofile")) {
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ id: 1, name: "Any" }]) });
     } else if (url.includes("/api/v1/metadataprofile")) {
@@ -101,14 +113,50 @@ test("Lidarr: With API key — calls API and shows success", async ({ page }) =>
   });
 });
 
-test("Lidarr: With API key — shows error when artist not found", async ({ page }) => {
-  await mockLidarrRoutes(page, { artistLookup: [] });
+test("Lidarr: With API key — matches album despite (Remastered) suffix in title", async ({ page }) => {
+  // Modjo fixture has album "Modjo (Remastered)" — Lidarr stores it as "Modjo"
+  const modjoArtist = { id: 1, artistName: "Modjo", foreignArtistId: "modjo-123" };
+  const modjoAlbum = { id: 20, title: "Modjo", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } };
+  await mockLidarrRoutes(page, {
+    artists: [modjoArtist],
+    artistLookup: [modjoArtist],
+    albums: [modjoAlbum],
+    albumByForeignId: [modjoAlbum],
+    search: [{ foreignId: "modjo-album-123", album: { id: 20, title: "Modjo", foreignAlbumId: "modjo-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "modjo-123", artistName: "Modjo" } } }],
+  });
+  await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
+  await openModjoResult(page);
+
+  await page.getByRole("button", { name: "Download with Lidarr" }).click();
+  await expect(page.getByRole("button", { name: /Searching/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Search triggered in Lidarr!" })).toBeVisible({
+    timeout: 15000,
+  });
+});
+
+test("Lidarr: With API key — finds album via /search fallback when not in local artist albums", async ({ page }) => {
+  // Artist exists locally but album is missing (e.g. excluded by metadata profile) — found via /search
+  const searchResult = [{ foreignId: "abc-album-123", album: { id: 10, title: "Blue Coloured Mountain", foreignAlbumId: "abc-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "abc-123", artistName: "Szymon" } } }];
+  await mockLidarrRoutes(page, { albums: [], search: searchResult });
+  await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await page.getByRole("button", { name: "Download with Lidarr" }).click();
+  await expect(page.getByRole("button", { name: /Searching/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Search triggered in Lidarr!" })).toBeVisible({
+    timeout: 15000,
+  });
+});
+
+test("Lidarr: With API key — shows error when album not found in search", async ({ page }) => {
+  // Artist found but album not in local list and not found via /search
+  await mockLidarrRoutes(page, { albums: [], search: [] });
   await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
   await openYakuzaResult(page);
 
   await page.getByRole("button", { name: "Download with Lidarr" }).click();
   await expect(
-    page.getByRole("button", { name: "Artist not found" }),
+    page.getByRole("button", { name: "Album not found in Lidarr" }),
   ).toBeVisible({ timeout: 10000 });
 });
 
