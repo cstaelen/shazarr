@@ -52,14 +52,19 @@ async function request<T>(
   } catch {
     throw new Error("Tidarr unreachable");
   }
-  const contentType = res.headers.get("content-type") ?? "";
   if (!res.ok) {
-    const body = contentType.includes("application/json") ? await res.text() : "";
+    const contentType = res.headers.get("content-type") ?? "";
+    if (!contentType.includes("application/json")) throw new Error("Tidarr unreachable");
+    const body = await res.text();
     throw new Error(`Tidarr API error (${res.status})${body ? `: ${body}` : ""}`);
   }
-  if (!contentType.includes("application/json")) throw new Error("Tidarr unreachable");
   const text = await res.text();
-  return text ? JSON.parse(text) : (undefined as T);
+  if (!text) return undefined as T;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return undefined as T;
+  }
 }
 
 async function fetchSettings(config: TidarrConfig): Promise<TidarrSettings | null> {
