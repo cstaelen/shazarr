@@ -78,8 +78,8 @@ importers:
         specifier: ^7.0.6
         version: 7.0.6(@capacitor/core@8.3.1)(@capacitor/filesystem@8.1.2(@capacitor/core@8.3.1))
       node:
-        specifier: ^25.9.0
-        version: 25.9.0
+        specifier: ^26.0.0
+        version: 26.0.0
       react:
         specifier: ^19.2.5
         version: 19.2.5
@@ -2860,8 +2860,8 @@ packages:
   node-releases@2.0.37:
     resolution: {integrity: sha512-1h5gKZCF+pO/o3Iqt5Jp7wc9rH3eJJ0+nh/CIoiRwjRxde/hAHyLPXYN4V3CqKAbiZPSeJFSWHmJsbkicta0Eg==}
 
-  node@25.9.0:
-    resolution: {integrity: sha512-tfIfIRJVc32gUI+cQrxwAGWLwTy/EENnB3vF95RuAFosqBGjMTY+o0/3T4oPOipUFrsebQ5WDMsRyAqn65RMFQ==}
+  node@26.0.0:
+    resolution: {integrity: sha512-wkqZ4HUBucLi6gpuUcaWRPG15TCI58eQ/hE2olMoCMqJpXUE5UDLcMItOgdPnAglWf5zEaWB3bebhMCWAk0JJw==}
     engines: {npm: '>=5.0.0'}
     hasBin: true
 
@@ -6950,7 +6950,7 @@ snapshots:
 
   node-releases@2.0.37: {}
 
-  node@25.9.0:
+  node@26.0.0:
     dependencies:
       node-bin-setup: 1.1.4
 

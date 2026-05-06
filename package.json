@@ -24,7 +24,7 @@
     "@typescript-eslint/parser": "^8.59.2",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
-    "node": "^25.9.0",
+    "node": "^26.0.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "shazam-api": "^0.3.0"
