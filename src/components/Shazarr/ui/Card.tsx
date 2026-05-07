@@ -1,23 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { App } from "@capacitor/app";
 import {
-  ExpandMore,
   PauseCircleFilled,
   PlayCircleFilled,
   Refresh,
 } from "@mui/icons-material";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Button,
   CardActions,
   CardMedia,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -30,11 +21,6 @@ import { useShazarrProvider } from "../useShazarr";
 
 export default function CardResult({ data }: { data: ShazamTrack }) {
   const [isPlaying, setIsPlaying] = useState<boolean>();
-
-  const lyrics = useMemo(
-    () => data?.sections?.filter((section) => section.type === "LYRICS")?.[0]?.text,
-    [data],
-  );
 
   const sampleURI = useMemo(
     () => data?.hub?.actions?.filter((action) => !!action.uri)?.[0]?.uri,
@@ -79,95 +65,54 @@ export default function CardResult({ data }: { data: ShazamTrack }) {
   }, [sample]);
 
   return (
-    <>
-      <Card sx={{ maxWidth: 260, margin: "0 auto 1rem" }}>
-        <CardMedia>
-          <ImageWithFallback width="400" alt="" src={data.images.coverart} />
-        </CardMedia>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {data.title}
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            {data.subtitle}
-          </Typography>
-        </CardContent>
-        {sample && (
-          <CardActions>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                width: "100%",
-                px: 2,
-                pb: 2,
-              }}
+    <Card sx={{ maxWidth: 280, margin: "0 auto 1rem" }}>
+      <CardMedia>
+        <ImageWithFallback width="400" alt="" src={data.images.coverart} />
+      </CardMedia>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {data.title}
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          {data.subtitle}
+        </Typography>
+      </CardContent>
+      {sample && (
+        <CardActions>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              px: 2,
+              pb: 2,
+            }}
+          >
+            <Button
+              variant="outlined"
+              startIcon={
+                isPlaying ? (
+                  <PauseCircleFilled sx={{ height: 24, width: 24 }} />
+                ) : (
+                  <PlayCircleFilled sx={{ height: 24, width: 24 }} />
+                )
+              }
+              aria-label={isPlaying ? "pause" : "play"}
+              onClick={togglePlayPause}
             >
-              <Button
-                variant="outlined"
-                startIcon={
-                  isPlaying ? (
-                    <PauseCircleFilled sx={{ height: 24, width: 24 }} />
-                  ) : (
-                    <PlayCircleFilled sx={{ height: 24, width: 24 }} />
-                  )
-                }
-                aria-label={isPlaying ? "pause" : "play"}
-                onClick={togglePlayPause}
-              >
-                {isPlaying ? "Pause" : "Play"}
-              </Button>
-              &nbsp;
-              <Button
-                onClick={() => resetSearch()}
-                variant="outlined"
-                color="warning"
-              >
-                <Refresh style={{ transform: "rotate(-180deg)" }} />
-              </Button>
-            </Box>
-          </CardActions>
-        )}
-      </Card>
-
-      <TableContainer>
-        <Table>
-          <TableBody>
-            {data?.sections?.[0]?.metadata?.map((row, index) => (
-              <TableRow key={`metadata-${index}`}>
-                <TableCell component="th" scope="row">
-                  <strong>{row.title}</strong>
-                </TableCell>
-                <TableCell align="right">{row.text}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {lyrics && lyrics?.length > 0 && (
-        <Box sx={{ marginTop: 2 }}>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
+              {isPlaying ? "Pause" : "Play"}
+            </Button>
+            &nbsp;
+            <Button
+              onClick={() => resetSearch()}
+              variant="outlined"
+              color="warning"
             >
-              <Typography>LYRICS</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                {lyrics?.map((lyric, index) => (
-                  <span key={`lyric-${index}`}>
-                    {lyric}
-                    <br />
-                  </span>
-                ))}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </Box>
+              <Refresh style={{ transform: "rotate(-180deg)" }} />
+            </Button>
+          </Box>
+        </CardActions>
       )}
-    </>
+    </Card>
   );
 }
