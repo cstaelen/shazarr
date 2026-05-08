@@ -52,7 +52,7 @@ test("Options: Should see options panel and use service buttons", async ({
   ).not.toBeVisible();
 
   // Go to result page
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   await page
     .locator("div:nth-child(3) > .MuiCardActions-root > button")
@@ -86,10 +86,5 @@ test("Options: Should see options panel and use service buttons", async ({
   await page.reload();
 
   await page.getByRole("button", { name: "Configuration" }).click();
-  await expect(
-    page
-      .getByRole("dialog")
-      .locator("div")
-      .filter({ hasText: "Github page - v0.0.0Save" }),
-  ).toHaveScreenshot();
+  await expect(page.getByRole("dialog")).toHaveScreenshot();
 });

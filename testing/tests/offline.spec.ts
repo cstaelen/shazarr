@@ -5,11 +5,13 @@ test("Offline: Should save record for further recognition", async ({
 }) => {
   await page.context().setOffline(false);
   await page.goto("/");
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
 
   await expect(page.getByText("Shazarr")).toBeVisible();
 
   // Run song recognition and cut internet connection
-  await page.getByRole("button").first().click();
+  await page.getByTestId("record-button").click();
   await expect(page.getByText("recording...")).toBeVisible();
   await page.context().setOffline(true);
   await page.waitForTimeout(5000);
@@ -18,7 +20,7 @@ test("Offline: Should save record for further recognition", async ({
   await expect(page.getByText("Internet is not reachable. In")).toBeVisible();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (1)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
   await expect(page.getByTestId("history-item")).toHaveCount(1);
   await expect(
     page
@@ -32,7 +34,7 @@ test("Offline: Should save record for further recognition", async ({
   await page.reload();
 
   // Search
-  await page.getByRole("button", { name: "Show records (1)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
   await page.getByTestId("history-item").getByRole("button").nth(1).click();
   await expect(page.getByText("searching...")).toBeVisible();
   await page.waitForTimeout(5000);

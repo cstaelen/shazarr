@@ -15,7 +15,7 @@ test("History: Should see tracks history", async ({ page }) => {
   await expect(page.getByText("Ready")).toBeInViewport();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
   await expect(page.getByTestId("history-item")).toHaveCount(3);
 
   const rows = page.getByTestId("history-item");
@@ -47,7 +47,7 @@ test("History: Should be able to remove 1 item", async ({ page }) => {
   await expect(page.getByText("Ready")).toBeInViewport();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
   await page
@@ -59,7 +59,7 @@ test("History: Should be able to remove 1 item", async ({ page }) => {
 
   // Refresh and check
   await page.reload();
-  await page.getByRole("button", { name: "Show records (2)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   await expect(page.getByText(expectedHistory[0])).toBeVisible();
   await expect(page.getByText(expectedHistory[1])).not.toBeVisible();
@@ -73,7 +73,7 @@ test("History: Should be able to remove 2 items", async ({ page }) => {
   await expect(page.getByText("Ready")).toBeInViewport();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
   await page
@@ -93,7 +93,7 @@ test("History: Should be able to remove 2 items", async ({ page }) => {
 
   // Refresh and check
   await page.reload();
-  await page.getByRole("button", { name: "Show records (1)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   await expect(page.getByText(expectedHistory[0])).not.toBeVisible();
   await expect(page.getByText(expectedHistory[1])).not.toBeVisible();
@@ -109,7 +109,7 @@ test("History: Should be able to consult 2 different items", async ({
   await expect(page.getByText("Ready")).toBeInViewport();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
   await page
@@ -121,8 +121,11 @@ test("History: Should be able to consult 2 different items", async ({
     page.getByText("Chillin'ModjoPlay AlbumModjo"),
   ).toHaveScreenshot({ maxDiffPixelRatio: 0.15 });
 
+  // Close result before reopening history
+  await page.getByRole("button", { name: "Close" }).click();
+
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
   await page

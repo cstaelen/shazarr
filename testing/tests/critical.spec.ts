@@ -9,12 +9,12 @@ test("Critical: Should be able to record, recognize and display result", async (
   await expect(page.getByText("Offroad")).toBeVisible();
   await expect(page.getByText("Ready")).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Services configuration" }),
+    page.getByRole("button", { name: "Configuration" }),
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 
   // Run song recognition
-  await page.getByRole("button").first().click();
+  await page.getByTestId("record-button").click();
   await expect(page.getByText("recording...")).toBeVisible();
   await page.waitForTimeout(5000);
 
@@ -35,8 +35,18 @@ test("Critical: Should be able to record, recognize and display result", async (
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await expect(page).toHaveScreenshot();
 
+  // Expect closing track result
+  await page.getByRole("button", { name: "Close" }).click();
+  await expect(page.getByTestId("Close")).not.toBeVisible();
+
+  // Expect to be on main screen
+  await expect(page.getByText("Ready")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Records" }),
+  ).toBeVisible();
+
   // Expect history
-  await page.getByRole("button", { name: "Show records (1)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   await expect(page.getByTestId("history-item")).toBeVisible();
   await expect(page.getByTestId("history-item")).toContainText(
@@ -49,14 +59,4 @@ test("Critical: Should be able to record, recognize and display result", async (
   // Expect closing history
   await page.getByRole("button", { name: "Close records" }).click();
   await expect(page.getByTestId("history-item")).not.toBeVisible();
-
-  // Expect closing track result
-  await page.getByRole("button", { name: "Close" }).click();
-  await expect(page.getByTestId("Close")).not.toBeVisible();
-
-  // Expect to be on main screen
-  await expect(page.getByText("Ready")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Show records (1)" }),
-  ).toBeVisible();
 });

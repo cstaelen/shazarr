@@ -28,6 +28,7 @@ export default function ShazarrButton() {
   
       <ListenButton>
         <IconButton
+          data-testid="record-button"
           onClick={() => {
             resetSearch();
             if (recordingStatus === "inactive") {

@@ -10,7 +10,7 @@ export const AlertHandler = () => {
   const { isNetworkConnected } = useConfigProvider();
 
   return (
-    <Box sx={{ mb: 10, maxWidth: 360, m: "0 auto" }}>
+    <Box sx={{ mb: 10, maxWidth: 360, m: "10 auto" }}>
         {!isNetworkConnected && recordingStatus === "inactive" && (
             <ApiErrorAlert severity="info" />
         )}
