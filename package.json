@@ -6,14 +6,14 @@
     "npm": ">=10"
   },
   "dependencies": {
-    "@capacitor/android": "^8.3.1",
+    "@capacitor/android": "^8.3.2",
     "@capacitor/app": "^8.1.0",
-    "@capacitor/core": "^8.3.1",
+    "@capacitor/core": "^8.3.2",
     "@capacitor/device": "^8.0.2",
     "@capacitor/filesystem": "^8.0.0",
     "@capacitor/haptics": "^8.0.2",
-    "@capacitor/ios": "^8.3.1",
-    "@capacitor/local-notifications": "^8.0.2",
+    "@capacitor/ios": "^8.3.2",
+    "@capacitor/local-notifications": "^8.1.0",
     "@capacitor/network": "^8.0.1",
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/screen-orientation": "^8.0.1",
@@ -24,14 +24,14 @@
     "@typescript-eslint/parser": "^8.59.2",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
-    "node": "^26.0.0",
+    "node": "^26.1.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "shazam-api": "^0.3.0"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
-    "@capacitor/cli": "^8.3.1",
+    "@capacitor/cli": "^8.3.2",
     "@eslint/js": "^10.0.1",
     "@ionic/cli": "^7.2.1",
     "@playwright/test": "^1.59.1",
@@ -49,7 +49,7 @@
     "ts-prune": "^0.10.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.10"
+    "vite": "^8.0.11"
   },
   "scripts": {
     "start": "vite dev",
