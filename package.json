@@ -6,13 +6,13 @@
     "npm": ">=10"
   },
   "dependencies": {
-    "@capacitor/android": "^8.3.2",
+    "@capacitor/android": "^8.3.3",
     "@capacitor/app": "^8.1.0",
-    "@capacitor/core": "^8.3.2",
+    "@capacitor/core": "^8.3.3",
     "@capacitor/device": "^8.0.2",
     "@capacitor/filesystem": "^8.0.0",
     "@capacitor/haptics": "^8.0.2",
-    "@capacitor/ios": "^8.3.2",
+    "@capacitor/ios": "^8.3.3",
     "@capacitor/local-notifications": "^8.1.0",
     "@capacitor/network": "^8.0.1",
     "@capacitor/preferences": "^8.0.1",
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
-    "@capacitor/cli": "^8.3.2",
+    "@capacitor/cli": "^8.3.3",
     "@eslint/js": "^10.0.1",
     "@ionic/cli": "^7.2.1",
     "@playwright/test": "^1.59.1",
