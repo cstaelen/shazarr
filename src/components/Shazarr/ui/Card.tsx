@@ -17,9 +17,8 @@ import Typography from "@mui/material/Typography";
 import { ShazamTrack } from "shazam-api/dist/types";
 
 import { ImageWithFallback } from "../../Common/ImageWithFallback";
-import { useShazarrProvider } from "../useShazarr";
 
-export default function CardResult({ data }: { data: ShazamTrack }) {
+export default function CardResult({ data, onClose }: { data: ShazamTrack; onClose: () => void }) {
   const [isPlaying, setIsPlaying] = useState<boolean>();
 
   const sampleURI = useMemo(
@@ -31,9 +30,6 @@ export default function CardResult({ data }: { data: ShazamTrack }) {
     () => (sampleURI ? new Audio(sampleURI) : undefined),
     [sampleURI],
   );
-  const {
-    actions: { resetSearch },
-  } = useShazarrProvider();
 
   function togglePlayPause() {
     if (!sample) return;
@@ -104,7 +100,7 @@ export default function CardResult({ data }: { data: ShazamTrack }) {
             </Button>
             &nbsp;
             <Button
-              onClick={() => resetSearch()}
+              onClick={onClose}
               variant="outlined"
               color="warning"
             >

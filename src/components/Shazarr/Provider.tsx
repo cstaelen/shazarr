@@ -3,7 +3,7 @@ import { Haptics } from "@capacitor/haptics";
 import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { VoiceRecorder } from "capacitor-voice-recorder";
 import { Shazam } from "shazam-api";
-import { ShazamRoot, ShazamTrack } from "shazam-api/dist/types";
+import { ShazamRoot } from "shazam-api/dist/types";
 
 import { RECORD_DURATION } from "../../constant";
 import { useConfigProvider } from "../Config/useConfig";
@@ -17,7 +17,7 @@ export type { RecordingStatusType } from "./context";
 
 export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [audio, setAudio] = useState<string>();
-  const [shazarrResponse, setShazarrResponse] = useState<ShazamTrack>();
+  const [showInlineResult, setShowInlineResult] = useState(false);
   const [shazarrLoading, setShazarrLoading] = useState(false);
   const [recordingError, setRecordingError] = useState<
     ReturnType<typeof useConfigProvider>["isNetworkConnected"] extends boolean
@@ -43,7 +43,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   };
 
   const resetSearch = useCallback(async () => {
-    setShazarrResponse(undefined);
+    setShowInlineResult(false);
     setAudio(undefined);
     setRecordingStatus("inactive");
     setShazarrLoading(false);
@@ -121,7 +121,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         .then((value: ShazamRoot | null) => {
           const response = value?.track;
           if (response?.title && recordingStatus !== "inactive") {
-            setShazarrResponse(response);
+            setShowInlineResult(true);
 
             addItemToHistory({
               title: response.title,
@@ -134,7 +134,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
               setCleanHistorySearch(historySearch);
             }
           } else {
-            setShazarrResponse(undefined);
             setRecordingError("SHAZARR_NOT_FOUND" as never);
           }
         })
@@ -201,8 +200,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    if (shazarrResponse) return;
-
     switch (recordingStatus) {
       case "start":
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -214,13 +211,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         }
         break;
     }
-  }, [
-    audio,
-    processRecording,
-    processTranscoding,
-    recordingStatus,
-    shazarrResponse,
-  ]);
+  }, [audio, processRecording, processTranscoding, recordingStatus]);
 
   useEffect(() => {
     if (cleanHistorySearch) {
@@ -228,16 +219,20 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     }
   }, [cleanHistorySearch, deleteHistoryItem]);
 
+  const dismissInlineResult = useCallback(() => {
+    setShowInlineResult(false);
+  }, []);
+
   const value = {
     recordingError,
     shazarrLoading,
-    shazarrResponse,
+    showInlineResult,
     recordingStatus,
     audio,
     actions: {
       setRecordingStatus,
       resetSearch,
-      setShazarrResponse,
+      dismissInlineResult,
       searchOfflineRecord,
     },
   };

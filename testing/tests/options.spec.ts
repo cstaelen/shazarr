@@ -54,10 +54,7 @@ test("Options: Should see options panel and use service buttons", async ({
   // Go to result page
   await page.getByRole("button", { name: "Records" }).click();
 
-  await page
-    .locator("div:nth-child(3) > .MuiCardActions-root > button")
-    .first()
-    .click();
+  await page.getByTestId("history-item").nth(2).getByRole("button").first().click();
 
   await waitForImgLoaded(page);
   await page.waitForTimeout(1000);

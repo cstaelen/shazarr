@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Close } from "@mui/icons-material";
 import { Box, Button, Divider, Drawer, Stack, Table, TableBody, TableCell, TableContainer, TableRow, useMediaQuery } from "@mui/material";
-import { ShazamProvider } from "shazam-api/dist/types";
+import { ShazamProvider, ShazamTrack } from "shazam-api/dist/types";
 
 import { useConfigProvider } from "../Config/useConfig";
 
@@ -11,47 +11,44 @@ import CustomServiceButton from "./ui/CustomServiceButton";
 import LidarrButton from "./ui/LidarrButton";
 import StreamProviderButton from "./ui/StreamProviderButton";
 import TidarrButton from "./ui/TidarrButton";
-import { useShazarrProvider } from "./useShazarr";
 
-export default function ShazarrResults() {
+interface Props {
+  data: ShazamTrack | undefined;
+  onClose: () => void;
+}
+
+export default function ShazarrResults({ data, onClose }: Props) {
   const isLandscape = useMediaQuery("(orientation: landscape)");
-  const {
-    shazarrResponse,
-    actions: { resetSearch },
-  } = useShazarrProvider();
-
   const { config } = useConfigProvider();
 
-  const albumName = shazarrResponse?.sections?.[0]?.metadata?.filter(
+  const albumName = data?.sections?.[0]?.metadata?.filter(
     (m: { title: string }) => m?.title === "Album",
   )?.[0]?.text;
 
   const lyrics = useMemo(
-    () => shazarrResponse?.sections?.filter((section) => section.type === "LYRICS")?.[0]?.text,
-    [shazarrResponse],
+    () => data?.sections?.filter((section) => section.type === "LYRICS")?.[0]?.text,
+    [data],
   );
 
-  if (!shazarrResponse) return null;
+  if (!data) return null;
 
   return (
     <Drawer
       anchor="bottom"
-      open={!!shazarrResponse}
-      onClose={() => resetSearch()}
-      ModalProps={{
-        keepMounted: true,
-      }}
+      open={!!data}
+      onClose={onClose}
+      ModalProps={{ keepMounted: true }}
     >
-      <Box sx={{p: 2, display: "flex", gap: 2, flexDirection: isLandscape ? "row" : "column"}}>
+      <Box sx={{ p: 2, display: "flex", gap: 2, flexDirection: isLandscape ? "row" : "column" }}>
         <Box sx={{ flex: "1 1 0" }}>
-          <CardResult data={shazarrResponse} />
+          <CardResult data={data} onClose={onClose} />
         </Box>
         <Box sx={{ flex: "1 1 0" }}>
-          <Stack spacing={2} sx={{ marginBottom: 2, maxWidth: 360,  }}>
+          <Stack spacing={2} sx={{ marginBottom: 2, maxWidth: 360 }}>
             <TableContainer>
               <Table>
                 <TableBody>
-                  {shazarrResponse?.sections?.[0]?.metadata?.map((row, index) => (
+                  {data?.sections?.[0]?.metadata?.map((row, index) => (
                     <TableRow key={`metadata-${index}`}>
                       <TableCell component="th" scope="row">
                         <strong>{row.title}</strong>
@@ -67,24 +64,24 @@ export default function ShazarrResults() {
 
             {config?.lidarr_url && (
               <LidarrButton
-                key={`lidarr-${shazarrResponse.key}`}
-                albumTitle={albumName || shazarrResponse.title}
-                artistName={shazarrResponse.subtitle}
+                key={`lidarr-${data.key}`}
+                albumTitle={albumName || data.title}
+                artistName={data.subtitle}
                 url={config.lidarr_url as string}
               />
             )}
             {config?.tidarr_url && (
               <TidarrButton
-                key={`tidarr-${shazarrResponse.key}`}
-                albumTitle={albumName || shazarrResponse.title}
-                trackTitle={shazarrResponse.title}
-                artistName={shazarrResponse.subtitle}
+                key={`tidarr-${data.key}`}
+                albumTitle={albumName || data.title}
+                trackTitle={data.title}
+                artistName={data.subtitle}
                 url={config.tidarr_url as string}
               />
             )}
             {config?.custom_service_url && config?.custom_service_name && (
               <CustomServiceButton
-                searchTerms={`${shazarrResponse.title} ${shazarrResponse.subtitle}`}
+                searchTerms={`${data.title} ${data.subtitle}`}
                 url={config.custom_service_url as string}
                 label={config.custom_service_name as string}
               />
@@ -92,7 +89,7 @@ export default function ShazarrResults() {
             <Divider />
 
             <Box sx={{ textAlign: "center" }}>
-              {shazarrResponse?.hub?.providers?.map(
+              {data?.hub?.providers?.map(
                 (provider: ShazamProvider, index: number) => (
                   <StreamProviderButton
                     key={`provider-${index}`}
@@ -101,10 +98,9 @@ export default function ShazarrResults() {
                   />
                 ),
               )}
-
-              {shazarrResponse?.myshazam?.apple?.actions?.[0]?.uri && (
+              {data?.myshazam?.apple?.actions?.[0]?.uri && (
                 <StreamProviderButton
-                  uri={shazarrResponse.myshazam.apple.actions?.[0]?.uri}
+                  uri={data.myshazam.apple.actions?.[0]?.uri}
                   type="APPLE"
                 />
               )}
@@ -113,7 +109,7 @@ export default function ShazarrResults() {
             <Divider />
 
             <Button
-              onClick={() => resetSearch()}
+              onClick={onClose}
               variant="outlined"
               startIcon={<Close style={{ transform: "rotate(-180deg)" }} />}
             >

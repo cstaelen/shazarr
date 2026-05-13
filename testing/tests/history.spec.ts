@@ -25,10 +25,7 @@ test("History: Should see tracks history", async ({ page }) => {
   }
 
   // Click on history item
-  await page
-    .locator("div:nth-child(3) > .MuiCardActions-root > button")
-    .first()
-    .click();
+  await page.getByTestId("history-item").nth(2).getByRole("button").first().click();
 
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
   await expect(page.getByText("Spotify")).toBeVisible();
@@ -50,10 +47,7 @@ test("History: Should be able to remove 1 item", async ({ page }) => {
   await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
-  await page
-    .locator("div:nth-child(2) > .MuiCardActions-root > button")
-    .last()
-    .click();
+  await page.getByTestId("history-item").nth(1).getByRole("button").last().click();
 
   await expect(page.getByTestId("history-item")).toHaveCount(2);
 
@@ -76,18 +70,12 @@ test("History: Should be able to remove 2 items", async ({ page }) => {
   await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
-  await page
-    .locator("div:nth-child(1) > .MuiCardActions-root > button")
-    .last()
-    .click();
+  await page.getByTestId("history-item").nth(0).getByRole("button").last().click();
 
   await expect(page.getByTestId("history-item")).toHaveCount(2);
 
   // Click on history item
-  await page
-    .locator("div:nth-child(1) > .MuiCardActions-root > button")
-    .last()
-    .click();
+  await page.getByTestId("history-item").nth(0).getByRole("button").last().click();
 
   await expect(page.getByTestId("history-item")).toHaveCount(1);
 
@@ -112,10 +100,7 @@ test("History: Should be able to consult 2 different items", async ({
   await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
-  await page
-    .locator("div:nth-child(1) > .MuiCardActions-root > button")
-    .first()
-    .click();
+  await page.getByTestId("history-item").nth(0).getByRole("button").first().click();
 
   await expect(
     page.getByText("Chillin'ModjoPlay AlbumModjo"),
@@ -128,10 +113,7 @@ test("History: Should be able to consult 2 different items", async ({
   await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
-  await page
-    .locator("div:nth-child(2) > .MuiCardActions-root > button")
-    .first()
-    .click();
+  await page.getByTestId("history-item").nth(1).getByRole("button").first().click();
 
   await expect(
     page.getByText(

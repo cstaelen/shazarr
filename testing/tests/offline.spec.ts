@@ -39,6 +39,7 @@ test("Offline: Should save record for further recognition", async ({
   await expect(page.getByText("searching...")).toBeVisible();
   await page.waitForTimeout(5000);
   await expect(page.getByText("Found !")).toBeVisible();
-  await expect(page.getByText("Chillin'")).toHaveCount(2);
-  await expect(page.getByText("Modjo", { exact: true })).toBeVisible();
+  await expect(page.getByTestId("inline-result-card")).toBeVisible();
+  await expect(page.getByTestId("inline-result-card")).toContainText("Chillin'");
+  await expect(page.getByTestId("inline-result-card")).toContainText("Modjo");
 });
