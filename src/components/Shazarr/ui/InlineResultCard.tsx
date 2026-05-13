@@ -36,7 +36,7 @@ export default function InlineResultCard({ track, onDismiss }: Props) {
             <ButtonBase sx={{ textAlign: "left" }} onClick={() => setResultOpen(true)}>
               <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
                 <strong>{track.title}</strong>
-                {track.subtitle && ` - ${track.subtitle}`}
+                {track.subtitle && <><br />{track.subtitle}</>}
               </Typography>
             </ButtonBase>
           </CardContent>
