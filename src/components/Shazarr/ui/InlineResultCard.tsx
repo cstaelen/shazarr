@@ -25,8 +25,8 @@ export default function InlineResultCard({ track, onDismiss }: Props) {
           <CardMedia sx={{ lineHeight: 0, padding: 1 }}>
             <ButtonBase onClick={() => setResultOpen(true)}>
               <ImageWithFallback
-                height="50"
-                width="50"
+                height="70"
+                width="70"
                 alt=""
                 src={track?.images?.coverart || ""}
               />
