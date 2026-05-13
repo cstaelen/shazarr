@@ -44,7 +44,7 @@ function App() {
             <CssBaseline />
             <Main>
               <Container>
-                <StackStyled direction="column" os={devideOS}  sx={{ pb: "20px" }}>
+                <StackStyled direction="column" os={devideOS}>
                   <Box>
                     <H1>Shazarr</H1>
                     <Typography component="h2" sx={{ marginBottom: 2 }}>

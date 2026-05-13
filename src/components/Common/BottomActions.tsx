@@ -56,7 +56,7 @@ const ActionsContainer = styled(Box)<{ landscape: boolean }>`
   position: fixed;
   z-index: 1000;
   display: flex;
-  gap: 8px;
+  gap: 24px;
 
   ${({ landscape }) =>
     landscape
@@ -67,7 +67,7 @@ const ActionsContainer = styled(Box)<{ landscape: boolean }>`
     flex-direction: column;
   `
       : `
-    bottom: 16px;
+    bottom: 40px;
     left: 0;
     right: 0;
     justify-content: center;
