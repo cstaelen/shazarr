@@ -176,9 +176,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       setShazarrLoading(false);
     } else {
       transcodePCM16(audio).then((pcm16) => {
-        if (recordingStatus !== "inactive") {
-          processShazam(pcm16);
-        }
+        processShazam(pcm16);
       });
     }
   }, [
@@ -187,7 +185,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     historySearch,
     isNetworkConnected,
     processShazam,
-    recordingStatus,
   ]);
 
   const searchOfflineRecord = (item: Parameters<typeof addItemToHistory>[0]) => {

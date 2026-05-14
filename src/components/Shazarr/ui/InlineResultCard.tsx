@@ -14,6 +14,11 @@ interface Props {
 export default function InlineResultCard({ track, onDismiss }: Props) {
   const [resultOpen, setResultOpen] = useState(false);
 
+  function openResult() {
+    setResultOpen(true);
+    onDismiss();
+  }
+
   return (
     <>
       <ShazarrResults
@@ -23,7 +28,7 @@ export default function InlineResultCard({ track, onDismiss }: Props) {
       <Box sx={{ marginY: 2 }} data-testid="inline-result-card">
         <Card sx={{ display: "flex", alignItems: "center" }}>
           <CardMedia sx={{ lineHeight: 0, padding: 1 }}>
-            <ButtonBase onClick={() => setResultOpen(true)}>
+            <ButtonBase onClick={openResult}>
               <ImageWithFallback
                 height="70"
                 width="70"
@@ -33,14 +38,14 @@ export default function InlineResultCard({ track, onDismiss }: Props) {
             </ButtonBase>
           </CardMedia>
           <CardContent sx={{ padding: "0.5rem", flex: "1 1 0" }}>
-            <ButtonBase sx={{ textAlign: "left" }} onClick={() => setResultOpen(true)}>
+            <ButtonBase sx={{ textAlign: "left" }} onClick={openResult}>
               <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
                 <strong>{track.title}</strong>
                 {track.subtitle && <><br />{track.subtitle}</>}
               </Typography>
             </ButtonBase>
           </CardContent>
-          <IconButton onClick={() => setResultOpen(true)} aria-label="View result">
+          <IconButton onClick={openResult} aria-label="View result">
             <RemoveRedEye />
           </IconButton>
           <IconButton onClick={onDismiss} aria-label="Dismiss result">
