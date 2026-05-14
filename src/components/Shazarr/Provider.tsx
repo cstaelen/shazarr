@@ -29,7 +29,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [historySearch, setHistorySearch] = useState<number>();
   const [cleanHistorySearch, setCleanHistorySearch] = useState<number>();
 
-  const { isNetworkConnected } = useConfigProvider();
   const {
     actions: { addItemToHistory, deleteHistoryItem },
   } = useHistoryProvider();
@@ -139,14 +138,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         })
         .catch((err) => {
           console.error(err);
-          if (!historySearch) {
-            addItemToHistory({
-              title: "Offline record",
-              artist: "Not discovered",
-              date: Date.now(),
-              stream: audio,
-            });
-          }
           setRecordingError("SHAZAM_API_ERROR" as never);
         })
         .finally(async () => {
@@ -164,28 +155,10 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
 
     if (!audio || audio.length === 0) return;
 
-    if (!isNetworkConnected && !historySearch) {
-      addItemToHistory({
-        title: "Offline record",
-        artist: "Not discovered",
-        date: Date.now(),
-        stream: audio,
-      });
-      vibrateAction();
-      setRecordingStatus("inactive");
-      setShazarrLoading(false);
-    } else {
-      transcodePCM16(audio).then((pcm16) => {
-        processShazam(pcm16);
-      });
-    }
-  }, [
-    addItemToHistory,
-    audio,
-    historySearch,
-    isNetworkConnected,
-    processShazam,
-  ]);
+    transcodePCM16(audio).then((pcm16) => {
+      processShazam(pcm16);
+    });
+  }, [audio, processShazam]);
 
   const searchOfflineRecord = (item: Parameters<typeof addItemToHistory>[0]) => {
     if (item?.stream) {
