@@ -138,6 +138,14 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
         })
         .catch((err) => {
           console.error(err);
+          if (!historySearch) {
+            addItemToHistory({
+              title: "Offline record",
+              artist: "Not discovered",
+              date: Date.now(),
+              stream: audio,
+            });
+          }
           setRecordingError("SHAZAM_API_ERROR" as never);
         })
         .finally(async () => {
