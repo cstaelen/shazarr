@@ -3,6 +3,11 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.3.0
+### 🖍 Changed
+* Results shows now as a inline card instead of a dedicated screen.
+* Enhance UI for landscape mode
+
 ## 📦 0.2.1
 ### 🐛 Fixed
 * Fix Tidarr network error

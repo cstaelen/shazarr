@@ -11,9 +11,9 @@ import {
   Typography,
 } from "@mui/material";
 
-import Config from "./components/Config";
+import { AlertHandler } from "./components/Common/Alert/AlertHandler";
+import BottomActions from "./components/Common/BottomActions";
 import { ConfigProvider } from "./components/Config/Provider";
-import HistoryList from "./components/History/List";
 import { HistoryProvider } from "./components/History/Provider";
 import ShazarrButton from "./components/Shazarr/Button";
 import { ShazarrProvider } from "./components/Shazarr/Provider";
@@ -43,7 +43,7 @@ function App() {
           <ShazarrProvider>
             <CssBaseline />
             <Main>
-              <Container maxWidth="xs">
+              <Container>
                 <StackStyled direction="column" os={devideOS}>
                   <Box>
                     <H1>Shazarr</H1>
@@ -63,12 +63,10 @@ function App() {
                   >
                     <ShazarrButton />
                   </Box>
-                  <Box sx={{pb: 4}}>
-                    <Config />
-                    <HistoryList />
-                  </Box>
+                  <AlertHandler />
                 </StackStyled>
               </Container>
+              <BottomActions />
             </Main>
           </ShazarrProvider>
         </HistoryProvider>

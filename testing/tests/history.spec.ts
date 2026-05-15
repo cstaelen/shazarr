@@ -15,7 +15,7 @@ test("History: Should see tracks history", async ({ page }) => {
   await expect(page.getByText("Ready")).toBeInViewport();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
   await expect(page.getByTestId("history-item")).toHaveCount(3);
 
   const rows = page.getByTestId("history-item");
@@ -25,10 +25,7 @@ test("History: Should see tracks history", async ({ page }) => {
   }
 
   // Click on history item
-  await page
-    .locator("div:nth-child(3) > .MuiCardActions-root > button")
-    .first()
-    .click();
+  await page.getByTestId("history-item").nth(2).getByRole("button").first().click();
 
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
   await expect(page.getByText("Spotify")).toBeVisible();
@@ -47,19 +44,16 @@ test("History: Should be able to remove 1 item", async ({ page }) => {
   await expect(page.getByText("Ready")).toBeInViewport();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
-  await page
-    .locator("div:nth-child(2) > .MuiCardActions-root > button")
-    .last()
-    .click();
+  await page.getByTestId("history-item").nth(1).getByRole("button").last().click();
 
   await expect(page.getByTestId("history-item")).toHaveCount(2);
 
   // Refresh and check
   await page.reload();
-  await page.getByRole("button", { name: "Show records (2)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   await expect(page.getByText(expectedHistory[0])).toBeVisible();
   await expect(page.getByText(expectedHistory[1])).not.toBeVisible();
@@ -73,27 +67,21 @@ test("History: Should be able to remove 2 items", async ({ page }) => {
   await expect(page.getByText("Ready")).toBeInViewport();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
-  await page
-    .locator("div:nth-child(1) > .MuiCardActions-root > button")
-    .last()
-    .click();
+  await page.getByTestId("history-item").nth(0).getByRole("button").last().click();
 
   await expect(page.getByTestId("history-item")).toHaveCount(2);
 
   // Click on history item
-  await page
-    .locator("div:nth-child(1) > .MuiCardActions-root > button")
-    .last()
-    .click();
+  await page.getByTestId("history-item").nth(0).getByRole("button").last().click();
 
   await expect(page.getByTestId("history-item")).toHaveCount(1);
 
   // Refresh and check
   await page.reload();
-  await page.getByRole("button", { name: "Show records (1)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   await expect(page.getByText(expectedHistory[0])).not.toBeVisible();
   await expect(page.getByText(expectedHistory[1])).not.toBeVisible();
@@ -109,26 +97,23 @@ test("History: Should be able to consult 2 different items", async ({
   await expect(page.getByText("Ready")).toBeInViewport();
 
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
-  await page
-    .locator("div:nth-child(1) > .MuiCardActions-root > button")
-    .first()
-    .click();
+  await page.getByTestId("history-item").nth(0).getByRole("button").first().click();
 
   await expect(
     page.getByText("Chillin'ModjoPlay AlbumModjo"),
   ).toHaveScreenshot({ maxDiffPixelRatio: 0.15 });
 
+  // Close result before reopening history
+  await page.getByRole("button", { name: "Close" }).click();
+
   // Open history panel
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
-  await page
-    .locator("div:nth-child(2) > .MuiCardActions-root > button")
-    .first()
-    .click();
+  await page.getByTestId("history-item").nth(1).getByRole("button").first().click();
 
   await expect(
     page.getByText(

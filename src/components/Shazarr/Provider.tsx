@@ -1,12 +1,14 @@
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Haptics } from "@capacitor/haptics";
 import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { VoiceRecorder } from "capacitor-voice-recorder";
 import { Shazam } from "shazam-api";
-import { ShazamRoot, ShazamTrack } from "shazam-api/dist/types";
+import { ShazamRoot } from "shazam-api/dist/types";
 
 import { RECORD_DURATION } from "../../constant";
+import { ErrorCodeType } from "../Config/errorCode";
 import { useConfigProvider } from "../Config/useConfig";
+import { HistoryItem } from "../History/context";
 import { useHistoryProvider } from "../History/useHistory";
 
 import { mockRecordBase64 } from "./mock/recordBase64";
@@ -17,21 +19,16 @@ export type { RecordingStatusType } from "./context";
 
 export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [audio, setAudio] = useState<string>();
-  const [shazarrResponse, setShazarrResponse] = useState<ShazamTrack>();
+  const [showInlineResult, setShowInlineResult] = useState(false);
   const [shazarrLoading, setShazarrLoading] = useState(false);
-  const [recordingError, setRecordingError] = useState<
-    ReturnType<typeof useConfigProvider>["isNetworkConnected"] extends boolean
-      ? never
-      : never
-  >();
+  const [recordingError, setRecordingError] = useState<ErrorCodeType | undefined>();
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
-  const [historySearch, setHistorySearch] = useState<number>();
-  const [cleanHistorySearch, setCleanHistorySearch] = useState<number>();
 
   const { isNetworkConnected } = useConfigProvider();
+
   const {
-    actions: { addItemToHistory, deleteHistoryItem },
+    actions: { addItemToHistory },
   } = useHistoryProvider();
 
   const vibrateAction = async () => {
@@ -42,12 +39,15 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const resetSearch = useCallback(async () => {
-    setShazarrResponse(undefined);
+  const dismissInlineResult = () => {
+    setShowInlineResult(false);
+  };
+
+  const resetSearch = async () => {
+    setShowInlineResult(false);
     setAudio(undefined);
     setRecordingStatus("inactive");
     setShazarrLoading(false);
-    setHistorySearch(undefined);
 
     await ScreenOrientation.unlock();
 
@@ -59,185 +59,146 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     } catch (e) {
       console.error(e);
     }
-  }, []);
+  };
 
-  const processRecording = useCallback(
-    async (duration: number = RECORD_DURATION) => {
-      setRecordingError(undefined);
-      try {
-        const { value: hasPerm } =
-          await VoiceRecorder.hasAudioRecordingPermission();
 
-        if (!hasPerm) {
-          const { value: resultRequestPerm } =
-            await VoiceRecorder.requestAudioRecordingPermission();
+  function handleTesting(date: number) {
+    const audioData = mockRecordBase64;
+    setAudio(audioData);
+    if (!isNetworkConnected) {
+      addItemToHistory({
+        title: "Offline record",
+        artist: "Not discovered",
+        date: date,
+        stream: audioData,
+      });
+      setRecordingStatus("inactive");
+      return;
+    }
+    setRecordingStatus("searching");
+    processTranscoding(audioData);
+  }
 
-          if (!resultRequestPerm) return;
+  const processShazam = async (samples: number[]) => {
+    const shazam = new Shazam();
+
+    shazam
+      .fullRecognizeSong(samples)
+      .then((value: ShazamRoot | null) => {
+        console.log("shazarr:", value);
+        const response = value?.track;
+        if (response?.title) {
+          addItemToHistory({
+            title: response.title,
+            artist: response.subtitle,
+            date: Date.now(),
+            data: response,
+          });
+          setShowInlineResult(true);
+        } else {
+          setRecordingError("SHAZARR_NOT_FOUND" as never);
         }
+      })
+      .catch((err) => {
+        console.error("shazarr:", err);
+        setRecordingError("SHAZAM_API_ERROR" as never);
+      })
+      .finally(async () => {
+        await vibrateAction();
+        await ScreenOrientation.unlock();
+        setRecordingStatus("inactive");
+        setShazarrLoading(false);
+      });
+  };
 
-        setRecordingStatus("recording");
-        vibrateAction();
-        const { value: isRecording } = await VoiceRecorder.startRecording();
+  const processTranscoding = (recordDataBase64: string) => {
+    setShazarrLoading(true);
+    transcodePCM16(recordDataBase64).then((pcm16) => {
+      processShazam(pcm16);
+    });
+  };
 
-        if (isRecording) {
-          setTimeout(async () => {
-            const { status } = await VoiceRecorder.getCurrentStatus();
-            if (recordingStatus !== "inactive" && status === "RECORDING") {
-              const {
-                value: { recordDataBase64 },
-              } = await VoiceRecorder.stopRecording();
+  const startRecording = async (duration: number = RECORD_DURATION) => {
+    setRecordingError(undefined);
+    try {
+      const { value: hasPerm } =
+        await VoiceRecorder.hasAudioRecordingPermission();
 
-              if (import.meta.env.VITE_STAGE === "testing") {
-                setAudio(mockRecordBase64);
-              } else {
-                setAudio(recordDataBase64);
-              }
+      if (!hasPerm) {
+        const { value: resultRequestPerm } =
+          await VoiceRecorder.requestAudioRecordingPermission();
 
-              setRecordingStatus("searching");
-              await vibrateAction();
-            }
-          }, duration);
-        }
-      } catch (err) {
-        console.error(err);
-        if (import.meta.env.VITE_STAGE === "testing") {
-          setAudio(mockRecordBase64);
-          setRecordingStatus("searching");
-          return;
-        }
-        resetSearch();
-        setRecordingError("ERROR_RECORDING" as never);
+        if (!resultRequestPerm) return;
       }
-    },
-    [recordingStatus, resetSearch],
-  );
 
-  const processShazam = useCallback(
-    async (samples: number[]) => {
-      const shazam = new Shazam();
+      vibrateAction();
+      setRecordingStatus("recording");
 
-      shazam
-        .fullRecognizeSong(samples)
-        .then((value: ShazamRoot | null) => {
-          const response = value?.track;
-          if (response?.title && recordingStatus !== "inactive") {
-            setShazarrResponse(response);
+      const { value: isRecording } = await VoiceRecorder.startRecording();
 
-            addItemToHistory({
-              title: response.title,
-              artist: response.subtitle,
-              date: Date.now(),
-              data: response,
-            });
+      if (isRecording) {
+        setTimeout(async () => {
+          const {
+            value: { recordDataBase64 },
+          } = await VoiceRecorder.stopRecording();
 
-            if (historySearch) {
-              setCleanHistorySearch(historySearch);
-            }
-          } else {
-            setShazarrResponse(undefined);
-            setRecordingError("SHAZARR_NOT_FOUND" as never);
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          if (!historySearch) {
+          const audioData = import.meta.env.VITE_STAGE === "testing"
+            ? mockRecordBase64
+            : recordDataBase64;
+
+          if (!audioData) return;
+
+          setAudio(audioData);
+          setRecordingStatus("searching");
+          await vibrateAction();
+
+          if (!isNetworkConnected) {
             addItemToHistory({
               title: "Offline record",
               artist: "Not discovered",
               date: Date.now(),
-              stream: audio,
+              stream: audioData,
             });
+            setRecordingStatus("inactive");
+            return;
           }
-          setRecordingError("SHAZAM_API_ERROR" as never);
-        })
-        .finally(async () => {
-          await vibrateAction();
-          await ScreenOrientation.unlock();
-          setRecordingStatus("inactive");
-          setShazarrLoading(false);
-        });
-    },
-    [addItemToHistory, audio, historySearch, recordingStatus],
-  );
 
-  const processTranscoding = useCallback(() => {
-    setShazarrLoading(true);
+          processTranscoding(audioData);
+        
+        }, duration);
+      }
+    } catch (err) {
+      console.error(err);
 
-    if (!audio || audio.length === 0) return;
+      if (import.meta.env.VITE_STAGE === "testing") {
+        handleTesting(Date.now());
+        return;
+      };
 
-    if (!isNetworkConnected && !historySearch) {
-      addItemToHistory({
-        title: "Offline record",
-        artist: "Not discovered",
-        date: Date.now(),
-        stream: audio,
-      });
-      vibrateAction();
-      setRecordingStatus("inactive");
-      setShazarrLoading(false);
-    } else {
-      transcodePCM16(audio).then((pcm16) => {
-        if (recordingStatus !== "inactive") {
-          processShazam(pcm16);
-        }
-      });
-    }
-  }, [
-    addItemToHistory,
-    audio,
-    historySearch,
-    isNetworkConnected,
-    processShazam,
-    recordingStatus,
-  ]);
-
-  const searchOfflineRecord = (item: Parameters<typeof addItemToHistory>[0]) => {
-    if (item?.stream) {
       resetSearch();
-      setAudio(item.stream);
-      setHistorySearch(item.date);
-      setRecordingStatus("searching");
-    }
+      setRecordingError("ERROR_RECORDING" as never);
+    };
   };
 
-  useEffect(() => {
-    if (shazarrResponse) return;
-
-    switch (recordingStatus) {
-      case "start":
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        processRecording();
-        break;
-      case "searching":
-        if (audio) {
-          processTranscoding();
-        }
-        break;
-    }
-  }, [
-    audio,
-    processRecording,
-    processTranscoding,
-    recordingStatus,
-    shazarrResponse,
-  ]);
-
-  useEffect(() => {
-    if (cleanHistorySearch) {
-      deleteHistoryItem(cleanHistorySearch);
-    }
-  }, [cleanHistorySearch, deleteHistoryItem]);
+  const searchOfflineRecord = (item: HistoryItem) => {
+    if (!item?.stream) return;
+    
+    resetSearch();
+    setAudio(item.stream);
+    setRecordingStatus("searching");
+    processTranscoding(item.stream);
+  };
 
   const value = {
     recordingError,
     shazarrLoading,
-    shazarrResponse,
+    showInlineResult,
     recordingStatus,
     audio,
     actions: {
-      setRecordingStatus,
+      startRecording,
       resetSearch,
-      setShazarrResponse,
+      dismissInlineResult,
       searchOfflineRecord,
     },
   };

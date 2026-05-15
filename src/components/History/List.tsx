@@ -1,63 +1,53 @@
-import { useState } from "react";
-import { Close, List } from "@mui/icons-material";
-import { Box, Button, Container, Drawer, useTheme } from "@mui/material";
-
-import { useShazarrProvider } from "../Shazarr/useShazarr";
+import { Close } from "@mui/icons-material";
+import { Box, Button, Container, Drawer, useMediaQuery, useTheme } from "@mui/material";
 
 import HistoryCard from "./Card";
 import { useHistoryProvider } from "./useHistory";
 
-export default function HistoryList() {
-  const { recordingStatus } = useShazarrProvider();
+interface Props {
+  open: boolean;
+  onClose: () => void;
+}
+
+export default function HistoryList({ open, onClose }: Props) {
+  const isLandscape = useMediaQuery("(orientation: landscape)");
   const { history } = useHistoryProvider();
-  const [listOpen, setListOpen] = useState<boolean>();
   const { palette } = useTheme();
 
   if (!history || history?.length === 0) return null;
 
   return (
-    <Box sx={{ marginBottom: 2 }}>
-      <Button
-        startIcon={<List />}
-        variant="outlined"
-        fullWidth
-        onClick={() => setListOpen(true)}
-        disabled={recordingStatus !== "inactive"}
+    <Drawer
+      anchor="bottom"
+      open={open}
+      onClose={onClose}
+      ModalProps={{
+        keepMounted: true,
+      }}
+    >
+      <Box
+        sx={{ backgroundImage: palette.background.paper, paddingTop: 1, mb: isLandscape ? 2 : 5 }}
+        data-testid="history-list"
       >
-        Show records ({history?.length})
-      </Button>
-      <Drawer
-        anchor="bottom"
-        open={listOpen}
-        onClose={() => setListOpen(false)}
-        ModalProps={{
-          keepMounted: true,
-        }}
-      >
-        <Box
-          sx={{ backgroundImage: palette.background.paper, paddingTop: 1, mb: 5 }}
-          data-testid="history-list"
-        >
-          <Container maxWidth="xs" sx={{ padding: "0 0.5rem" }}>
-            {history?.map((item, index) => (
-              <HistoryCard
-                item={item}
-                key={`history-item${index}`}
-                onClose={() => setListOpen(false)}
-              />
-            ))}
-            <Button
-              startIcon={<Close />}
-              variant="outlined"
-              fullWidth
-              onClick={() => setListOpen(false)}
-              sx={{ marginBottom: 1 }}
-            >
-              Close records
-            </Button>
-          </Container>
-        </Box>
-      </Drawer>
-    </Box>
+        <Container maxWidth="xs" sx={{ padding: "0 0.5rem" }}>
+          {history?.map((item, index) => (
+            <HistoryCard
+              item={item}
+              key={`history-item${index}`}
+              onClose={onClose}
+            />
+          ))}
+          <Button
+            startIcon={<Close />}
+            variant="outlined"
+            fullWidth
+            onClick={onClose}
+            sx={{ marginBottom: 1 }}
+          >
+            Close records
+          </Button>
+        </Container>
+      </Box>
+    </Drawer>
   );
 }
