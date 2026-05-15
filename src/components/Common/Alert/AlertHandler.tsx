@@ -28,7 +28,7 @@ export const AlertHandler = () => {
   }
 
   return (
-    <Box sx={{ mb: 10, maxWidth: 360, m: "10 auto" }}>
+    <Box sx={{ maxWidth: 360, m: "10px auto 80px", width: "100%" }}>
       <ShazarrResults
         data={resultOpen && lastItem?.data ? lastItem.data : undefined}
         onClose={() => setResultOpen(false)}

@@ -15,7 +15,7 @@ export default function ShazarrButton() {
     shazarrLoading,
     shazarrResponse,
     recordingStatus,
-    actions: { setRecordingStatus, resetSearch },
+    actions: { startRecording, resetSearch },
   } = useShazarrProvider();
 
   return (
@@ -32,7 +32,7 @@ export default function ShazarrButton() {
           onClick={() => {
             resetSearch();
             if (recordingStatus === "inactive") {
-              setRecordingStatus("start");
+              startRecording();
             }
           }}
         >

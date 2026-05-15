@@ -49,17 +49,17 @@ export default function HistoryCard({
         sx={{ display: "flex", margin: "0 auto 0.5rem", alignItems: "center" }}
         data-testid="history-item"
       >
-        <CardMedia sx={{ lineHeight: 0, padding: 1 }}>
+        <CardMedia sx={{ lineHeight: 0 }}>
           <ButtonBase onClick={handleClickItem}>
             <ImageWithFallback
-              height="50"
-              width="50"
+              height="60"
+              width="60"
               alt=""
               src={item?.data?.images?.coverart || ""}
             />
           </ButtonBase>
         </CardMedia>
-        <CardContent sx={{ padding: "0.5rem", flex: "1 1 0" }}>
+        <CardContent sx={{ padding: "0.3rem 0.5rem", flex: "1 1 0" }}>
           <ButtonBase sx={{ textAlign: "left" }} onClick={handleClickItem}>
             <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
               <strong>{item.title}</strong> {`- ${item.artist}`}

@@ -9,15 +9,15 @@ test("Offline: Should save record for further recognition", async ({
   await page.reload();
 
   await expect(page.getByText("Shazarr")).toBeVisible();
+  await expect(page.getByText("Ready", { exact: true })).toBeVisible();
+
+  await page.context().setOffline(true);
+  await expect(page.getByText("Offline mode", { exact: true })).toBeVisible();
+  await expect(page.getByText("Internet is not reachable. In")).toBeVisible();
 
   // Run song recognition and cut internet connection
   await page.getByTestId("record-button").click();
-  await expect(page.getByText("recording...")).toBeVisible();
-  await page.context().setOffline(true);
-  await page.waitForTimeout(5000);
-
-  await expect(page.getByText("Offline mode", { exact: true })).toBeVisible();
-  await expect(page.getByText("Internet is not reachable. In")).toBeVisible();
+  
 
   // Open history panel
   await page.getByRole("button", { name: "Records" }).click();
