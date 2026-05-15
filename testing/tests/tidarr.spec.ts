@@ -42,7 +42,7 @@ async function gotoWithConfig(page: Page, config: Record<string, string>) {
 }
 
 async function openYakuzaResult(page: Page) {
-  await page.getByRole("button", { name: "Show records (3)" }).click();
+  await page.getByRole("button", { name: "Records" }).click();
   await page.locator("div:nth-child(3) > .MuiCardActions-root > button").first().click();
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 }

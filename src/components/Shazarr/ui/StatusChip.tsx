@@ -6,27 +6,25 @@ import { useConfigProvider } from "../../Config/useConfig";
 import { useShazarrProvider } from "../useShazarr";
 
 export default function StatusChip() {
-  const { shazarrLoading, shazarrResponse, recordingStatus } =
+  const { shazarrLoading, showInlineResult, recordingStatus } =
     useShazarrProvider();
   const { isNetworkConnected } = useConfigProvider();
 
   return (
     <Chip
       color={
-        shazarrResponse
+        showInlineResult
           ? "success"
           : shazarrLoading || recordingStatus === "recording"
             ? "default"
-            : shazarrResponse && !shazarrResponse
-              ? "warning"
-              : !isNetworkConnected
-                ? "error"
-                : "info"
+            : !isNetworkConnected
+              ? "error"
+              : "info"
       }
       icon={
         recordingStatus && recordingStatus !== "inactive" ? (
           <CircularProgress size={16} style={{ margin: "0 5px 0 10px" }} />
-        ) : shazarrResponse ? (
+        ) : showInlineResult ? (
           <Check fontSize="small" />
         ) : !isNetworkConnected ? (
           <NetworkPing fontSize="small" />
@@ -37,13 +35,11 @@ export default function StatusChip() {
       label={
         recordingStatus && recordingStatus !== "inactive"
           ? `${recordingStatus}...`
-          : shazarrResponse
+          : showInlineResult
             ? "Found !"
-            : shazarrResponse && !shazarrResponse
-              ? "Not found. Get closer."
-              : !isNetworkConnected
-                ? "Offline mode"
-                : "Ready"
+            : !isNetworkConnected
+              ? "Offline mode"
+              : "Ready"
       }
       variant="outlined"
     />

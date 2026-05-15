@@ -1,6 +1,6 @@
 import { Alert, Box } from "@mui/material";
 
-import errorCode, { ErrorCodeType } from "./errorCode";
+import errorCode, { ErrorCodeType } from "../../Config/errorCode";
 
 export default function ApiErrorAlert({
   message,
