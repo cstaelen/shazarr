@@ -172,6 +172,14 @@ async function waitForAlbum(
   return null;
 }
 
+async function ensureAlbumMonitored(config: LidarrConfig, album: LidarrAlbum): Promise<void> {
+  if (album.monitored) return;
+  await request(config, `/album/${album.id}`, {
+    method: "PUT",
+    body: JSON.stringify({ ...album, monitored: true }),
+  });
+}
+
 async function findAndAddAlbum(
   config: LidarrConfig,
   albumTitle: string,
@@ -281,7 +289,11 @@ export async function lidarrAutoSearch(
 
     let album = await waitForAlbum(config, ensured.artistId, normalizedAlbum);
 
-    if (!album) {
+    if (album) {
+      // Lidarr auto-creates all of an artist's albums on artist add; ensure only
+      // the identified album is monitored, not the artist's full discography.
+      await ensureAlbumMonitored(config, album);
+    } else {
       album = await findAndAddAlbum(config, albumTitle, artistName, normalizedAlbum, normalizedArtist, addedArtistIds);
     }
 
