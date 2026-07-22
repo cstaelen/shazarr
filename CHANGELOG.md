@@ -3,6 +3,10 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.3.1
+### 🐛 Fixed
+* Fix Lidarr monitored artist instead of album only #308
+
 ## 📦 0.3.0
 ### 🖍 Changed
 * Results shows now as a inline card instead of a dedicated screen.

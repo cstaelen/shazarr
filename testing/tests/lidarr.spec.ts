@@ -148,6 +148,40 @@ test("Lidarr: With API key — finds album via /search fallback when not in loca
   });
 });
 
+test("Lidarr: With API key — newly added artist's matched album is explicitly monitored, others are not", async ({ page }) => {
+  // Artist doesn't exist locally yet; after ensureArtist creates it, Lidarr populates
+  // albums (one matching, one unrelated) — only the matched album must be PUT-monitored.
+  const otherAlbum = { id: 11, title: "Some Other Album", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } };
+  const putRequests: { url: string; body: unknown }[] = [];
+
+  await mockLidarrRoutes(page, {
+    artists: [],
+    artistLookup: [DEFAULT_ARTIST],
+    albums: [DEFAULT_ALBUM, otherAlbum],
+  });
+  await page.route(`${LIDARR_URL}/api/v1/album/*`, async (route) => {
+    if (route.request().method() === "PUT") {
+      putRequests.push({ url: route.request().url(), body: route.request().postDataJSON() });
+      await route.fulfill({ status: 202, contentType: "application/json", body: route.request().postData() ?? "{}" });
+    } else {
+      await route.continue();
+    }
+  });
+
+  await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await page.getByRole("button", { name: "Download with Lidarr" }).click();
+  await expect(page.getByRole("button", { name: /Searching/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Search triggered in Lidarr!" })).toBeVisible({
+    timeout: 15000,
+  });
+
+  expect(putRequests).toHaveLength(1);
+  expect(putRequests[0].url).toContain(`/api/v1/album/${DEFAULT_ALBUM.id}`);
+  expect((putRequests[0].body as { monitored: boolean }).monitored).toBe(true);
+});
+
 test("Lidarr: With API key — shows error when album not found in search", async ({ page }) => {
   // Artist found but album not in local list and not found via /search
   await mockLidarrRoutes(page, { albums: [], search: [] });

@@ -43,7 +43,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
-    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
     "globals": "^17.7.0",
     "prettier": "^3.9.6",
     "ts-prune": "^0.10.3",
