@@ -37,7 +37,6 @@ async function openModjoResult(page: Page) {
 
 const DEFAULT_ARTIST = { id: 1, artistName: "Szymon", foreignArtistId: "abc-123" };
 const DEFAULT_ALBUM = { id: 10, title: "Blue Coloured Mountain", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } };
-const DEFAULT_SEARCH = [{ foreignId: "abc-album-123", album: { id: 10, title: "Blue Coloured Mountain", foreignAlbumId: "abc-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "abc-123", artistName: "Szymon" } } }];
 
 function mockLidarrRoutes(
   page: Page,
@@ -45,26 +44,48 @@ function mockLidarrRoutes(
     artists?: unknown[];
     artistLookup?: unknown[];
     albums?: unknown[];
-    albumByForeignId?: unknown[];
-    search?: unknown[];
+    onArtistCreate?: (body: Record<string, unknown>) => void;
   } = {},
 ) {
-  return page.route(`${LIDARR_URL}/**`, async (route) => {
+  // Mutable state so GET after PUT reflects the change — mirrors ensureMonitored's
+  // verify-then-retry behavior against a real server.
+  const artists = new Map(
+    (overrides.artists ?? [DEFAULT_ARTIST]).map((a) => [(a as { id: number }).id, { ...a }]),
+  );
+  const albums = new Map(
+    (overrides.albums ?? [DEFAULT_ALBUM]).map((a) => [(a as { id: number }).id, { ...a }]),
+  );
+  let nextArtistId = 1000;
+
+  const routePromise = page.route(`${LIDARR_URL}/**`, async (route) => {
     const url = route.request().url();
     const method = route.request().method();
+    const idMatch = url.match(/\/api\/v1\/(artist|album)\/(\d+)$/);
 
-    if (url.includes("/api/v1/search")) {
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.search ?? DEFAULT_SEARCH) });
+    if (idMatch && method === "GET") {
+      const [, kind, id] = idMatch;
+      const store = kind === "artist" ? artists : albums;
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(store.get(Number(id))) });
+    } else if (idMatch && method === "PUT") {
+      const [, kind, id] = idMatch;
+      const store = kind === "artist" ? artists : albums;
+      const body = route.request().postDataJSON();
+      store.set(Number(id), body);
+      await route.fulfill({ status: 202, contentType: "application/json", body: JSON.stringify(body) });
     } else if (url.includes("/api/v1/artist") && !url.includes("lookup") && method === "GET") {
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.artists ?? [DEFAULT_ARTIST]) });
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([...artists.values()]) });
     } else if (url.includes("/api/v1/artist/lookup")) {
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.artistLookup ?? [DEFAULT_ARTIST]) });
     } else if (url.includes("/api/v1/artist") && method === "POST") {
-      await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: 1 }) });
-    } else if (url.includes("/api/v1/album") && url.includes("foreignAlbumId=")) {
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.albumByForeignId ?? [DEFAULT_ALBUM]) });
+      const body = route.request().postDataJSON();
+      overrides.onArtistCreate?.(body);
+      const id = nextArtistId++;
+      // Real Lidarr often doesn't honor monitored: true on create — simulate
+      // that so ensureArtistMonitored's verify-then-retry loop is exercised.
+      artists.set(id, { ...body, id, monitored: false });
+      await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id }) });
     } else if (url.includes("/api/v1/album") && url.includes("artistId=")) {
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(overrides.albums ?? [DEFAULT_ALBUM]) });
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([...albums.values()]) });
     } else if (url.includes("/api/v1/qualityprofile")) {
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ id: 1, name: "Any" }]) });
     } else if (url.includes("/api/v1/metadataprofile")) {
@@ -77,6 +98,8 @@ function mockLidarrRoutes(
       await route.continue();
     }
   });
+
+  return { routePromise, artists, albums };
 }
 
 test("Lidarr: Without API key — opens browser search", async ({ page }) => {
@@ -121,8 +144,6 @@ test("Lidarr: With API key — matches album despite (Remastered) suffix in titl
     artists: [modjoArtist],
     artistLookup: [modjoArtist],
     albums: [modjoAlbum],
-    albumByForeignId: [modjoAlbum],
-    search: [{ foreignId: "modjo-album-123", album: { id: 20, title: "Modjo", foreignAlbumId: "modjo-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "modjo-123", artistName: "Modjo" } } }],
   });
   await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
   await openModjoResult(page);
@@ -134,38 +155,19 @@ test("Lidarr: With API key — matches album despite (Remastered) suffix in titl
   });
 });
 
-test("Lidarr: With API key — finds album via /search fallback when not in local artist albums", async ({ page }) => {
-  // Artist exists locally but album is missing (e.g. excluded by metadata profile) — found via /search
-  const searchResult = [{ foreignId: "abc-album-123", album: { id: 10, title: "Blue Coloured Mountain", foreignAlbumId: "abc-album-123", artistId: 1, monitored: false, artist: { foreignArtistId: "abc-123", artistName: "Szymon" } } }];
-  await mockLidarrRoutes(page, { albums: [], search: searchResult });
-  await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
-  await openYakuzaResult(page);
-
-  await page.getByRole("button", { name: "Download with Lidarr" }).click();
-  await expect(page.getByRole("button", { name: /Searching/i })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Search triggered in Lidarr!" })).toBeVisible({
-    timeout: 15000,
-  });
-});
-
-test("Lidarr: With API key — newly added artist's matched album is explicitly monitored, others are not", async ({ page }) => {
-  // Artist doesn't exist locally yet; after ensureArtist creates it, Lidarr populates
-  // albums (one matching, one unrelated) — only the matched album must be PUT-monitored.
+test("Lidarr: With API key — newly added artist's matched album is explicitly monitored, others left untouched", async ({ page }) => {
+  // Artist doesn't exist locally yet; ensureArtist creates it with monitor: "none",
+  // so Lidarr populates albums unmonitored — only the matched album gets PUT-monitored.
   const otherAlbum = { id: 11, title: "Some Other Album", artistId: 1, monitored: false, statistics: { percentOfTracks: 0 } };
-  const putRequests: { url: string; body: unknown }[] = [];
+  let artistPostBody: { monitored?: boolean; addOptions?: { monitor?: string } } | undefined;
 
-  await mockLidarrRoutes(page, {
+  const { albums } = await mockLidarrRoutes(page, {
     artists: [],
     artistLookup: [DEFAULT_ARTIST],
     albums: [DEFAULT_ALBUM, otherAlbum],
-  });
-  await page.route(`${LIDARR_URL}/api/v1/album/*`, async (route) => {
-    if (route.request().method() === "PUT") {
-      putRequests.push({ url: route.request().url(), body: route.request().postDataJSON() });
-      await route.fulfill({ status: 202, contentType: "application/json", body: route.request().postData() ?? "{}" });
-    } else {
-      await route.continue();
-    }
+    onArtistCreate: (body) => {
+      artistPostBody = body as typeof artistPostBody;
+    },
   });
 
   await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
@@ -177,14 +179,35 @@ test("Lidarr: With API key — newly added artist's matched album is explicitly 
     timeout: 15000,
   });
 
-  expect(putRequests).toHaveLength(1);
-  expect(putRequests[0].url).toContain(`/api/v1/album/${DEFAULT_ALBUM.id}`);
-  expect((putRequests[0].body as { monitored: boolean }).monitored).toBe(true);
+  // Artist-level monitoring is on, but nothing is auto-monitored on artist add.
+  expect(artistPostBody?.monitored).toBe(true);
+  expect(artistPostBody?.addOptions?.monitor).toBe("none");
+
+  // Only the shazarred album ends up monitored; the rest of the discography is untouched.
+  expect(albums.get(DEFAULT_ALBUM.id)?.monitored).toBe(true);
+  expect(albums.get(otherAlbum.id)?.monitored).toBe(false);
 });
 
-test("Lidarr: With API key — shows error when album not found in search", async ({ page }) => {
-  // Artist found but album not in local list and not found via /search
-  await mockLidarrRoutes(page, { albums: [], search: [] });
+test("Lidarr: With API key — monitors an already-existing artist's unmonitored album before searching", async ({ page }) => {
+  // Artist already exists locally with the album present but unmonitored (e.g. user
+  // added it manually before) — Shazarr must monitor it before triggering the search.
+  const { albums } = await mockLidarrRoutes(page, { albums: [DEFAULT_ALBUM] });
+
+  await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await page.getByRole("button", { name: "Download with Lidarr" }).click();
+  await expect(page.getByRole("button", { name: /Searching/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Search triggered in Lidarr!" })).toBeVisible({
+    timeout: 15000,
+  });
+
+  expect(albums.get(DEFAULT_ALBUM.id)?.monitored).toBe(true);
+});
+
+test("Lidarr: With API key — shows error when album not found for existing artist", async ({ page }) => {
+  // Artist found locally but the identified album isn't in its album list.
+  await mockLidarrRoutes(page, { albums: [] });
   await gotoWithConfig(page, { lidarr_url: LIDARR_URL, lidarr_api_key: LIDARR_API_KEY });
   await openYakuzaResult(page);
 
