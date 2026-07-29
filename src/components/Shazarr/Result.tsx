@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { App } from "@capacitor/app";
 import { Close } from "@mui/icons-material";
 import { Box, Button, Divider, Drawer, Stack, Table, TableBody, TableCell, TableContainer, TableRow, useMediaQuery } from "@mui/material";
 import { ShazamProvider, ShazamTrack } from "shazam-api/dist/types";
@@ -29,6 +30,15 @@ export default function ShazarrResults({ data, onClose }: Props) {
     () => data?.sections?.filter((section) => section.type === "LYRICS")?.[0]?.text,
     [data],
   );
+
+  useEffect(() => {
+    if (!data) return;
+    const listener = App.addListener("backButton", () => onClose());
+    
+    return () => {
+      listener.then((handle) => handle.remove());
+    };
+  }, [data, onClose]);
 
   if (!data) return null;
 

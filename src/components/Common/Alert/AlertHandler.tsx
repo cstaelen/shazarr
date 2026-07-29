@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Box } from "@mui/material";
 
 import { useConfigProvider } from "../../Config/useConfig";
@@ -10,28 +9,28 @@ import { useShazarrProvider } from "../../Shazarr/useShazarr";
 import ApiErrorAlert from "./Alert";
 
 export const AlertHandler = () => {
-  const [resultOpen, setResultOpen] = useState(false);
-  const { recordingStatus, recordingError, showInlineResult, actions: { dismissInlineResult } } = useShazarrProvider();
+  const { recordingStatus, recordingError, showInlineResult, openResultDate, actions: { dismissInlineResult, setOpenResultDate } } = useShazarrProvider();
   const { isNetworkConnected } = useConfigProvider();
   const { history } = useHistoryProvider();
 
   const lastItem = history?.[history.length - 1];
+  const isOpen = !!lastItem && openResultDate === lastItem.date;
 
   function handleDismiss() {
     dismissInlineResult();
-    setResultOpen(false);
+    setOpenResultDate(undefined);
   }
 
   function handleOpenResult() {
     dismissInlineResult();
-    setResultOpen(true);
+    if (lastItem) setOpenResultDate(lastItem.date);
   }
 
   return (
     <Box sx={{ maxWidth: 360, m: "10px auto 80px", width: "100%" }}>
       <ShazarrResults
-        data={resultOpen && lastItem?.data ? lastItem.data : undefined}
-        onClose={() => setResultOpen(false)}
+        data={isOpen ? lastItem.data : undefined}
+        onClose={() => setOpenResultDate(undefined)}
       />
       {showInlineResult && lastItem?.data && recordingStatus === "inactive" && (
         <InlineResultCard

@@ -11,11 +11,13 @@ type ShazarrContextType = {
   showInlineResult: boolean;
   recordingStatus: RecordingStatusType;
   audio: string | undefined;
+  openResultDate: number | undefined; // date of the history item whose detail panel is open, or undefined if none
   actions: {
     startRecording: () => void;
     searchOfflineRecord: (item: HistoryItem) => void;
     resetSearch: () => void;
     dismissInlineResult: () => void;
+    setOpenResultDate: (date: number | undefined) => void;
   };
 };
 
