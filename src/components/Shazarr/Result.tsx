@@ -2,9 +2,10 @@ import { useEffect, useMemo } from "react";
 import { App } from "@capacitor/app";
 import { Close } from "@mui/icons-material";
 import { Box, Button, Divider, Drawer, Stack, Table, TableBody, TableCell, TableContainer, TableRow, useMediaQuery } from "@mui/material";
-import { ShazamProvider, ShazamTrack } from "shazam-api/dist/types";
+import { ShazamProvider } from "shazam-api/dist/types";
 
 import { useConfigProvider } from "../Config/useConfig";
+import { useHistoryProvider } from "../History/useHistory";
 
 import ButtonLyrics from "./ui/ButtonLyrics";
 import CardResult from "./ui/Card";
@@ -12,15 +13,19 @@ import CustomServiceButton from "./ui/CustomServiceButton";
 import LidarrButton from "./ui/LidarrButton";
 import StreamProviderButton from "./ui/StreamProviderButton";
 import TidarrButton from "./ui/TidarrButton";
+import { useShazarrProvider } from "./useShazarr";
 
-interface Props {
-  data: ShazamTrack | undefined;
-  onClose: () => void;
-}
-
-export default function ShazarrResults({ data, onClose }: Props) {
+export default function ShazarrResults() {
   const isLandscape = useMediaQuery("(orientation: landscape)");
   const { config } = useConfigProvider();
+  const {
+    openResultDate,
+    actions: { setOpenResultDate },
+  } = useShazarrProvider();
+  const { history } = useHistoryProvider();
+
+  const onClose = () => setOpenResultDate(undefined);
+  const data = history?.find((item) => item.date === openResultDate)?.data;
 
   const albumName = data?.sections?.[0]?.metadata?.filter(
     (m: { title: string }) => m?.title === "Album",
@@ -33,12 +38,12 @@ export default function ShazarrResults({ data, onClose }: Props) {
 
   useEffect(() => {
     if (!data) return;
-    const listener = App.addListener("backButton", () => onClose());
-    
+    const listener = App.addListener("backButton", () => setOpenResultDate(undefined));
+
     return () => {
       listener.then((handle) => handle.remove());
     };
-  }, [data, onClose]);
+  }, [data, setOpenResultDate]);
 
   if (!data) return null;
 
@@ -47,7 +52,6 @@ export default function ShazarrResults({ data, onClose }: Props) {
       anchor="bottom"
       open={!!data}
       onClose={onClose}
-      ModalProps={{ keepMounted: true }}
     >
       <Box sx={{ p: 2, display: "flex", gap: 2, flexDirection: isLandscape ? "row" : "column" }}>
         <Box sx={{ flex: "1 1 0" }}>

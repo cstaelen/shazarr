@@ -106,11 +106,8 @@ test("History: Should be able to consult 2 different items", async ({
     page.getByText("Chillin'ModjoPlay AlbumModjo"),
   ).toHaveScreenshot({ maxDiffPixelRatio: 0.15 });
 
-  // Close result before reopening history
+  // Close result — the history panel stays open underneath, no need to reopen it
   await page.getByRole("button", { name: "Close" }).click();
-
-  // Open history panel
-  await page.getByRole("button", { name: "Records" }).click();
 
   // Click on history item
   await page.getByTestId("history-item").nth(1).getByRole("button").first().click();

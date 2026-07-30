@@ -5,7 +5,6 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 import { ImageWithFallback } from "../Common/ImageWithFallback";
-import ShazarrResults from "../Shazarr/Result";
 import { useShazarrProvider } from "../Shazarr/useShazarr";
 
 import { HistoryItem } from "./context";
@@ -17,7 +16,6 @@ export default function HistoryCard({
   item: HistoryItem;
 }) {
   const {
-    openResultDate,
     actions: { searchOfflineRecord, setOpenResultDate },
   } = useShazarrProvider();
   const {
@@ -26,7 +24,6 @@ export default function HistoryCard({
 
   const date = new Date(item.date).toUTCString();
   const dateRecord = new Date(date).toLocaleString();
-  const isOpen = openResultDate === item.date;
 
   function handleClickItem() {
     if (item?.data) {
@@ -38,10 +35,6 @@ export default function HistoryCard({
 
   return (
     <>
-      <ShazarrResults
-        data={isOpen ? item.data : undefined}
-        onClose={() => setOpenResultDate(undefined)}
-      />
       <Card
         sx={{ display: "flex", margin: "0 auto 0.5rem", alignItems: "center" }}
         data-testid="history-item"
