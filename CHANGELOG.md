@@ -6,6 +6,8 @@ Shazarr notable changes.
 ## 📦 0.3.2
 ### 🚀 Added
 * Use back button to close panel
+### 🖍 Changed
+* Download the APK directly on update
 ### 🐛 Fixed
 * Rewrite Lidarr album monitoring #308
 
