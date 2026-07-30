@@ -15,6 +15,16 @@ jobs:
       - name: Set VITE_CURRENT_VERSION
         run: echo "VITE_CURRENT_VERSION=v0.0.0-testing" >> $GITHUB_ENV
 
+      - name: Set VERSION_CODE
+        # A timestamp keeps versionCode strictly increasing across PR builds so
+        # Android allows installing over an existing release without requiring
+        # an uninstall first (Android rejects installs with a lower versionCode).
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "VERSION_CODE=$(date +%s)" >> $GITHUB_ENV
+          echo "VERSION_NAME=0.0.0-pr${PR_NUMBER}" >> $GITHUB_ENV
+
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
