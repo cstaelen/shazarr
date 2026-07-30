@@ -50,9 +50,17 @@ export default function LidarrButton({
     const result = await lidarrAutoSearch(url, apiKey, albumTitle, artistName);
     if (result.success) {
       const s = result.status ?? "queued";
-      setSuccessMessage(
-        s === "available" ? "Already in Lidarr library" : "Search triggered in Lidarr!"
-      );
+      switch (s){
+        case "available":
+          setSuccessMessage("Exists in Lidarr");
+          break;
+        case "wanted":
+          setSuccessMessage("Already monitored !");
+          break;
+        default: 
+          setSuccessMessage("Search triggered in Lidarr!");
+      }
+      
       setStatus("success");
     } else {
       setErrorMessage(formatLidarrError(result.message));
