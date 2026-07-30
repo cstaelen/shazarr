@@ -20,6 +20,7 @@ export type { RecordingStatusType } from "./context";
 export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [audio, setAudio] = useState<string>();
   const [showInlineResult, setShowInlineResult] = useState(false);
+  const [openResultDate, setOpenResultDate] = useState<number>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
   const [recordingError, setRecordingError] = useState<ErrorCodeType | undefined>();
   const [recordingStatus, setRecordingStatus] =
@@ -193,6 +194,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     recordingError,
     shazarrLoading,
     showInlineResult,
+    openResultDate,
     recordingStatus,
     audio,
     actions: {
@@ -200,6 +202,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       resetSearch,
       dismissInlineResult,
       searchOfflineRecord,
+      setOpenResultDate,
     },
   };
 

@@ -3,6 +3,12 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.3.2
+### 🚀 Added
+* Use back button to close panel
+### 🐛 Fixed
+* Rewrite Lidarr album monitoring #308
+
 ## 📦 0.3.1
 ### 🐛 Fixed
 * Fix Lidarr monitored artist instead of album only #308

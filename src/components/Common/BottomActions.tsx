@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { App } from "@capacitor/app";
 import styled from "@emotion/styled";
 import { List, Settings } from "@mui/icons-material";
 import { Box, Fab, useMediaQuery } from "@mui/material";
@@ -12,12 +13,34 @@ import { useShazarrProvider } from "../Shazarr/useShazarr";
 export default function BottomActions() {
   const [configOpen, setConfigOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const { recordingStatus } = useShazarrProvider();
+  const { recordingStatus, openResultDate } = useShazarrProvider();
   const { formConfig } = useConfigProvider();
   const { history } = useHistoryProvider();
   const isLandscape = useMediaQuery("(orientation: landscape)");
 
   const disabled = recordingStatus !== "inactive";
+
+  // Android hardware back button: close whichever panel is open instead of
+  // exiting the app. Falls through to default behavior (exit app) when
+  // nothing is open. The result detail panel closes itself (see Result.tsx).
+  useEffect(() => {
+    const listener = App.addListener("backButton", () => {
+      if (openResultDate !== undefined) {
+        // Result.tsx's own listener already closes the detail panel.
+        return;
+      } else if (historyOpen) {
+        setHistoryOpen(false);
+      } else if (configOpen) {
+        setConfigOpen(false);
+      } else {
+        App.exitApp();
+      }
+    });
+
+    return () => {
+      listener.then((handle) => handle.remove());
+    };
+  }, [historyOpen, configOpen, openResultDate]);
 
   return (
     <>
