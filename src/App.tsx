@@ -17,6 +17,7 @@ import { ConfigProvider } from "./components/Config/Provider";
 import { HistoryProvider } from "./components/History/Provider";
 import ShazarrButton from "./components/Shazarr/Button";
 import { ShazarrProvider } from "./components/Shazarr/Provider";
+import ShazarrResults from "./components/Shazarr/Result";
 import StatusChip from "./components/Shazarr/ui/StatusChip";
 
 const darkTheme = createTheme({
@@ -66,6 +67,7 @@ function App() {
                   <AlertHandler />
                 </StackStyled>
               </Container>
+              <ShazarrResults />
               <BottomActions />
             </Main>
           </ShazarrProvider>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { DeleteForever, RemoveRedEye, Search } from "@mui/icons-material";
 import { ButtonBase, CardActions, CardMedia, IconButton } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -6,7 +5,6 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 import { ImageWithFallback } from "../Common/ImageWithFallback";
-import ShazarrResults from "../Shazarr/Result";
 import { useShazarrProvider } from "../Shazarr/useShazarr";
 
 import { HistoryItem } from "./context";
@@ -14,14 +12,11 @@ import { useHistoryProvider } from "./useHistory";
 
 export default function HistoryCard({
   item,
-  onClose,
 }: {
   item: HistoryItem;
-  onClose: () => void;
 }) {
-  const [resultOpen, setResultOpen] = useState(false);
   const {
-    actions: { searchOfflineRecord },
+    actions: { searchOfflineRecord, setOpenResultDate },
   } = useShazarrProvider();
   const {
     actions: { deleteHistoryItem },
@@ -32,19 +27,14 @@ export default function HistoryCard({
 
   function handleClickItem() {
     if (item?.data) {
-      setResultOpen(true);
+      setOpenResultDate(item.date);
     } else {
       searchOfflineRecord(item);
     }
-    onClose();
   }
 
   return (
     <>
-      <ShazarrResults
-        data={resultOpen ? item.data : undefined}
-        onClose={() => setResultOpen(false)}
-      />
       <Card
         sx={{ display: "flex", margin: "0 auto 0.5rem", alignItems: "center" }}
         data-testid="history-item"

@@ -7,13 +7,11 @@ import { RECORD_DURATION } from "../../constant";
 import skullImage from "../../resources/skull.png?inline";
 import NotesAnimate from "../NotesAnimate/NotesAnimate";
 
-import ShazarrResults from "./Result";
 import { useShazarrProvider } from "./useShazarr";
 
 export default function ShazarrButton() {
   const {
     shazarrLoading,
-    shazarrResponse,
     recordingStatus,
     actions: { startRecording, resetSearch },
   } = useShazarrProvider();
@@ -61,7 +59,6 @@ export default function ShazarrButton() {
           </Round>
         </IconButton>
       </ListenButton>
-      {shazarrResponse && <ShazarrResults />}
     </Box>
   );
 }

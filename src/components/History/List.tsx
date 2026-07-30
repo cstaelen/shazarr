@@ -34,7 +34,6 @@ export default function HistoryList({ open, onClose }: Props) {
             <HistoryCard
               item={item}
               key={`history-item${index}`}
-              onClose={onClose}
             />
           ))}
           <Button
