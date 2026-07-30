@@ -60,7 +60,11 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
   );
 
 
-  async function sendNotification(name: string, prerelease: boolean) {
+  async function sendNotification(
+    name: string,
+    prerelease: boolean,
+    apkUrl?: string,
+  ) {
     let allowed = false;
 
     const { display: currentPerm } =
@@ -81,7 +85,8 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
 
     LocalNotifications.addListener("localNotificationActionPerformed", () => {
       window.open(
-        `https://github.com${import.meta.env.VITE_REPO_API_URL}/releases`,
+        apkUrl ??
+          `https://github.com${import.meta.env.VITE_REPO_API_URL}/releases`,
       );
     });
     LocalNotifications.schedule({
@@ -117,7 +122,14 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           latestVersion !== currentVersion &&
           latestVersion > currentVersion
         ) {
-          sendNotification(data[0].tag_name, data[0].prerelease);
+          const apkAsset = data[0].assets?.find((asset: { name: string }) =>
+            asset.name.endsWith(".apk"),
+          );
+          sendNotification(
+            data[0].tag_name,
+            data[0].prerelease,
+            apkAsset?.browser_download_url,
+          );
         }
       } catch (e) {
         console.log("fetch github issue", e);
