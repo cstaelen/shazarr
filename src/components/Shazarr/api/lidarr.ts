@@ -1,3 +1,4 @@
+import { getReleaseGroupsByIsrc } from "./musicbrainz";
 import { cleanAlbumTitle, normalize } from "./utils";
 
 type LidarrConfig = {
@@ -10,6 +11,7 @@ type LidarrAlbum = {
   title: string;
   artistId: number;
   monitored: boolean;
+  foreignAlbumId?: string;
   statistics?: { percentOfTracks: number };
 };
 
@@ -30,6 +32,16 @@ type LidarrArtistLookup = {
   genres?: string[];
   ratings?: unknown;
   status?: string;
+};
+
+// From `/album/lookup?term=lidarr:<mbid>` — ids are 0 until actually added.
+type LidarrAlbumLookup = {
+  title: string;
+  foreignAlbumId: string;
+  albumType?: string;
+  secondaryTypes?: string[];
+  images?: unknown[];
+  artist?: LidarrArtistLookup;
 };
 
 export type LidarrAutoSearchResult =
@@ -70,6 +82,11 @@ async function getAlbumsByArtist(config: LidarrConfig, artistId: number): Promis
 async function lookupArtist(config: LidarrConfig, term: string): Promise<LidarrArtistLookup[]> {
   if (!term?.trim()) return [];
   return request<LidarrArtistLookup[]>(config, `/artist/lookup?term=${term}`);
+}
+
+async function lookupAlbumByMbid(config: LidarrConfig, mbid: string): Promise<LidarrAlbumLookup | null> {
+  const results = await request<LidarrAlbumLookup[]>(config, `/album/lookup?term=lidarr:${mbid}`);
+  return results[0] ?? null;
 }
 
 async function ensureArtist(
@@ -142,10 +159,8 @@ function getAlbumStatus(album: LidarrAlbum): "available" | "wanted" | "queued" {
   return "queued";
 }
 
-// After ensureArtist creates a new artist, Lidarr populates its albums
-// asynchronously — poll only until the discography shows up at all (a few
-// albums means the initial sync is done), then look up the identified album
-// once. If it's not there, it never will be — no point polling further.
+// Newly created artists get their albums populated asynchronously — poll
+// until the discography shows up, then match once.
 async function waitForAlbum(
   config: LidarrConfig,
   artistId: number,
@@ -164,10 +179,8 @@ async function waitForAlbum(
   return null;
 }
 
-// Lidarr can silently revert monitored flags while it's still syncing metadata
-// right after an artist is added (cover downloads, album info updates) — a PUT
-// sent during that window gets overwritten once the sync finishes. Verify with
-// a fresh GET after each attempt and retry until it actually sticks.
+// Lidarr can silently revert monitored flags while still syncing metadata
+// right after an artist is added — verify with a fresh GET and retry.
 async function ensureMonitored<T extends { monitored: boolean }>(
   config: LidarrConfig,
   resource: "artist" | "album",
@@ -195,17 +208,100 @@ async function triggerOrAddAlbum(
   const status = getAlbumStatus(album);
   if (status === "available") return { success: true, status };
   await triggerAlbumSearch(config, album.id);
-  // "wanted" means the album was already monitored before this call (nothing
-  // changed) — anything we just monitored ourselves is reported as "queued"
-  // regardless of Lidarr's raw monitored flag, so the UI can tell them apart.
+  // Distinguish "we just started monitoring it" from "it was already wanted".
   return { success: true, status: wasAlreadyMonitored ? status : "queued" };
+}
+
+// Album > EP > Single, compilations/live releases last. Lower score wins.
+function releaseGroupRank(candidate: LidarrAlbumLookup): number {
+  const secondary = candidate.secondaryTypes ?? [];
+  if (secondary.length > 0) return 3;
+  if (candidate.albumType === "Album") return 0;
+  if (candidate.albumType === "EP") return 1;
+  if (candidate.albumType === "Single") return 2;
+  return 3;
+}
+
+// Resolves an ISRC to a Lidarr artist + album via MusicBrainz release-group
+// MBIDs. A release-group can belong to a "Various Artists" compilation even
+// for a single-artist recording, so the artist name is cross-checked before
+// accepting a candidate, and the best-ranked one wins.
+async function resolveAlbumLookupByIsrc(
+  config: LidarrConfig,
+  isrc: string,
+  normalizedArtist: string
+): Promise<LidarrAlbumLookup | null> {
+  const releaseGroups = await getReleaseGroupsByIsrc(isrc).catch(() => []);
+  if (releaseGroups.length === 0) return null;
+
+  const lookups = await Promise.all(
+    releaseGroups.map((g) => lookupAlbumByMbid(config, g.id).catch(() => null))
+  );
+
+  const candidates = lookups.filter(
+    (a): a is LidarrAlbumLookup =>
+      !!a?.artist && normalize(a.artist.artistName) === normalizedArtist
+  );
+  if (candidates.length === 0) return null;
+
+  candidates.sort((a, b) => releaseGroupRank(a) - releaseGroupRank(b));
+  return candidates[0];
+}
+
+// Lidarr populates a newly created artist's discography itself right after
+// POST /artist — a separate POST /album for a title already in it 409s
+// (unique constraint). Wait for the sync and match by MBID instead.
+async function waitForAlbumByMbid(
+  config: LidarrConfig,
+  artistId: number,
+  foreignAlbumId: string,
+  timeoutMs = 20_000,
+  pollIntervalMs = 2_500
+): Promise<LidarrAlbum | null> {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    const albums = await getAlbumsByArtist(config, artistId);
+    const found = albums.find((a) => a.foreignAlbumId === foreignAlbumId);
+    if (found) return found;
+    if (albums.length > 0) return null; // sync done, album genuinely absent
+    await new Promise((r) => setTimeout(r, pollIntervalMs));
+  }
+  return null;
+}
+
+async function lidarrAutoSearchByMbid(
+  config: LidarrConfig,
+  albumLookup: LidarrAlbumLookup
+): Promise<LidarrAutoSearchResult | null> {
+  if (!albumLookup.artist) return null;
+
+  const ensured = await ensureArtist(config, albumLookup.artist);
+  if (!ensured.success) return null;
+
+  const album = ensured.created
+    ? await waitForAlbumByMbid(config, ensured.artistId, albumLookup.foreignAlbumId)
+    : (await getAlbumsByArtist(config, ensured.artistId)).find(
+        (a) => a.foreignAlbumId === albumLookup.foreignAlbumId
+      ) ?? null;
+
+  if (!album) {
+    if (ensured.created) await deleteArtist(config, ensured.artistId);
+    return null;
+  }
+
+  const wasAlreadyMonitored = album.monitored;
+  if (ensured.created) await ensureMonitored<LidarrArtist>(config, "artist", ensured.artistId);
+  const monitoredAlbum = await ensureMonitored<LidarrAlbum>(config, "album", album.id);
+
+  return triggerOrAddAlbum(config, monitoredAlbum, wasAlreadyMonitored);
 }
 
 export async function lidarrAutoSearch(
   url: string,
   apiKey: string,
   albumTitle: string,
-  artistName: string
+  artistName: string,
+  isrc?: string
 ): Promise<LidarrAutoSearchResult> {
   if (!albumTitle || !artistName) return { success: false, message: "Missing album or artist name" };
 
@@ -213,8 +309,21 @@ export async function lidarrAutoSearch(
   const normalizedAlbum = normalize(cleanAlbumTitle(albumTitle));
   const normalizedArtist = normalize(artistName);
 
+  // Unambiguous MBID path first; falls through to text search on any failure.
+  if (isrc) {
+    try {
+      const albumLookup = await resolveAlbumLookupByIsrc(config, isrc, normalizedArtist);
+      if (albumLookup) {
+        const result = await lidarrAutoSearchByMbid(config, albumLookup);
+        if (result) return result;
+      }
+    } catch {
+      // fall through to text search
+    }
+  }
+
   try {
-    // Step 1: ensure the artist exists (reuse if already there, else create it).
+    // Ensure the artist exists (reuse if already there, else create it).
     const lookupResults = await lookupArtist(config, artistName);
     const exactMatch = lookupResults.filter((a) => normalize(a.artistName) === normalizedArtist);
     const candidate = exactMatch[0] ?? lookupResults[0];
@@ -223,23 +332,18 @@ export async function lidarrAutoSearch(
     const ensured = await ensureArtist(config, candidate);
     if (!ensured.success) return { success: false, message: ensured.message };
 
-    // Step 2: look up the identified album within the artist's albums. A newly
-    // created artist gets its albums populated by Lidarr asynchronously.
+    // Match the album within the artist's (possibly still-syncing) discography.
     const album = ensured.created
       ? await waitForAlbum(config, ensured.artistId, normalizedAlbum)
       : (await getAlbumsByArtist(config, ensured.artistId)).find((a) => normalize(a.title) === normalizedAlbum) ??
         null;
 
-    // Step 3: no match — roll back the artist if we just created it for nothing.
+    // No match — roll back the artist if we just created it for nothing.
     if (!album) {
       if (ensured.created) await deleteArtist(config, ensured.artistId);
       return { success: false, message: "Album not found" };
     }
 
-    // Step 4: monitor it (artist-level monitoring is on, but ensureArtist keeps
-    // individual albums unmonitored on artist add). For a freshly created artist,
-    // Lidarr's background metadata sync can still revert monitored flags, so
-    // verify/retry rather than trusting a single PUT.
     const wasAlreadyMonitored = album.monitored;
     const monitoredAlbum = await ensureMonitored<LidarrAlbum>(config, "album", album.id);
     if (ensured.created) await ensureMonitored<LidarrArtist>(config, "artist", ensured.artistId);

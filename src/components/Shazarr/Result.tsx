@@ -82,6 +82,7 @@ export default function ShazarrResults() {
                 albumTitle={albumName || data.title}
                 artistName={data.subtitle}
                 url={config.lidarr_url as string}
+                isrc={(data as { isrc?: string }).isrc}
               />
             )}
             {config?.tidarr_url && (

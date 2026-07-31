@@ -25,10 +25,12 @@ export default function LidarrButton({
   albumTitle,
   artistName,
   url,
+  isrc,
 }: {
   albumTitle: string;
   artistName: string;
   url: string;
+  isrc?: string;
 }) {
   const { isNetworkConnected, config } = useConfigProvider();
   const [status, setStatus] = useState<LidarrStatus>("idle");
@@ -47,7 +49,7 @@ export default function LidarrButton({
     }
 
     setStatus("loading");
-    const result = await lidarrAutoSearch(url, apiKey, albumTitle, artistName);
+    const result = await lidarrAutoSearch(url, apiKey, albumTitle, artistName, isrc);
     if (result.success) {
       const s = result.status ?? "queued";
       switch (s){
