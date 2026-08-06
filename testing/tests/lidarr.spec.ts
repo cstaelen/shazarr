@@ -92,6 +92,9 @@ function mockLidarrRoutes(
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ id: 1, name: "Standard" }]) });
     } else if (url.includes("/api/v1/rootfolder")) {
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([{ path: "/music" }]) });
+    } else if (url.includes("/api/v1/command") && method === "GET") {
+      // No RefreshArtist commands pending — waitForArtistRefresh returns immediately.
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([]) });
     } else if (url.includes("/api/v1/command")) {
       await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: 99 }) });
     } else {
