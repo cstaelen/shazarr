@@ -71,8 +71,9 @@ async function request<T>(config: LidarrConfig, path: string, options: RequestIn
   return text ? JSON.parse(text) : (undefined as unknown as T);
 }
 
-async function getAllArtists(config: LidarrConfig): Promise<LidarrArtist[]> {
-  return request<LidarrArtist[]>(config, "/artist");
+async function findArtistByMbid(config: LidarrConfig, mbid: string): Promise<LidarrArtist | null> {
+  const results = await request<LidarrArtist[]>(config, `/artist?mbId=${mbid}`);
+  return results[0] ?? null;
 }
 
 async function getAlbumsByArtist(config: LidarrConfig, artistId: number): Promise<LidarrAlbum[]> {
@@ -95,8 +96,7 @@ async function ensureArtist(
 ): Promise<{ success: true; artistId: number; created: boolean } | { success: false; message: string }> {
   if (!artist?.foreignArtistId) return { success: false, message: "Invalid artist: missing foreignArtistId" };
 
-  const existing = await getAllArtists(config);
-  const found = existing.find((a) => a.foreignArtistId === artist.foreignArtistId);
+  const found = await findArtistByMbid(config, artist.foreignArtistId);
   if (found?.id) return { success: true, artistId: found.id, created: false };
 
   const [rootFolders, qualityProfiles, metadataProfiles] = await Promise.all([
@@ -154,10 +154,12 @@ type LidarrCommand = {
 async function waitForArtistRefresh(
   config: LidarrConfig,
   artistId: number,
-  timeoutMs = 60_000,
-  pollIntervalMs = 1_500
+  timeoutMs = 60_000
 ): Promise<void> {
   const started = Date.now();
+  // Start fast to catch small discographies quickly, then back off — large
+  // ones take 10-20s+, no need to poll /command every 1.5s the whole time.
+  let pollIntervalMs = 1_000;
   while (Date.now() - started < timeoutMs) {
     const commands = await request<LidarrCommand[]>(config, "/command");
     const refresh = commands.find(
@@ -165,6 +167,7 @@ async function waitForArtistRefresh(
     );
     if (!refresh || refresh.status === "completed" || refresh.status === "failed") return;
     await new Promise((r) => setTimeout(r, pollIntervalMs));
+    pollIntervalMs = Math.min(pollIntervalMs * 1.5, 5_000);
   }
 }
 
@@ -240,11 +243,12 @@ async function finalizeAlbum(
   ensured: { artistId: number; created: boolean },
   album: LidarrAlbum
 ): Promise<LidarrAutoSearchResult> {
-  const wasAlreadyMonitored = album.monitored;
-  if (ensured.created) {
-    await waitForArtistRefresh(config, ensured.artistId);
-    await ensureMonitored<LidarrArtist>(config, "artist", ensured.artistId);
-  }
+  // For a freshly created artist, Lidarr can mark the targeted album monitored
+  // on its own during import (even with addOptions.monitor: "none") — that's
+  // still us adding it for the first time, never "already monitored" by the user.
+  const wasAlreadyMonitored = ensured.created ? false : album.monitored;
+  if (ensured.created) await waitForArtistRefresh(config, ensured.artistId);
+  await ensureMonitored<LidarrArtist>(config, "artist", ensured.artistId);
   const monitoredAlbum = await ensureMonitored<LidarrAlbum>(config, "album", album.id);
 
   return triggerOrAddAlbum(config, monitoredAlbum, wasAlreadyMonitored);
