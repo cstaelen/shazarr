@@ -145,6 +145,29 @@ async function deleteArtist(config: LidarrConfig, artistId: number): Promise<voi
   }
 }
 
+type LidarrCommand = {
+  name: string;
+  status: string;
+  body?: { artistIds?: number[] };
+};
+
+async function waitForArtistRefresh(
+  config: LidarrConfig,
+  artistId: number,
+  timeoutMs = 60_000,
+  pollIntervalMs = 1_500
+): Promise<void> {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    const commands = await request<LidarrCommand[]>(config, "/command");
+    const refresh = commands.find(
+      (c) => c.name === "RefreshArtist" && c.body?.artistIds?.includes(artistId)
+    );
+    if (!refresh || refresh.status === "completed" || refresh.status === "failed") return;
+    await new Promise((r) => setTimeout(r, pollIntervalMs));
+  }
+}
+
 async function triggerAlbumSearch(config: LidarrConfig, albumId: number): Promise<void> {
   await request(config, "/command", {
     method: "POST",
@@ -212,6 +235,21 @@ async function triggerOrAddAlbum(
   return { success: true, status: wasAlreadyMonitored ? status : "queued" };
 }
 
+async function finalizeAlbum(
+  config: LidarrConfig,
+  ensured: { artistId: number; created: boolean },
+  album: LidarrAlbum
+): Promise<LidarrAutoSearchResult> {
+  const wasAlreadyMonitored = album.monitored;
+  if (ensured.created) {
+    await waitForArtistRefresh(config, ensured.artistId);
+    await ensureMonitored<LidarrArtist>(config, "artist", ensured.artistId);
+  }
+  const monitoredAlbum = await ensureMonitored<LidarrAlbum>(config, "album", album.id);
+
+  return triggerOrAddAlbum(config, monitoredAlbum, wasAlreadyMonitored);
+}
+
 // Album > EP > Single, compilations/live releases last. Lower score wins.
 function releaseGroupRank(candidate: LidarrAlbumLookup): number {
   const secondary = candidate.secondaryTypes ?? [];
@@ -222,10 +260,6 @@ function releaseGroupRank(candidate: LidarrAlbumLookup): number {
   return 3;
 }
 
-// Resolves an ISRC to a Lidarr artist + album via MusicBrainz release-group
-// MBIDs. A release-group can belong to a "Various Artists" compilation even
-// for a single-artist recording, so the artist name is cross-checked before
-// accepting a candidate, and the best-ranked one wins.
 async function resolveAlbumLookupByIsrc(
   config: LidarrConfig,
   isrc: string,
@@ -248,9 +282,6 @@ async function resolveAlbumLookupByIsrc(
   return candidates[0];
 }
 
-// Lidarr populates a newly created artist's discography itself right after
-// POST /artist — a separate POST /album for a title already in it 409s
-// (unique constraint). Wait for the sync and match by MBID instead.
 async function waitForAlbumByMbid(
   config: LidarrConfig,
   artistId: number,
@@ -289,11 +320,7 @@ async function lidarrAutoSearchByMbid(
     return null;
   }
 
-  const wasAlreadyMonitored = album.monitored;
-  if (ensured.created) await ensureMonitored<LidarrArtist>(config, "artist", ensured.artistId);
-  const monitoredAlbum = await ensureMonitored<LidarrAlbum>(config, "album", album.id);
-
-  return triggerOrAddAlbum(config, monitoredAlbum, wasAlreadyMonitored);
+  return finalizeAlbum(config, ensured, album);
 }
 
 export async function lidarrAutoSearch(
@@ -344,11 +371,7 @@ export async function lidarrAutoSearch(
       return { success: false, message: "Album not found" };
     }
 
-    const wasAlreadyMonitored = album.monitored;
-    const monitoredAlbum = await ensureMonitored<LidarrAlbum>(config, "album", album.id);
-    if (ensured.created) await ensureMonitored<LidarrArtist>(config, "artist", ensured.artistId);
-
-    return triggerOrAddAlbum(config, monitoredAlbum, wasAlreadyMonitored);
+    return await finalizeAlbum(config, ensured, album);
   } catch (e: unknown) {
     return { success: false, message: e instanceof Error ? e.message : "Album download failed" };
   }
