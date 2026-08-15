@@ -59,17 +59,15 @@ export default function LidarrButton({
         case "wanted":
           setSuccessMessage("Already monitored !");
           break;
-        default: 
+        default:
           setSuccessMessage("Search triggered in Lidarr!");
       }
-      
+
       setStatus("success");
     } else {
       setErrorMessage(formatLidarrError(result.message));
       setStatus("error");
     }
-
-    setTimeout(() => setStatus("idle"), 3000);
   }
 
   const label = {

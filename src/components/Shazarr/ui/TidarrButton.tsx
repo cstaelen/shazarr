@@ -62,7 +62,6 @@ export default function TidarrButton({
   function setError(msg: string) {
     setErrorMessage(formatTidarrError(msg));
     setStatus("error");
-    setTimeout(() => setStatus("idle"), 3000);
   }
 
   async function handleClick() {
@@ -106,7 +105,6 @@ export default function TidarrButton({
       if (result.success) {
         if (result.message) setSuccessMessage(result.message);
         setStatus("success");
-        setTimeout(() => setStatus("idle"), 3000);
       } else {
         setError(result.message);
       }
