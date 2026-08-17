@@ -3,6 +3,11 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.3.4
+### 🖍 Changed
+* Wait for Lidarr's artist sync to actually finish instead of guessing with a timeout
+
+
 ## 📦 0.3.3
 ### 🖍 Changed
 * Keep tidarr and lidarr button state instead of returning to initial state
