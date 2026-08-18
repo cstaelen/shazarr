@@ -50,8 +50,8 @@ importers:
         specifier: ^8.5.0
         version: 8.5.0(@capacitor/core@8.5.0)
       '@capacitor/local-notifications':
-        specifier: ^8.2.1
-        version: 8.2.1(@capacitor/core@8.5.0)
+        specifier: ^8.3.0
+        version: 8.3.0(@capacitor/core@8.5.0)
       '@capacitor/network':
         specifier: ^8.0.1
         version: 8.0.1(@capacitor/core@8.5.0)
@@ -349,8 +349,8 @@ packages:
     peerDependencies:
       '@capacitor/core': ^8.5.0
 
-  '@capacitor/local-notifications@8.2.1':
-    resolution: {integrity: sha512-Bkim+MGl7UrDTjDferV4ECq0aWciTsa0k15+MX2jnx2PeWgEPvlBy5yrqzBlwEZPrtHFUvPVxPi5V66MPGHkAw==}
+  '@capacitor/local-notifications@8.3.0':
+    resolution: {integrity: sha512-QvgW2ucBAwtI/arLrUP1XRTJVzJxmdI9BOCl+E9J2HAmYuSWZtDFb3e1fpnciVzwZaq6RDP00baBQgG6eYik/Q==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
@@ -4317,7 +4317,7 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.5.0
 
-  '@capacitor/local-notifications@8.2.1(@capacitor/core@8.5.0)':
+  '@capacitor/local-notifications@8.3.0(@capacitor/core@8.5.0)':
     dependencies:
       '@capacitor/core': 8.5.0
 
