@@ -6,6 +6,8 @@
 .pnp.js
 # testing
 /coverage
+.pnpm-store
+/docs
 
 # production
 /build

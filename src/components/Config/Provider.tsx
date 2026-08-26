@@ -44,6 +44,11 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
         placeholder: "Custom service name",
         type: "text",
       },
+      auto_listen_on_launch: {
+        value: currentConfig.auto_listen_on_launch ?? false,
+        placeholder: "Auto-listen on app launch",
+        type: "checkbox",
+      },
     });
   }, []);
 

@@ -3,9 +3,11 @@ import {
   Box,
   Button,
   Drawer,
+  FormControlLabel,
   Input,
   Link,
   Paper,
+  Switch,
 } from "@mui/material";
 
 import { useShazarrProvider } from "../Shazarr/useShazarr";
@@ -38,6 +40,7 @@ export default function Config({ open, onClose }: Props) {
       tidarr_api_key: data.get("tidarr_api_key")?.toString() || "",
       custom_service_url: data.get("custom_service_url")?.toString() || "",
       custom_service_name: data.get("custom_service_name")?.toString() || "",
+      auto_listen_on_launch: data.get("auto_listen_on_launch") === "on",
     });
     onClose();
   }
@@ -67,14 +70,32 @@ export default function Config({ open, onClose }: Props) {
         {Object.entries(formConfig)?.map((field, index) => (
           <Box sx={{ marginBottom: 2 }} key={`form-field-${index}`}>
             <Paper sx={{ padding: "0.5rem" }}>
-              <Input
-                name={field[0]}
-                type={field[1].type}
-                sx={{ fontSize: "0.925rem" }}
-                defaultValue={field[1].value}
-                placeholder={field[1].placeholder}
-                fullWidth
-              />
+              {field[1].type === "checkbox" ? (
+                <FormControlLabel
+                  sx={{
+                    marginLeft: 0,
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                  labelPlacement="start"
+                  control={
+                    <Switch
+                      name={field[0]}
+                      defaultChecked={Boolean(field[1].value)}
+                    />
+                  }
+                  label={field[1].placeholder}
+                />
+              ) : (
+                <Input
+                  name={field[0]}
+                  type={field[1].type}
+                  sx={{ fontSize: "0.925rem" }}
+                  defaultValue={field[1].value as string | null}
+                  placeholder={field[1].placeholder}
+                  fullWidth
+                />
+              )}
             </Paper>
           </Box>
         ))}
