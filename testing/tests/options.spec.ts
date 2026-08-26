@@ -85,3 +85,29 @@ test("Options: Should see options panel and use service buttons", async ({
   await page.getByRole("button", { name: "Configuration" }).click();
   await expect(page.getByRole("dialog")).toHaveScreenshot();
 });
+
+test("Options: Auto-listen on launch starts recording automatically", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem(
+      "CapacitorStorage.com.shazarr.config",
+      JSON.stringify({ auto_listen_on_launch: true }),
+    );
+  });
+  await page.goto("/");
+
+  await expect(page.getByText("Found !")).toBeVisible({ timeout: 10000 });
+  await expect(page.getByTestId("inline-result-card")).toBeVisible();
+});
+
+test("Options: Auto-listen disabled by default does not start recording", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  await expect(page.getByText("Ready")).toBeVisible();
+  await page.waitForTimeout(2000);
+  await expect(page.getByText("Ready")).toBeVisible();
+  await expect(page.getByTestId("inline-result-card")).not.toBeVisible();
+});

@@ -7,15 +7,16 @@ export type ConfigStoreType = {
   tidarr_api_key: string;
   custom_service_url: string;
   custom_service_name: string;
+  auto_listen_on_launch: boolean;
 };
 
 type storeKeysType = keyof ConfigStoreType;
 
 export type ConfigFieldsType = {
   [key in storeKeysType]: {
-    value: string | null;
+    value: ConfigStoreType[key] | null;
     placeholder: string;
-    type: "text" | "url";
+    type: "text" | "url" | "checkbox";
   };
 };
 

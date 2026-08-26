@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Haptics } from "@capacitor/haptics";
 import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { VoiceRecorder } from "capacitor-voice-recorder";
@@ -26,7 +26,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatusType>("inactive");
 
-  const { isNetworkConnected } = useConfigProvider();
+  const { config, isNetworkConnected } = useConfigProvider();
 
   const {
     actions: { addItemToHistory },
@@ -180,6 +180,18 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       setRecordingError("ERROR_RECORDING" as never);
     };
   };
+
+  const hasAutoListened = useRef(false);
+
+  useEffect(() => {
+    if (hasAutoListened.current) return;
+    if (!config?.auto_listen_on_launch) return;
+    if (recordingStatus !== "inactive") return;
+
+    hasAutoListened.current = true;
+    setTimeout(() => startRecording(), 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config?.auto_listen_on_launch]);
 
   const searchOfflineRecord = (item: HistoryItem) => {
     if (!item?.stream) return;
