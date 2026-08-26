@@ -26,8 +26,38 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
     });
   }, [history]);
 
+  function getTrackIdentity(item: HistoryItem) {
+    return item.data?.key;
+  }
+
   function addItemToHistory(item: HistoryItem) {
-    setHistory((prev) => [...(prev || []), item]);
+    setHistory((prev) => {
+      const list = prev || [];
+      const identity = getTrackIdentity(item);
+      const existingIndex =
+        identity === undefined
+          ? -1
+          : list.findIndex((existing) => getTrackIdentity(existing) === identity);
+
+      if (existingIndex === -1) {
+        return [...list, item];
+      }
+
+      const existing = list[existingIndex];
+      const merged: HistoryItem = {
+        ...item,
+        previousDates: [
+          existing.date,
+          ...(existing.previousDates || []),
+        ],
+      };
+
+      return [
+        ...list.slice(0, existingIndex),
+        ...list.slice(existingIndex + 1),
+        merged,
+      ];
+    });
   }
 
   function deleteHistoryItem(date: number) {

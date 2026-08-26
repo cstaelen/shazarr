@@ -7,6 +7,10 @@ Shazarr notable changes.
 ### 🚀 Added
 * Add new option to auto-shazam on app open #337
 
+## 📦 0.3.5
+### 🚀 Added
+* Dedup records on new tags and store previous tag dates
+
 ## 📦 0.3.4
 ### 🖍 Changed
 * Wait for Lidarr's artist sync to actually finish instead of guessing with a timeout
