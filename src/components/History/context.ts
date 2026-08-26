@@ -7,6 +7,7 @@ export type HistoryItem = {
   date: number;
   data?: ShazamTrack;
   stream?: string;
+  previousDates?: number[];
 };
 
 type HistoryContextType = {
