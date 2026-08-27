@@ -6,10 +6,7 @@ Shazarr notable changes.
 ## 📦 0.3.5
 ### 🚀 Added
 * Add new option to auto-shazam on app open #337
-
-## 📦 0.3.5
-### 🚀 Added
-* Dedup records on new tags and store previous tag dates
+* Dedup records on new tags and store previous tag dates #339
 
 ## 📦 0.3.4
 ### 🖍 Changed
