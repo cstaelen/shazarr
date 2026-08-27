@@ -181,17 +181,20 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     };
   };
 
-  const hasAutoListened = useRef(false);
+  const hasCheckedLaunchConfig = useRef(false);
 
   useEffect(() => {
-    if (hasAutoListened.current) return;
-    if (!config?.auto_listen_on_launch) return;
+    if (hasCheckedLaunchConfig.current) return;
+    if (!config) return;
+    hasCheckedLaunchConfig.current = true;
+
+    if (!config.auto_listen_on_launch) return;
     if (recordingStatus !== "inactive") return;
 
-    hasAutoListened.current = true;
     setTimeout(() => startRecording(), 0);
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config?.auto_listen_on_launch]);
+  }, [config]);
 
   const searchOfflineRecord = (item: HistoryItem) => {
     if (!item?.stream) return;

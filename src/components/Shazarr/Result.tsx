@@ -12,6 +12,7 @@ import CardResult from "./ui/Card";
 import CustomServiceButton from "./ui/CustomServiceButton";
 import LidarrButton from "./ui/LidarrButton";
 import StreamProviderButton from "./ui/StreamProviderButton";
+import TagHistory from "./ui/TagHistory";
 import TidarrButton from "./ui/TidarrButton";
 import { useShazarrProvider } from "./useShazarr";
 
@@ -25,7 +26,9 @@ export default function ShazarrResults() {
   const { history } = useHistoryProvider();
 
   const onClose = () => setOpenResultDate(undefined);
-  const data = history?.find((item) => item.date === openResultDate)?.data;
+  const historyItem = history?.find((item) => item.date === openResultDate);
+  const data = historyItem?.data;
+  const previousDates = historyItem?.previousDates || [];
 
   const albumName = data?.sections?.[0]?.metadata?.filter(
     (m: { title: string }) => m?.title === "Album",
@@ -75,6 +78,11 @@ export default function ShazarrResults() {
             </TableContainer>
 
             <ButtonLyrics lyrics={lyrics} />
+            {!!historyItem?.date && (
+              <TagHistory currentDate={historyItem.date} previousDates={previousDates} />
+            )}
+
+            {previousDates && previousDates.length > 0 && <Divider />}
 
             {config?.lidarr_url && (
               <LidarrButton
@@ -101,7 +109,8 @@ export default function ShazarrResults() {
                 label={config.custom_service_name as string}
               />
             )}
-            <Divider />
+
+            {config?.lidarr_url && config?.tidarr_url && config?.custom_service_url && config?.custom_service_name && (<Divider />)}
 
             <Box sx={{ textAlign: "center" }}>
               {data?.hub?.providers?.map(

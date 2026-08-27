@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { DeleteForever, RemoveRedEye, Search } from "@mui/icons-material";
-import { ButtonBase, CardActions, CardMedia, Collapse, IconButton } from "@mui/material";
+import { ButtonBase, CardActions, CardMedia, IconButton } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -11,16 +10,11 @@ import { useShazarrProvider } from "../Shazarr/useShazarr";
 import { HistoryItem } from "./context";
 import { useHistoryProvider } from "./useHistory";
 
-function formatDate(timestamp: number) {
-  return new Date(new Date(timestamp).toUTCString()).toLocaleString();
-}
-
 export default function HistoryCard({
   item,
 }: {
   item: HistoryItem;
 }) {
-  const [showPreviousDates, setShowPreviousDates] = useState(false);
   const {
     actions: { searchOfflineRecord, setOpenResultDate },
   } = useShazarrProvider();
@@ -28,8 +22,8 @@ export default function HistoryCard({
     actions: { deleteHistoryItem },
   } = useHistoryProvider();
 
-  const dateRecord = formatDate(item.date);
-  const previousDates = item.previousDates || [];
+  const date = new Date(item.date).toUTCString();
+  const dateRecord = new Date(date).toLocaleString();
 
   function handleClickItem() {
     if (item?.data) {
@@ -37,11 +31,6 @@ export default function HistoryCard({
     } else {
       searchOfflineRecord(item);
     }
-  }
-
-  function handleTogglePreviousDates(event: React.MouseEvent) {
-    event.stopPropagation();
-    setShowPreviousDates((prev) => !prev);
   }
 
   return (
@@ -61,7 +50,7 @@ export default function HistoryCard({
           </ButtonBase>
         </CardMedia>
         <CardContent sx={{ padding: "0.3rem 0.5rem", flex: "1 1 0" }}>
-          <ButtonBase sx={{ textAlign: "left", display: "block", width: "100%" }} onClick={handleClickItem}>
+          <ButtonBase sx={{ textAlign: "left" }} onClick={handleClickItem}>
             <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
               <strong>{item.title}</strong> {`- ${item.artist}`}
               <br />
@@ -70,27 +59,6 @@ export default function HistoryCard({
               </small>
             </Typography>
           </ButtonBase>
-          {!!previousDates.length && (
-            <>
-              <ButtonBase onClick={handleTogglePreviousDates}>
-                <Typography variant="body2" color="text.secondary">
-                  <small>
-                    &middot; tagged {previousDates.length + 1} times
-                  </small>
-                </Typography>
-              </ButtonBase>
-              <Collapse in={showPreviousDates}>
-                <Typography variant="body2" color="text.secondary" component="div">
-                  {previousDates.map((timestamp) => (
-                    <small key={timestamp}>
-                      <i>{formatDate(timestamp)}</i>
-                      <br />
-                    </small>
-                  ))}
-                </Typography>
-              </Collapse>
-            </>
-          )}
         </CardContent>
         <CardActions>
           <IconButton onClick={handleClickItem}>
