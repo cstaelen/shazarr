@@ -3,6 +3,12 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.3.6
+### 🚀 Added
+* Add Soulsync support #358
+### 🖍 Changed
+* Move from Matomo to Umami
+
 ## 📦 0.3.5
 ### 🚀 Added
 * Add new option to auto-shazam on app open #337

@@ -11,6 +11,7 @@ import ButtonLyrics from "./ui/ButtonLyrics";
 import CardResult from "./ui/Card";
 import CustomServiceButton from "./ui/CustomServiceButton";
 import LidarrButton from "./ui/LidarrButton";
+import SoulsyncButton from "./ui/SoulsyncButton";
 import StreamProviderButton from "./ui/StreamProviderButton";
 import TagHistory from "./ui/TagHistory";
 import TidarrButton from "./ui/TidarrButton";
@@ -102,6 +103,15 @@ export default function ShazarrResults() {
                 url={config.tidarr_url as string}
               />
             )}
+            {config?.soulsync_url && (
+              <SoulsyncButton
+                key={`soulsync-${data.key}`}
+                albumTitle={albumName || data.title}
+                trackTitle={data.title}
+                artistName={data.subtitle}
+                url={config.soulsync_url as string}
+              />
+            )}
             {config?.custom_service_url && config?.custom_service_name && (
               <CustomServiceButton
                 searchTerms={`${data.title} ${data.subtitle}`}
@@ -110,7 +120,9 @@ export default function ShazarrResults() {
               />
             )}
 
-            {config?.lidarr_url && config?.tidarr_url && config?.custom_service_url && config?.custom_service_name && (<Divider />)}
+            {(config?.lidarr_url || config?.tidarr_url || config?.soulsync_url || (config?.custom_service_url && config?.custom_service_name)) && (
+              <Divider />
+            )}
 
             <Box sx={{ textAlign: "center" }}>
               {data?.hub?.providers?.map(

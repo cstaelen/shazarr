@@ -13,6 +13,10 @@
 /build
 /dist
 
+#docker tests
+.docker
+docker-compose.yml
+
 # misc
 .DS_Store
 .env.local
