@@ -21,10 +21,10 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.4.0",
     "@mui/material": "^9.4.0",
-    "@typescript-eslint/parser": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.1",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
-    "node": "^26.9.0",
+    "node": "^26.10.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "shazam-api": "^0.3.0"
@@ -45,11 +45,11 @@
     "eslint-plugin-react-refresh": "^0.5.7",
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "globals": "^17.12.0",
-    "prettier": "^3.9.8",
+    "prettier": "^3.9.9",
     "ts-prune": "^0.10.3",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.70.0",
-    "vite": "^8.3.0"
+    "typescript-eslint": "^8.70.1",
+    "vite": "^8.3.1"
   },
   "scripts": {
     "start": "vite dev",
