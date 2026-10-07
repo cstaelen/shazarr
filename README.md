@@ -13,6 +13,7 @@ Shazarr project is a mobile app (android, ios) providing Shazam song recognition
 - Audio microphone capture and song recognition using reverse Shazam API with [node-shazam-api](https://github.com/asivery/node-shazam-api).
 - Download discovered album with [Lidarr](https://github.com/linuxserver/docker-lidarr), auto-search via API (with browser fallback if no API key)
 - Download discovered track or album with [Tidarr](https://github.com/cstaelen/tidarr), search Tidal content in-app, pick the album, queue track or full album download, or with Tidarr 1.2.1 or higher, add track to Tidal favorites
+- Add to [SoulSync](https://github.com/Nezreka/SoulSync) wishlist to trigger automatic download (via API)
 - Add custom search service
 - Listen on streaming app Spotify, Apple Music and Deezer
 - Show lyrics
@@ -37,6 +38,9 @@ Get last release  :
 
 - **Lidarr URL** : `http://<lidarr-web-ui-url>`
 - **Tidarr URL**: `http://<tidarr-web-ui-url>`
+- **SoulSync URL**: `http://<soulsync-web-ui-url>:8008`
+- **SoulSync API Key**: `your-api-key` (generated from SoulSync settings)
+- **SoulSync Profile ID**: `1` (optional, defaults to 1)
 - **Custom service URL**: `http://<service-url>?query=`
 - **Custom service name**: `My custom music service`
 
@@ -94,4 +98,5 @@ If you like this project you can support here:
 - UI inspiration : https://github.com/codrops/ShazamButtonEffect
 - See Lidarr project: https://github.com/linuxserver/docker-lidarr 
 - See Tidarr project: https://github.com/cstaelen/tidarr
+- See SoulSync project: https://github.com/Nezreka/SoulSync
 

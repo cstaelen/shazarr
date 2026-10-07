@@ -5,6 +5,9 @@ export type ConfigStoreType = {
   lidarr_api_key: string;
   tidarr_url: string;
   tidarr_api_key: string;
+  soulsync_url: string;
+  soulsync_api_key: string;
+  soulsync_profile_id?: string;
   custom_service_url: string;
   custom_service_name: string;
   auto_listen_on_launch: boolean;

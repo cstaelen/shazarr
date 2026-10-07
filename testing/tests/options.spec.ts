@@ -33,6 +33,12 @@ test("Options: Should see options panel and use service buttons", async ({
   // Open config panel
   await page.getByRole("button", { name: "Configuration" }).click();
 
+  // Wait for accordions to be visible and expand them
+  await expect(page.getByText("Lidarr")).toBeVisible({ timeout: 5000 });
+  await page.getByText("Lidarr").click();
+  await page.getByText("Tidarr").click();
+  await page.getByText("Custom Service").click();
+
   // Fill fields and save
   await page
     .getByPlaceholder("Lidarr URL (http://...)")
@@ -58,7 +64,7 @@ test("Options: Should see options panel and use service buttons", async ({
 
   await waitForImgLoaded(page);
   await page.waitForTimeout(1000);
-  await expect(page.getByText("Download with LidarrDownload")).toHaveScreenshot(
+  await expect(page.getByText("Download with Lidarr")).toHaveScreenshot(
     { maxDiffPixelRatio: 0.05 },
   );
 

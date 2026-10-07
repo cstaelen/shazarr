@@ -34,6 +34,21 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
         placeholder: "Tidarr API key (optional, enables auto-search)",
         type: "text",
       },
+      soulsync_url: {
+        value: currentConfig.soulsync_url,
+        placeholder: "SoulSync URL (http://...)",
+        type: "url",
+      },
+      soulsync_api_key: {
+        value: currentConfig.soulsync_api_key,
+        placeholder: "SoulSync API key (Bearer token)",
+        type: "text",
+      },
+      soulsync_profile_id: {
+        value: currentConfig.soulsync_profile_id,
+        placeholder: "SoulSync Profile ID (optional, default: 1)",
+        type: "text",
+      },
       custom_service_url: {
         value: currentConfig.custom_service_url,
         placeholder: "Custom service (http://...?query=)",
