@@ -3,6 +3,10 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.3.7
+### 🖍 Changed
+* Remove alarm and reminder permission request #366
+
 ## 📦 0.3.6
 ### 🚀 Added
 * Add Soulsync support #358

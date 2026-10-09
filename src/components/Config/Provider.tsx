@@ -109,7 +109,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           `https://github.com${import.meta.env.VITE_REPO_API_URL}/releases`,
       );
     });
-    LocalNotifications.schedule({
+    LocalNotifications.show({
       notifications: [
         {
           title: `${prerelease ? "'[prerelease]" : ""} Update available !`,
@@ -117,7 +117,6 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           id: 1,
           largeIcon: "ic_stat_name/ic_stat_name",
           smallIcon: "ic_stat_name/ic_stat_name",
-          schedule: { at: new Date(Date.now() + 500) },
         },
       ],
     });

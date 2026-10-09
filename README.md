@@ -6,58 +6,72 @@
 <a href="https://www.buymeacoffee.com/clst" target="_blank" title="Buy Me A Coffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 28px !important;width: 110px !important;" ></a>
 
 # Shazarr - Unofficial Shazam mobile app web UI
-Shazarr project is a mobile app (android, ios) providing Shazam song recognition service with [Lidarr](https://github.com/linuxserver/docker-lidarr) and [Tidarr](https://github.com/cstaelen/tidarr) integration.
 
-
-## Features
-- Audio microphone capture and song recognition using reverse Shazam API with [node-shazam-api](https://github.com/asivery/node-shazam-api).
-- Download discovered album with [Lidarr](https://github.com/linuxserver/docker-lidarr), auto-search via API (with browser fallback if no API key)
-- Download discovered track or album with [Tidarr](https://github.com/cstaelen/tidarr), search Tidal content in-app, pick the album, queue track or full album download, or with Tidarr 1.2.1 or higher, add track to Tidal favorites
-- Add to [SoulSync](https://github.com/Nezreka/SoulSync) wishlist to trigger automatic download (via API)
-- Add custom search service
-- Listen on streaming app Spotify, Apple Music and Deezer
-- Show lyrics
-- Offline mode : record and recognize later (if network down)
-- Records history
-- Privacy: No login, no tracking, no API key
-
-## Screenshots
+Shazarr is a mobile app (Android, iOS) providing Shazam song recognition with deep integration to music automation services. The app allows you to identify songs and automatically add them to your media library through various services.
 
 <img src="https://github.com/cstaelen/docker-shazarr/blob/b436440b628ff5c8a0925a57e63e6659b1bf273e/.github/screenshot.jpg" />
 
+## Features
+
+### Core
+- Audio microphone capture and song recognition using reverse Shazam API with [node-shazam-api](https://github.com/asivery/node-shazam-api)
+- Listen on streaming apps: Spotify, Apple Music and Deezer
+- Show lyrics for recognized tracks
+- Records history: access your last recognized songs
+- Offline mode: record without API access, recognize later when network is restored
+- Privacy: No login, no tracking, no mandatory API key
+
+### Music Services Integration
+- **Lidarr**: Auto-search and download discovered albums via API
+- **Tidarr**: Search Tidal content in-app, queue tracks or full album downloads, add to Tidal favorites
+- **SoulSync**: Add to wishlist to trigger automatic download via API
+- **Custom services**: Add any external search service with custom URL patterns
+
 ## Get started
 
-- **Android**: ✅ APK Download APK [here](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
-- **iOS**: ⚠️ build app from Xcode ONLY (needs xcode and paired device)
+- **Android**: ✅ Download APK [here](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
+- **iOS**: ⚠️ Build from Xcode only (requires Xcode and paired device)
 
 Get last release  :
 
 [<img src="https://github.com/cstaelen/shazarr-app/blob/4465b4d6532a4ade3a970be2b9ade3705706e50f/.github/qr-release.png" width="100" />](https://github.com/cstaelen/shazarr-app/releases/latest)
 
-### App options (fit with your data)
+## Configuration
 
-- **Lidarr URL** : `http://<lidarr-web-ui-url>`
-- **Tidarr URL**: `http://<tidarr-web-ui-url>`
-- **SoulSync URL**: `http://<soulsync-web-ui-url>:8008`
-- **SoulSync API Key**: `your-api-key` (generated from SoulSync settings)
-- **SoulSync Profile ID**: `1` (optional, defaults to 1)
-- **Custom service URL**: `http://<service-url>?query=`
-- **Custom service name**: `My custom music service`
+Configure Shazarr to connect with your music automation services:
 
-#### iOS ( /!\ source build only )
-Requirements: `pnpm`, `xcode`.
+### Services
+- **Lidarr URL**: `http://<lidarr-web-ui-url>` (optional API key for auto-search, falls back to browser)
+- **Tidarr URL**: `http://<tidarr-web-ui-url>` (optional API key for auto-search)
 
-1. Git clone project first
-2. in project folder run:
-```
-cd docker-shazarr
-pnpm run ios:build
-```
-XCode should open project.
+### SoulSync
+- **SoulSync URL**: `http://<soulsync-ip>:8008`
+- **SoulSync API Key**: `your-api-key` (generated from SoulSync settings: Settings > API)
+- **SoulSync Profile ID**: `1` (optional, defaults to profile 1)
 
-3. [Pair your iOS device](https://developer.apple.com/documentation/xcode/running-your-app-in-simulator-or-on-a-device/#Connect-real-devices-to-your-Mac)
-4. build the app.
-5. After few secs, it should be installed on your ipad/iphone.
+> **Note**: When configured with API key, Shazarr will automatically search and add tracks/albums to your SoulSync wishlist, triggering automatic downloads based on your SoulSync configuration.
+
+### Custom Service
+- **Custom service URL**: `http://<service-url>?query=` (e.g., `http://my-service.local/search?q=`)
+- **Custom service name**: Display name for the button (e.g., "My Music Service")
+
+---
+
+## iOS (Build from source only)
+
+> ⚠️ iOS app must be built from Xcode. There is currently no pre-built binary distribution.
+
+**Requirements**: `pnpm`, Xcode, paired iOS device
+
+1. Clone the project
+2. In project folder, run:
+   ```sh
+   pnpm run ios:build
+   ```
+3. Xcode will open the project
+4. [Pair your iOS device](https://developer.apple.com/documentation/xcode/running-your-app-in-simulator-or-on-a-device/#Connect-real-devices-to-your-Mac)
+5. Build the app
+6. After a few seconds, the app will be installed on your iPad/iPhone
 
 ## Roadmap
 - [x] Android app
