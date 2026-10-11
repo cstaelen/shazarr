@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import { AlertHandler } from "./components/Common/Alert/AlertHandler";
+import { Analytics } from "./components/Common/Analytics";
 import BottomActions from "./components/Common/BottomActions";
 import { ConfigProvider } from "./components/Config/Provider";
 import { HistoryProvider } from "./components/History/Provider";
@@ -43,6 +44,7 @@ function App() {
         <HistoryProvider>
           <ShazarrProvider>
             <CssBaseline />
+            <Analytics />
             <Main>
               <Container>
                 <StackStyled direction="column" os={devideOS}>
