@@ -1,9 +1,28 @@
 {
   "name": "shazarr-app",
   "private": true,
-  "engines": {
-    "node": ">=18",
-    "npm": ">=10"
+  "scripts": {
+    "start": "vite dev",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "ionic:serve": "pnpm run start",
+    "ios:open": "ionic capacitor open ios",
+    "ios:sync": "npx cap sync ios",
+    "ios:live": "ionic capacitor run ios -l --external --port 5173",
+    "android:open": "ionic capacitor open android",
+    "android:sync": "npx cap sync android",
+    "android:live": "ionic capacitor run android -l --external --port 5173",
+    "quality:deadcode": "ts-prune | (! grep -v 'used in module')",
+    "quality:depcheck": "npx depcheck",
+    "quality:lint": "oxlint",
+    "quality:lint-fix": "oxlint --fix",
+    "quality:format": "oxfmt",
+    "quality:format-check": "oxfmt --check",
+    "testing:run": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.63.0-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && npx playwright test'",
+    "testing:ui": "npx playwright test --ui",
+    "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.63.0-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && npx playwright test'",
+    "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.63.0-noble npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
+    "testing:update-snapshots": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.63.0-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && npx playwright test --update-snapshots'"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",
@@ -21,7 +40,6 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.4.0",
     "@mui/material": "^9.4.0",
-    "@typescript-eslint/parser": "^8.71.1",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
     "node": "^26.10.0",
@@ -32,45 +50,33 @@
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.5.2",
-    "@eslint/js": "^10.0.1",
     "@ionic/cli": "^7.2.1",
     "@playwright/test": "^1.63.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "depcheck": "^1.4.7",
-    "eslint": "^10.12.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.7",
-    "eslint-plugin-simple-import-sort": "^14.0.0",
-    "globals": "^17.13.0",
-    "prettier": "^3.9.9",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
     "ts-prune": "^0.10.3",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1",
     "vite": "^8.3.3"
   },
-  "scripts": {
-    "start": "vite dev",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "ionic:serve": "pnpm run start",
-    "ios:open": "ionic capacitor open ios",
-    "ios:sync": "npx cap sync ios",
-    "ios:live": "ionic capacitor run ios -l --external --port 5173",
-    "android:open": "ionic capacitor open android",
-    "android:sync": "npx cap sync android",
-    "android:live": "ionic capacitor run android -l --external --port 5173",
-    "quality:deadcode": "ts-prune | (! grep -v 'used in module')",
-    "quality:depcheck": "npx depcheck",
-    "quality:eslint": "eslint .",
-    "quality:eslint-fix": "eslint --fix .",
-    "testing:run": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.63.0-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && npx playwright test'",
-    "testing:ui": "npx playwright test --ui",
-    "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.63.0-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && npx playwright test'",
-    "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.63.0-noble npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
-    "testing:update-snapshots": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v1.63.0-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && npx playwright test --update-snapshots'"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=10"
   },
   "pnpm": {
     "overrides": {
@@ -93,17 +99,5 @@
       "uuid": ">=11.1.1",
       "yaml": ">=1.10.3"
     }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }

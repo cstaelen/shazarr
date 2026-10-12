@@ -46,17 +46,10 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
       const existing = list[existingIndex];
       const merged: HistoryItem = {
         ...item,
-        previousDates: [
-          existing.date,
-          ...(existing.previousDates || []),
-        ],
+        previousDates: [existing.date, ...(existing.previousDates || [])],
       };
 
-      return [
-        ...list.slice(0, existingIndex),
-        ...list.slice(existingIndex + 1),
-        merged,
-      ];
+      return [...list.slice(0, existingIndex), ...list.slice(existingIndex + 1), merged];
     });
   }
 
@@ -72,7 +65,5 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
     },
   };
 
-  return (
-    <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>
-  );
+  return <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>;
 }

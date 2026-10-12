@@ -43,7 +43,7 @@ export default function LidarrButton({
     if (!apiKey) {
       window.open(
         `${url}/add/search?term=${encodeURIComponent(`${albumTitle} ${artistName}`)}`,
-        "_blank"
+        "_blank",
       );
       return;
     }
@@ -52,7 +52,7 @@ export default function LidarrButton({
     const result = await lidarrAutoSearch(url, apiKey, albumTitle, artistName, isrc);
     if (result.success) {
       const s = result.status ?? "queued";
-      switch (s){
+      switch (s) {
         case "available":
           setSuccessMessage("Exists in Lidarr");
           break;
@@ -92,13 +92,7 @@ export default function LidarrButton({
             <img src={lidarrLogo} alt="" width="32" height="32" />
           )
         }
-        color={
-          status === "success"
-            ? "success"
-            : status === "error"
-              ? "warning"
-              : "primary"
-        }
+        color={status === "success" ? "success" : status === "error" ? "warning" : "primary"}
         onClick={handleClick}
       >
         <strong>{label}</strong>

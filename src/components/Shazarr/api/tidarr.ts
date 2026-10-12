@@ -37,7 +37,7 @@ export function tidalCoverUrl(cover: string): string {
 async function request<T>(
   config: TidarrConfig,
   path: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<T> {
   let res: Response;
   try {
@@ -91,7 +91,11 @@ async function fetchAlbumTracks(config: TidarrConfig, albumId: number): Promise<
   return data?.rows?.[1]?.modules?.[0]?.pagedList?.items?.map((t) => t.item) ?? [];
 }
 
-async function findTrack(config: TidarrConfig, albumId: number, trackTitle: string): Promise<TidalTrack | null> {
+async function findTrack(
+  config: TidarrConfig,
+  albumId: number,
+  trackTitle: string,
+): Promise<TidalTrack | null> {
   const tracks = await fetchAlbumTracks(config, albumId);
   return tracks.find((t) => normalize(t.title) === normalize(trackTitle)) ?? null;
 }
@@ -105,21 +109,23 @@ export async function tidarrSearchAlbums(
   apiKey: string,
   artist: string,
   album: string,
-  trackTitle: string
+  trackTitle: string,
 ): Promise<TidalAlbum[]> {
   const config: TidarrConfig = { url, apiKey };
   const data = await request<{ albums?: { items: TidalAlbum[] } }>(
     config,
-    `/proxy/tidal/v2/search?query=${encodeURIComponent(`${artist} ${album}`)}&${TIDAL_PARAMS}&limit=10`
+    `/proxy/tidal/v2/search?query=${encodeURIComponent(`${artist} ${album}`)}&${TIDAL_PARAMS}&limit=10`,
   );
   const normalizedAlbum = normalize(album);
   const normalizedTrack = normalize(trackTitle);
-  const candidates = (data?.albums?.items ?? []).filter((a) => normalize(a.title) === normalizedAlbum);
+  const candidates = (data?.albums?.items ?? []).filter(
+    (a) => normalize(a.title) === normalizedAlbum,
+  );
   const results = await Promise.all(
     candidates.map(async (a) => {
       const tracks = await fetchAlbumTracks(config, a.id);
       return tracks.some((t) => normalize(t.title) === normalizedTrack) ? a : null;
-    })
+    }),
   );
   return results.filter((a): a is TidalAlbum => a !== null);
 }
@@ -128,23 +134,28 @@ export async function tidarrFavoriteTrack(
   url: string,
   apiKey: string,
   albumId: number,
-  trackTitle: string
+  trackTitle: string,
 ): Promise<TidarrQueueResult> {
   const config: TidarrConfig = { url, apiKey };
   try {
     const settings = await fetchSettings(config);
-    if (!settings) return { success: false, message: "Could not get Tidal credentials from Tidarr settings" };
+    if (!settings)
+      return { success: false, message: "Could not get Tidal credentials from Tidarr settings" };
     const track = await findTrack(config, albumId, trackTitle);
     if (!track) return { success: false, message: "Track not found in album" };
     const res = await fetch(
       `${config.url.replace(/\/$/, "")}/proxy/tidal/v1/users/${settings.auth.user_id}/favorites/tracks?countryCode=${settings.auth.country_code}`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded", "X-Api-Key": config.apiKey },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Api-Key": config.apiKey,
+        },
         body: `trackId=${track.id}`,
-      }
+      },
     );
-    if (!res.ok) return { success: false, message: `Tidal error (${res.status}): ${await res.text()}` };
+    if (!res.ok)
+      return { success: false, message: `Tidal error (${res.status}): ${await res.text()}` };
     return { success: true, message: "Added to Tidal favorites!" };
   } catch (e) {
     return catchError(e, "Favorite failed");
@@ -155,7 +166,7 @@ export async function tidarrQueueAlbum(
   url: string,
   apiKey: string,
   album: TidalAlbum,
-  artistName: string
+  artistName: string,
 ): Promise<TidarrQueueResult> {
   const config: TidarrConfig = { url, apiKey };
   try {
@@ -184,7 +195,7 @@ export async function tidarrQueueTrack(
   url: string,
   apiKey: string,
   albumId: number,
-  trackTitle: string
+  trackTitle: string,
 ): Promise<TidarrQueueResult> {
   const config: TidarrConfig = { url, apiKey };
   try {

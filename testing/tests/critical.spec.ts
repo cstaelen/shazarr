@@ -1,16 +1,12 @@
 import test, { expect } from "@playwright/test";
 
-test("Critical: Should be able to record, recognize and display result", async ({
-  page,
-}) => {
+test("Critical: Should be able to record, recognize and display result", async ({ page }) => {
   page.goto("/");
   // Home testing
   await expect(page.getByText("Shazarr")).toBeVisible();
   await expect(page.getByText("Offroad")).toBeVisible();
   await expect(page.getByText("Ready")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Configuration" }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Configuration" })).toBeVisible();
   await expect(page).toHaveScreenshot();
 
   // Run song recognition
@@ -34,21 +30,20 @@ test("Critical: Should be able to record, recognize and display result", async (
   await expect(page).toHaveScreenshot();
 
   // Dismiss inline card (close button, NOT delete from history)
-  await page.getByTestId("inline-result-card").getByRole("button", { name: "Dismiss result" }).click();
+  await page
+    .getByTestId("inline-result-card")
+    .getByRole("button", { name: "Dismiss result" })
+    .click();
   await expect(page.getByTestId("inline-result-card")).not.toBeVisible();
 
   // Expect to be on main screen with Records button visible
   await expect(page.getByText("Ready")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Records" }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Records" })).toBeVisible();
 
   // Open history drawer
   await page.getByRole("button", { name: "Records" }).click();
   await expect(page.getByTestId("history-item")).toBeVisible();
-  await expect(page.getByTestId("history-item")).toContainText(
-    "Chillin' - Modjo",
-  );
+  await expect(page.getByTestId("history-item")).toContainText("Chillin' - Modjo");
 
   // Click history item to open Result drawer
   await page.getByTestId("history-item").getByRole("button").first().click();

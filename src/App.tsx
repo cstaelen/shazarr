@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import { Device } from "@capacitor/device";
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
-import {
-  Box,
-  Container,
-  createTheme,
-  CssBaseline,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Container, createTheme, CssBaseline, Stack, Typography } from "@mui/material";
 
 import { AlertHandler } from "./components/Common/Alert/AlertHandler";
 import { Analytics } from "./components/Common/Analytics";

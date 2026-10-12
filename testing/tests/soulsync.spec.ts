@@ -8,14 +8,8 @@ const SOULSYNC_API_KEY = "test-soulsync-api-key";
 async function gotoWithConfig(page: Page, config: Record<string, string>) {
   await page.addInitScript(
     ({ config, history }) => {
-      window.localStorage.setItem(
-        "CapacitorStorage.com.shazarr.config",
-        JSON.stringify(config),
-      );
-      window.localStorage.setItem(
-        "CapacitorStorage.com.shazarr.history",
-        JSON.stringify(history),
-      );
+      window.localStorage.setItem("CapacitorStorage.com.shazarr.config", JSON.stringify(config));
+      window.localStorage.setItem("CapacitorStorage.com.shazarr.history", JSON.stringify(history));
     },
     { config, history: historyFixtures },
   );
@@ -88,7 +82,10 @@ function mockSoulsyncNotFound(page: Page) {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ success: false, error: { code: "NOT_FOUND", message: "No tracks found" } }),
+        body: JSON.stringify({
+          success: false,
+          error: { code: "NOT_FOUND", message: "No tracks found" },
+        }),
       });
     } else if (url.includes("/api/v1/wishlist") && method === "POST") {
       await route.fulfill({
@@ -140,7 +137,9 @@ test("SoulSync: With API key — adds track to wishlist and shows success", asyn
   await expect(page.getByTestId("soulsync-dialog")).toBeVisible({ timeout: 10000 });
   await page.getByTestId("soulsync-add-track").click();
   // Skip "Searching" check - too fast in CI, goes straight to success
-  await expect(page.getByTestId("soulsync-button")).toContainText(/Added|added|wishlist/i, { timeout: 20000 });
+  await expect(page.getByTestId("soulsync-button")).toContainText(/Added|added|wishlist/i, {
+    timeout: 20000,
+  });
 });
 
 test("SoulSync: With API key — adds album to wishlist and shows success", async ({ page }) => {
@@ -153,7 +152,10 @@ test("SoulSync: With API key — adds album to wishlist and shows success", asyn
   await expect(page.getByTestId("soulsync-dialog")).toBeVisible({ timeout: 10000 });
   await page.getByTestId("soulsync-add-album").click();
   // Skip "Searching" check - too fast in CI, goes straight to success
-  await expect(page.getByTestId("soulsync-button")).toContainText(/Added|tracks from|to SoulSync/i, { timeout: 20000 });
+  await expect(page.getByTestId("soulsync-button")).toContainText(
+    /Added|tracks from|to SoulSync/i,
+    { timeout: 20000 },
+  );
 });
 
 test("SoulSync: With API key — shows error when track not found", async ({ page }) => {
@@ -166,5 +168,8 @@ test("SoulSync: With API key — shows error when track not found", async ({ pag
   await expect(page.getByTestId("soulsync-dialog")).toBeVisible({ timeout: 10000 });
   await page.getByTestId("soulsync-add-track").click();
   // Skip "Searching" check - too fast in CI, goes straight to error
-  await expect(page.getByTestId("soulsync-button")).toContainText(/not found|No match|Error|unreachable/i, { timeout: 20000 });
+  await expect(page.getByTestId("soulsync-button")).toContainText(
+    /not found|No match|Error|unreachable/i,
+    { timeout: 20000 },
+  );
 });

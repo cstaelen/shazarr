@@ -88,9 +88,7 @@ test("History: Should be able to remove 2 items", async ({ page }) => {
   await expect(page.getByText(expectedHistory[2])).toBeVisible();
 });
 
-test("History: Should be able to consult 2 different items", async ({
-  page,
-}) => {
+test("History: Should be able to consult 2 different items", async ({ page }) => {
   // Load localstorage
   gotoWithLocalStorage("/", page);
 
@@ -102,9 +100,9 @@ test("History: Should be able to consult 2 different items", async ({
   // Click on history item
   await page.getByTestId("history-item").nth(0).getByRole("button").first().click();
 
-  await expect(
-    page.getByText("Chillin'ModjoPlay AlbumModjo"),
-  ).toHaveScreenshot({ maxDiffPixelRatio: 0.15 });
+  await expect(page.getByText("Chillin'ModjoPlay AlbumModjo")).toHaveScreenshot({
+    maxDiffPixelRatio: 0.15,
+  });
 
   // Close result — the history panel stays open underneath, no need to reopen it
   await page.getByRole("button", { name: "Close" }).click();

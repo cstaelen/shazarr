@@ -62,7 +62,6 @@ jobs:
         working-directory: ./android
         run: chmod +x gradlew
 
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
@@ -92,4 +91,3 @@ jobs:
         with:
           name: app-bundle
           path: android/app/build/outputs/apk/release/shazarr-signed.apk
-      

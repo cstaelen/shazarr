@@ -26,8 +26,7 @@ const Note = () => {
     left: Math2.randomCeil(leftPos),
     width: newScale,
     height: newScale,
-    animation:
-      "noteAnimation 1000ms cubic-bezier(0.47, 0, 0.745, 0.715) forwards",
+    animation: "noteAnimation 1000ms cubic-bezier(0.47, 0, 0.745, 0.715) forwards",
     opacity: 0,
     position: "absolute",
     textShadow: "10px 10px #000",

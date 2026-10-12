@@ -26,14 +26,8 @@ const MOCK_SETTINGS = {
 async function gotoWithConfig(page: Page, config: Record<string, string>) {
   await page.addInitScript(
     ({ config, history }) => {
-      window.localStorage.setItem(
-        "CapacitorStorage.com.shazarr.config",
-        JSON.stringify(config),
-      );
-      window.localStorage.setItem(
-        "CapacitorStorage.com.shazarr.history",
-        JSON.stringify(history),
-      );
+      window.localStorage.setItem("CapacitorStorage.com.shazarr.config", JSON.stringify(config));
+      window.localStorage.setItem("CapacitorStorage.com.shazarr.history", JSON.stringify(history));
     },
     { config, history: historyFixtures },
   );
@@ -47,23 +41,32 @@ async function openYakuzaResult(page: Page) {
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 }
 
-function mockTidarrRoutes(
-  page: Page,
-  overrides: { search?: unknown; albumTracks?: unknown } = {},
-) {
+function mockTidarrRoutes(page: Page, overrides: { search?: unknown; albumTracks?: unknown } = {}) {
   return page.route(`${TIDARR_URL}/**`, async (route) => {
     const url = route.request().url();
 
     if (url.includes("/proxy/tidal/v2/search")) {
       const body = overrides.search ?? { albums: { items: [MOCK_ALBUM] } };
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(body),
+      });
     } else if (url.includes("/proxy/tidal/v1/pages/album")) {
       const body = overrides.albumTracks ?? {
         rows: [null, { modules: [{ pagedList: { items: [{ item: MOCK_TRACK }] } }] }],
       };
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(body),
+      });
     } else if (url.includes("/api/settings")) {
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(MOCK_SETTINGS) });
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(MOCK_SETTINGS),
+      });
     } else if (url.includes("/api/save") && route.request().method() === "POST") {
       await route.fulfill({ status: 201, body: "Created" });
     } else if (url.includes("/proxy/tidal/v1/users/12345/favorites/tracks")) {
@@ -114,8 +117,7 @@ test("Tidarr: With API key — shows error when no albums found", async ({ page 
   await openYakuzaResult(page);
 
   await page.getByRole("button", { name: "Download with Tidarr" }).click();
-  await expect(
-    page.getByRole("button", { name: "Track not found on Tidal" }),
-  ).toBeVisible({ timeout: 10000 });
+  await expect(page.getByRole("button", { name: "Track not found on Tidal" })).toBeVisible({
+    timeout: 10000,
+  });
 });
-

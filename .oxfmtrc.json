@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/schemas/oxfmtrc.json",
+
+  "ignorePatterns": [
+    "**/node_modules",
+    "**/public",
+    "**/playwright-report",
+    "**/dist",
+    "**/android",
+    "**/ios",
+    "**/.git"
+  ],
+
+  "settings": {
+    "typescript": {
+      "tsconfig": "./tsconfig.json"
+    }
+  },
+
+  "options": {
+    "quoteStyle": "double",
+    "semicolons": "always",
+    "trailingCommas": "es5",
+    "indentWidth": 2,
+    "useTabs": false,
+    "lineEndings": "lf"
+  }
+}

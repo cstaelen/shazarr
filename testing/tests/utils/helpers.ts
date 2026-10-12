@@ -9,10 +9,7 @@ export async function gotoWithLocalStorage(url: string, page: Page) {
   const stringifiedData = JSON.stringify(historyFixtures);
   await page.evaluate(
     (stringifiedData) =>
-      window.localStorage.setItem(
-        "CapacitorStorage.com.shazarr.history",
-        stringifiedData,
-      ),
+      window.localStorage.setItem("CapacitorStorage.com.shazarr.history", stringifiedData),
     stringifiedData,
   );
   // Reload page with

@@ -35,13 +35,11 @@ async function request<T>(path: string): Promise<T> {
 // An ISRC identifies a recording, which can appear on several releases
 // (single, album, compilation...). Each release belongs to one release-group,
 // which is the stable "album" identity Lidarr expects for unambiguous lookup.
-export async function getReleaseGroupsByIsrc(
-  isrc: string
-): Promise<MusicBrainzReleaseGroup[]> {
+export async function getReleaseGroupsByIsrc(isrc: string): Promise<MusicBrainzReleaseGroup[]> {
   if (!isrc?.trim()) return [];
 
   const data = await request<MusicBrainzRecordingSearchResponse>(
-    `/recording?query=isrc:${encodeURIComponent(isrc)}&fmt=json&inc=releases%2Brelease-groups`
+    `/recording?query=isrc:${encodeURIComponent(isrc)}&fmt=json&inc=releases%2Brelease-groups`,
   );
 
   const releaseGroups = new Map<string, MusicBrainzReleaseGroup>();

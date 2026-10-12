@@ -23,8 +23,7 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const [openResultDate, setOpenResultDate] = useState<number>();
   const [shazarrLoading, setShazarrLoading] = useState(false);
   const [recordingError, setRecordingError] = useState<ErrorCodeType | undefined>();
-  const [recordingStatus, setRecordingStatus] =
-    useState<RecordingStatusType>("inactive");
+  const [recordingStatus, setRecordingStatus] = useState<RecordingStatusType>("inactive");
 
   const { config, isNetworkConnected } = useConfigProvider();
 
@@ -61,7 +60,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       console.error(e);
     }
   };
-
 
   function handleTesting(date: number) {
     const audioData = mockRecordBase64;
@@ -122,12 +120,10 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
   const startRecording = async (duration: number = RECORD_DURATION) => {
     setRecordingError(undefined);
     try {
-      const { value: hasPerm } =
-        await VoiceRecorder.hasAudioRecordingPermission();
+      const { value: hasPerm } = await VoiceRecorder.hasAudioRecordingPermission();
 
       if (!hasPerm) {
-        const { value: resultRequestPerm } =
-          await VoiceRecorder.requestAudioRecordingPermission();
+        const { value: resultRequestPerm } = await VoiceRecorder.requestAudioRecordingPermission();
 
         if (!resultRequestPerm) return;
       }
@@ -143,9 +139,8 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
             value: { recordDataBase64 },
           } = await VoiceRecorder.stopRecording();
 
-          const audioData = import.meta.env.VITE_STAGE === "testing"
-            ? mockRecordBase64
-            : recordDataBase64;
+          const audioData =
+            import.meta.env.VITE_STAGE === "testing" ? mockRecordBase64 : recordDataBase64;
 
           if (!audioData) return;
 
@@ -165,7 +160,6 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
           }
 
           processTranscoding(audioData);
-        
         }, duration);
       }
     } catch (err) {
@@ -174,11 +168,11 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
       if (import.meta.env.VITE_STAGE === "testing") {
         handleTesting(Date.now());
         return;
-      };
+      }
 
       resetSearch();
       setRecordingError("ERROR_RECORDING" as never);
-    };
+    }
   };
 
   const hasCheckedLaunchConfig = useRef(false);
@@ -192,13 +186,12 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     if (recordingStatus !== "inactive") return;
 
     setTimeout(() => startRecording(), 0);
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
   }, [config]);
 
   const searchOfflineRecord = (item: HistoryItem) => {
     if (!item?.stream) return;
-    
+
     resetSearch();
     setAudio(item.stream);
     setRecordingStatus("searching");
@@ -221,7 +214,5 @@ export function ShazarrProvider({ children }: { children: ReactNode }) {
     },
   };
 
-  return (
-    <ShazarrContext.Provider value={value}>{children}</ShazarrContext.Provider>
-  );
+  return <ShazarrContext.Provider value={value}>{children}</ShazarrContext.Provider>;
 }

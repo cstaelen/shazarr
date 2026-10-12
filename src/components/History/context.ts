@@ -18,6 +18,4 @@ type HistoryContextType = {
   };
 };
 
-export const HistoryContext = createContext<HistoryContextType>(
-  {} as HistoryContextType,
-);
+export const HistoryContext = createContext<HistoryContextType>({} as HistoryContextType);

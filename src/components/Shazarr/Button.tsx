@@ -19,11 +19,9 @@ export default function ShazarrButton() {
   return (
     <Box sx={{ position: "relative" }}>
       {recordingStatus !== "inactive" ? (
-        <NotesAnimate
-          duration={recordingStatus === "recording" ? RECORD_DURATION : 0}
-        />
+        <NotesAnimate duration={recordingStatus === "recording" ? RECORD_DURATION : 0} />
       ) : null}
-  
+
       <ListenButton>
         <IconButton
           data-testid="record-button"
@@ -34,17 +32,11 @@ export default function ShazarrButton() {
             }
           }}
         >
-          <Round
-            isAnimate={recordingStatus === "recording" || shazarrLoading}
-          >
+          <Round isAnimate={recordingStatus === "recording" || shazarrLoading}>
             {recordingStatus === "searching" ? (
-              <MoreHorizOutlined
-                style={{ transform: "scale(1.6)", opacity: 0.5 }}
-              />
+              <MoreHorizOutlined style={{ transform: "scale(1.6)", opacity: 0.5 }} />
             ) : recordingStatus === "recording" ? (
-              <GraphicEqIcon
-                style={{ transform: "scale(1.6)", opacity: 0.5 }}
-              />
+              <GraphicEqIcon style={{ transform: "scale(1.6)", opacity: 0.5 }} />
             ) : (
               <>
                 <img
@@ -96,14 +88,12 @@ const Round = styled.div<{ isAnimate: boolean }>`
     margin-left: -3.5rem;
     margin-top: -3.5rem;
     z-index: 0;
-    animation: ${({ isAnimate }) =>
-      isAnimate ? "button-animate 2s infinite linear" : "none"};
+    animation: ${({ isAnimate }) => (isAnimate ? "button-animate 2s infinite linear" : "none")};
     transition: transform 300ms ease;
   }
 
   img {
-    animation: ${({ isAnimate }) =>
-      isAnimate ? "button-animate 2s infinite linear" : "none"};
+    animation: ${({ isAnimate }) => (isAnimate ? "button-animate 2s infinite linear" : "none")};
   }
 
   @keyframes button-animate {

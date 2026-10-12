@@ -1,7 +1,19 @@
 import { useEffect, useMemo } from "react";
 import { App } from "@capacitor/app";
 import { Close } from "@mui/icons-material";
-import { Box, Button, Divider, Drawer, Stack, Table, TableBody, TableCell, TableContainer, TableRow, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  useMediaQuery,
+} from "@mui/material";
 import { ShazamProvider } from "shazam-api/dist/types";
 
 import { useConfigProvider } from "../Config/useConfig";
@@ -52,11 +64,7 @@ export default function ShazarrResults() {
   if (!data) return null;
 
   return (
-    <Drawer
-      anchor="bottom"
-      open={!!data}
-      onClose={onClose}
-    >
+    <Drawer anchor="bottom" open={!!data} onClose={onClose}>
       <Box sx={{ p: 2, display: "flex", gap: 2, flexDirection: isLandscape ? "row" : "column" }}>
         <Box sx={{ flex: "1 1 0" }}>
           <CardResult data={data} onClose={onClose} />
@@ -120,25 +128,21 @@ export default function ShazarrResults() {
               />
             )}
 
-            {(config?.lidarr_url || config?.tidarr_url || config?.soulsync_url || (config?.custom_service_url && config?.custom_service_name)) && (
-              <Divider />
-            )}
+            {(config?.lidarr_url ||
+              config?.tidarr_url ||
+              config?.soulsync_url ||
+              (config?.custom_service_url && config?.custom_service_name)) && <Divider />}
 
             <Box sx={{ textAlign: "center" }}>
-              {data?.hub?.providers?.map(
-                (provider: ShazamProvider, index: number) => (
-                  <StreamProviderButton
-                    key={`provider-${index}`}
-                    uri={provider.actions?.[0]?.uri}
-                    type={provider.type}
-                  />
-                ),
-              )}
-              {data?.myshazam?.apple?.actions?.[0]?.uri && (
+              {data?.hub?.providers?.map((provider: ShazamProvider, index: number) => (
                 <StreamProviderButton
-                  uri={data.myshazam.apple.actions?.[0]?.uri}
-                  type="APPLE"
+                  key={`provider-${index}`}
+                  uri={provider.actions?.[0]?.uri}
+                  type={provider.type}
                 />
+              ))}
+              {data?.myshazam?.apple?.actions?.[0]?.uri && (
+                <StreamProviderButton uri={data.myshazam.apple.actions?.[0]?.uri} type="APPLE" />
               )}
             </Box>
 

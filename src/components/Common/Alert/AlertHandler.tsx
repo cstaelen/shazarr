@@ -8,7 +8,12 @@ import { useShazarrProvider } from "../../Shazarr/useShazarr";
 import ApiErrorAlert from "./Alert";
 
 export const AlertHandler = () => {
-  const { recordingStatus, recordingError, showInlineResult, actions: { dismissInlineResult, setOpenResultDate } } = useShazarrProvider();
+  const {
+    recordingStatus,
+    recordingError,
+    showInlineResult,
+    actions: { dismissInlineResult, setOpenResultDate },
+  } = useShazarrProvider();
   const { isNetworkConnected } = useConfigProvider();
   const { history } = useHistoryProvider();
 
@@ -33,9 +38,7 @@ export const AlertHandler = () => {
           onOpen={handleOpenResult}
         />
       )}
-      {!isNetworkConnected && recordingStatus === "inactive" && (
-        <ApiErrorAlert severity="info" />
-      )}
+      {!isNetworkConnected && recordingStatus === "inactive" && <ApiErrorAlert severity="info" />}
       {recordingError && recordingStatus === "inactive" && (
         <ApiErrorAlert message={recordingError} />
       )}
