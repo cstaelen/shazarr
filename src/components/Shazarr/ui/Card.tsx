@@ -1,15 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { App } from "@capacitor/app";
-import {
-  PauseCircleFilled,
-  PlayCircleFilled,
-  Refresh,
-} from "@mui/icons-material";
-import {
-  Button,
-  CardActions,
-  CardMedia,
-} from "@mui/material";
+import { PauseCircleFilled, PlayCircleFilled, Refresh } from "@mui/icons-material";
+import { Button, CardActions, CardMedia } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -26,10 +18,7 @@ export default function CardResult({ data, onClose }: { data: ShazamTrack; onClo
     [data],
   );
 
-  const sample = useMemo(
-    () => (sampleURI ? new Audio(sampleURI) : undefined),
-    [sampleURI],
-  );
+  const sample = useMemo(() => (sampleURI ? new Audio(sampleURI) : undefined), [sampleURI]);
 
   function togglePlayPause() {
     if (!sample) return;
@@ -99,11 +88,7 @@ export default function CardResult({ data, onClose }: { data: ShazamTrack; onClo
               {isPlaying ? "Pause" : "Play"}
             </Button>
             &nbsp;
-            <Button
-              onClick={onClose}
-              variant="outlined"
-              color="warning"
-            >
+            <Button onClick={onClose} variant="outlined" color="warning">
               <Refresh style={{ transform: "rotate(-180deg)" }} />
             </Button>
           </Box>

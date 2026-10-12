@@ -66,8 +66,8 @@ export default function SoulsyncButton({
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const apiKey = config?.soulsync_api_key;
-  const profileId = config?.soulsync_profile_id 
-    ? parseInt(config.soulsync_profile_id, 10) 
+  const profileId = config?.soulsync_profile_id
+    ? parseInt(config.soulsync_profile_id, 10)
     : undefined;
 
   async function handleAdd(type: "track" | "album") {
@@ -79,20 +79,14 @@ export default function SoulsyncButton({
 
     let result: SoulsyncQueueResult;
     if (type === "track") {
-      result = await soulsyncAddTrackToWishlist(
-        url,
-        trackTitle,
-        artistName,
-        apiKey,
-        profileId
-      );
+      result = await soulsyncAddTrackToWishlist(url, trackTitle, artistName, apiKey, profileId);
     } else {
       result = await soulsyncAddAlbumToWishlist(
         url,
         effectiveAlbumTitle,
         artistName,
         apiKey,
-        profileId
+        profileId,
       );
     }
 
@@ -136,19 +130,13 @@ export default function SoulsyncButton({
               <SoulsyncLogoIcon />
             )
           }
-          color={
-            status === "success"
-              ? "success"
-              : status === "error"
-              ? "warning"
-              : "primary"
-          }
+          color={status === "success" ? "success" : status === "error" ? "warning" : "primary"}
           onClick={handleClick}
           data-testid="soulsync-button"
         >
           <strong>{label}</strong>
         </Button>
-        
+
         {apiKey && (
           <Tooltip title="Open SoulSync">
             <span>
@@ -164,7 +152,7 @@ export default function SoulsyncButton({
           </Tooltip>
         )}
       </Stack>
-      
+
       {/* Dialog to choose between Track and Album */}
       <Dialog
         open={dialogOpen}

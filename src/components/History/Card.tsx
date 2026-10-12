@@ -10,11 +10,7 @@ import { useShazarrProvider } from "../Shazarr/useShazarr";
 import { HistoryItem } from "./context";
 import { useHistoryProvider } from "./useHistory";
 
-export default function HistoryCard({
-  item,
-}: {
-  item: HistoryItem;
-}) {
+export default function HistoryCard({ item }: { item: HistoryItem }) {
   const {
     actions: { searchOfflineRecord, setOpenResultDate },
   } = useShazarrProvider();

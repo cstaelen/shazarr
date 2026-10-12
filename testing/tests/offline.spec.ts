@@ -1,8 +1,6 @@
 import test, { expect } from "@playwright/test";
 
-test("Offline: Should save record for further recognition", async ({
-  page,
-}) => {
+test("Offline: Should save record for further recognition", async ({ page }) => {
   await page.context().setOffline(false);
   await page.goto("/");
   await page.evaluate(() => window.localStorage.clear());
@@ -17,16 +15,12 @@ test("Offline: Should save record for further recognition", async ({
 
   // Run song recognition and cut internet connection
   await page.getByTestId("record-button").click();
-  
 
   // Open history panel
   await page.getByRole("button", { name: "Records" }).click();
   await expect(page.getByTestId("history-item")).toHaveCount(1);
   await expect(
-    page
-      .getByTestId("history-item")
-      .locator("div")
-      .filter({ hasText: "Offline record - Not" }),
+    page.getByTestId("history-item").locator("div").filter({ hasText: "Offline record - Not" }),
   ).toHaveCount(1);
 
   // Set online

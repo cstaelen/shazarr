@@ -33,11 +33,7 @@ const SERVICE_GROUPS = [
     id: "lidarr",
     name: "Lidarr",
     icon: (
-      <img
-        src={lidarrLogo}
-        alt="Lidarr"
-        style={{ width: 24, height: 24, borderRadius: "4px" }}
-      />
+      <img src={lidarrLogo} alt="Lidarr" style={{ width: 24, height: 24, borderRadius: "4px" }} />
     ),
     fields: ["lidarr_url", "lidarr_api_key"],
   },
@@ -110,8 +106,7 @@ export default function Config({ open, onClose }: Props) {
 
   const handleAccordionChange = (groupId: string) => {
     setExpanded((prev) => {
-      const isCurrentlyExpanded =
-        prev.includes(groupId);
+      const isCurrentlyExpanded = prev.includes(groupId);
       if (isCurrentlyExpanded) {
         return prev.filter((id) => id !== groupId);
       } else {
@@ -130,10 +125,7 @@ export default function Config({ open, onClose }: Props) {
     return group.fields.some((field) => config?.[field as keyof typeof config]);
   };
 
-  const renderField = (
-    fieldKey: string,
-    fieldConfig: ConfigFieldsType[keyof ConfigFieldsType]
-  ) => {
+  const renderField = (fieldKey: string, fieldConfig: ConfigFieldsType[keyof ConfigFieldsType]) => {
     if (fieldConfig.type === "checkbox") {
       return (
         <FormControlLabel
@@ -144,12 +136,7 @@ export default function Config({ open, onClose }: Props) {
             width: "100%",
           }}
           labelPlacement="start"
-          control={
-            <Switch
-              name={fieldKey}
-              defaultChecked={Boolean(fieldConfig.value)}
-            />
-          }
+          control={<Switch name={fieldKey} defaultChecked={Boolean(fieldConfig.value)} />}
           label={fieldConfig.placeholder}
         />
       );
@@ -220,9 +207,9 @@ export default function Config({ open, onClose }: Props) {
               return fieldConfig ? { key: fieldKey, config: fieldConfig } : null;
             })
             .filter(Boolean) as Array<{
-              key: string;
-              config: ConfigFieldsType[keyof ConfigFieldsType];
-            }>;
+            key: string;
+            config: ConfigFieldsType[keyof ConfigFieldsType];
+          }>;
 
           if (groupFields.length === 0) return null;
 
@@ -253,11 +240,7 @@ export default function Config({ open, onClose }: Props) {
                     },
                   }}
                 >
-                  <Stack
-                    direction="row"
-                    spacing={1}
-                    sx={{ width: "100%", alignItems: "center" }}
-                  >
+                  <Stack direction="row" spacing={1} sx={{ width: "100%", alignItems: "center" }}>
                     <Box
                       sx={{
                         width: 24,

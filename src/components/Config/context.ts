@@ -32,6 +32,4 @@ type ConfigContextType = {
   };
 };
 
-export const ConfigContext = createContext<ConfigContextType>(
-  {} as ConfigContextType,
-);
+export const ConfigContext = createContext<ConfigContextType>({} as ConfigContextType);

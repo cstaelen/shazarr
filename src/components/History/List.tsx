@@ -31,10 +31,7 @@ export default function HistoryList({ open, onClose }: Props) {
       >
         <Container maxWidth="xs" sx={{ padding: "0 0.5rem" }}>
           {history?.map((item, index) => (
-            <HistoryCard
-              item={item}
-              key={`history-item${index}`}
-            />
+            <HistoryCard item={item} key={`history-item${index}`} />
           ))}
           <Button
             startIcon={<Close />}

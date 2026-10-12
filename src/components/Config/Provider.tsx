@@ -5,7 +5,7 @@ import { Preferences } from "@capacitor/preferences";
 
 import { SHAZARR_STORE_KEY } from "../../constant";
 
-import { ConfigContext, ConfigFieldsType,ConfigStoreType } from "./context";
+import { ConfigContext, ConfigFieldsType, ConfigStoreType } from "./context";
 
 export function ConfigProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<ConfigStoreType | null>(null);
@@ -79,20 +79,13 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     [loadForm],
   );
 
-
-  async function sendNotification(
-    name: string,
-    prerelease: boolean,
-    apkUrl?: string,
-  ) {
+  async function sendNotification(name: string, prerelease: boolean, apkUrl?: string) {
     let allowed = false;
 
-    const { display: currentPerm } =
-      await LocalNotifications.checkPermissions();
+    const { display: currentPerm } = await LocalNotifications.checkPermissions();
 
     if (currentPerm !== "granted") {
-      const { display: requestStatus } =
-        await LocalNotifications.requestPermissions();
+      const { display: requestStatus } = await LocalNotifications.requestPermissions();
 
       if (requestStatus === "granted") {
         allowed = true;
@@ -104,10 +97,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     if (!allowed) return;
 
     LocalNotifications.addListener("localNotificationActionPerformed", () => {
-      window.open(
-        apkUrl ??
-          `https://github.com${import.meta.env.VITE_REPO_API_URL}/releases`,
-      );
+      window.open(apkUrl ?? `https://github.com${import.meta.env.VITE_REPO_API_URL}/releases`);
     });
     LocalNotifications.show({
       notifications: [
@@ -129,26 +119,16 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           `https://api.github.com/repos${import.meta.env.VITE_REPO_API_URL}/releases`,
         );
         const data = await response.json();
-        const latestVersion = data[0].tag_name.substring(
-          1,
-          data[0].tag_name.length,
-        );
+        const latestVersion = data[0].tag_name.substring(1, data[0].tag_name.length);
         const currentVersion = import.meta.env.VITE_CURRENT_VERSION.substring(
           1,
           data[0].tag_name.length,
         );
-        if (
-          latestVersion !== currentVersion &&
-          latestVersion > currentVersion
-        ) {
+        if (latestVersion !== currentVersion && latestVersion > currentVersion) {
           const apkAsset = data[0].assets?.find((asset: { name: string }) =>
             asset.name.endsWith(".apk"),
           );
-          sendNotification(
-            data[0].tag_name,
-            data[0].prerelease,
-            apkAsset?.browser_download_url,
-          );
+          sendNotification(data[0].tag_name, data[0].prerelease, apkAsset?.browser_download_url);
         }
       } catch (e) {
         console.log("fetch github issue", e);
@@ -160,9 +140,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     async function init() {
       const { value: store } = await Preferences.get({ key: SHAZARR_STORE_KEY });
       const storeData: ConfigStoreType =
-        store && store !== "undefined"
-          ? JSON.parse(store)
-          : ({} as ConfigStoreType);
+        store && store !== "undefined" ? JSON.parse(store) : ({} as ConfigStoreType);
       setConfig(storeData);
       loadForm(storeData);
     }
@@ -189,8 +167,5 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     },
   };
 
-  return (
-    <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
-  );
+  return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;
 }
-

@@ -66,10 +66,7 @@ export default function TidarrButton({
 
   async function handleClick() {
     if (!apiKey) {
-      window.open(
-        `${url}/search/${encodeURIComponent(`${trackTitle} ${artistName}`)}`,
-        "_blank"
-      );
+      window.open(`${url}/search/${encodeURIComponent(`${trackTitle} ${artistName}`)}`, "_blank");
       return;
     }
 
@@ -123,50 +120,40 @@ export default function TidarrButton({
   return (
     <>
       <Stack direction="row" spacing={1}>
-      <Button
-        variant="contained"
-        fullWidth
-        disabled={!isNetworkConnected || status === "loading"}
-        startIcon={
-          status === "loading" ? (
-            <CircularProgress size={20} color="inherit" />
-          ) : (
-            <AlbumStyled />
-          )
-        }
-        color={
-          status === "success"
-            ? "success"
-            : status === "error"
-              ? "warning"
-              : "primary"
-        }
-        onClick={handleClick}
-      >
-        <strong>{label}</strong>
-      </Button>
-      {apiKey && (
-        <Tooltip title="Open Tidarr search">
-          <span>
-            <IconButton
-              color="primary"
-              onClick={() => window.open(`${url}/search/${encodeURIComponent(`${trackTitle} ${artistName}`)}`, "_blank")}
-              disabled={!isNetworkConnected}
-              sx={{ border: 2, borderRadius: 1 }}
-            >
-              <OpenInNew />
-            </IconButton>
-          </span>
-        </Tooltip>
-      )}
+        <Button
+          variant="contained"
+          fullWidth
+          disabled={!isNetworkConnected || status === "loading"}
+          startIcon={
+            status === "loading" ? <CircularProgress size={20} color="inherit" /> : <AlbumStyled />
+          }
+          color={status === "success" ? "success" : status === "error" ? "warning" : "primary"}
+          onClick={handleClick}
+        >
+          <strong>{label}</strong>
+        </Button>
+        {apiKey && (
+          <Tooltip title="Open Tidarr search">
+            <span>
+              <IconButton
+                color="primary"
+                onClick={() =>
+                  window.open(
+                    `${url}/search/${encodeURIComponent(`${trackTitle} ${artistName}`)}`,
+                    "_blank",
+                  )
+                }
+                disabled={!isNetworkConnected}
+                sx={{ border: 2, borderRadius: 1 }}
+              >
+                <OpenInNew />
+              </IconButton>
+            </span>
+          </Tooltip>
+        )}
       </Stack>
 
-      <Dialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        fullWidth
-        maxWidth="xs"
-      >
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth="xs">
         <DialogTitle>Choose an album</DialogTitle>
         <DialogContent sx={{ padding: 1 }}>
           <Stack spacing={1}>
@@ -192,10 +179,20 @@ export default function TidarrButton({
                     <Typography variant="body2" sx={{ fontWeight: "bold" }} noWrap>
                       {album.title}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary" noWrap sx={{ display: "block" }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      noWrap
+                      sx={{ display: "block" }}
+                    >
                       {album.artists?.[0]?.name}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary" noWrap sx={{ display: "block" }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      noWrap
+                      sx={{ display: "block" }}
+                    >
                       {album.releaseDate?.slice(0, 4)} · {album.numberOfTracks} tracks
                     </Typography>
                   </Box>
@@ -215,7 +212,12 @@ export default function TidarrButton({
                     variant="text"
                     startIcon={<Download fontSize="small" />}
                     onClick={() => handleQueue(album, "track")}
-                    sx={{ flex: 1, borderRadius: 0, borderLeft: "1px solid", borderColor: "divider" }}
+                    sx={{
+                      flex: 1,
+                      borderRadius: 0,
+                      borderLeft: "1px solid",
+                      borderColor: "divider",
+                    }}
                   >
                     Track
                   </Button>
@@ -224,7 +226,12 @@ export default function TidarrButton({
                     variant="text"
                     color="secondary"
                     onClick={() => handleQueue(album, "favorite")}
-                    sx={{ borderRadius: 0, borderLeft: "1px solid", borderColor: "divider", px: 1.5 }}
+                    sx={{
+                      borderRadius: 0,
+                      borderLeft: "1px solid",
+                      borderColor: "divider",
+                      px: 1.5,
+                    }}
                   >
                     <Favorite fontSize="small" />
                   </Button>

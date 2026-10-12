@@ -1,17 +1,17 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 concurrency:
   group: ${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}    
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    name: 'Playwright Tests'
+    name: "Playwright Tests"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,14 +25,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22.x"
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install ${{ github.actor == 'dependabot[bot]' && '--no-frozen-lockfile' || '--frozen-lockfile' }}
 
       - name: Run Playwright tests
         run: pnpm run testing:ci
-        
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

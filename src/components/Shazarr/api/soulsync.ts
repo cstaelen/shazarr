@@ -17,7 +17,7 @@ export type SoulsyncQueueResult =
 async function request<T>(
   config: SoulsyncConfig,
   path: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<{
   success: boolean;
   data?: T;
@@ -53,9 +53,7 @@ async function request<T>(
       const text = await res.text();
       try {
         const errorData = JSON.parse(text);
-        throw new Error(
-          `SoulSync API error (${res.status}): ${errorData.error?.message || text}`
-        );
+        throw new Error(`SoulSync API error (${res.status}): ${errorData.error?.message || text}`);
       } catch {
         throw new Error(`SoulSync API error (${res.status}): ${text}`);
       }
@@ -65,10 +63,9 @@ async function request<T>(
     if (!content) return { success: true } as const;
     return JSON.parse(content);
   } catch (e) {
-    throw new Error(
-      `SoulSync unreachable: ${e instanceof Error ? e.message : "Unknown error"}`,
-      { cause: e }
-    );
+    throw new Error(`SoulSync unreachable: ${e instanceof Error ? e.message : "Unknown error"}`, {
+      cause: e,
+    });
   }
 }
 
@@ -80,7 +77,7 @@ export async function soulsyncSearchTracks(
   query: string,
   apiKey?: string,
   profileId?: number,
-  limit: number = 5
+  limit: number = 5,
 ): Promise<{
   success: boolean;
   tracks?: Array<{
@@ -130,7 +127,7 @@ export async function soulsyncAddTrackToWishlist(
   trackTitle: string,
   artistName: string,
   apiKey?: string,
-  profileId?: number
+  profileId?: number,
 ): Promise<SoulsyncQueueResult> {
   const config: SoulsyncConfig = { url, apiKey, profileId };
 
@@ -141,7 +138,7 @@ export async function soulsyncAddTrackToWishlist(
       `${artistName} - ${trackTitle}`,
       apiKey,
       profileId,
-      1
+      1,
     );
 
     if (!searchResult.success || !searchResult.tracks?.length) {
@@ -191,7 +188,7 @@ export async function soulsyncAddAlbumToWishlist(
   albumTitle: string,
   artistName: string,
   apiKey?: string,
-  profileId?: number
+  profileId?: number,
 ): Promise<SoulsyncQueueResult> {
   const config: SoulsyncConfig = { url, apiKey, profileId };
 
@@ -202,7 +199,7 @@ export async function soulsyncAddAlbumToWishlist(
       `${artistName} - ${albumTitle}`,
       apiKey,
       profileId,
-      25
+      25,
     );
 
     if (!searchResult.success || !searchResult.tracks?.length) {
@@ -216,7 +213,7 @@ export async function soulsyncAddAlbumToWishlist(
     const albumTracks = searchResult.tracks.filter(
       (t) =>
         normalize(t.album) === normalize(albumTitle) &&
-        t.artists.some((a) => normalize(a) === normalize(artistName))
+        t.artists.some((a) => normalize(a) === normalize(artistName)),
     );
 
     if (albumTracks.length === 0) {

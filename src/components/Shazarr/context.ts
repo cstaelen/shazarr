@@ -21,6 +21,4 @@ type ShazarrContextType = {
   };
 };
 
-export const ShazarrContext = createContext<ShazarrContextType>(
-  {} as ShazarrContextType,
-);
+export const ShazarrContext = createContext<ShazarrContextType>({} as ShazarrContextType);

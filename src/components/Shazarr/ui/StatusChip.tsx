@@ -1,4 +1,3 @@
-
 import { Check, MicOutlined, NetworkPing } from "@mui/icons-material";
 import { Chip, CircularProgress } from "@mui/material";
 
@@ -6,8 +5,7 @@ import { useConfigProvider } from "../../Config/useConfig";
 import { useShazarrProvider } from "../useShazarr";
 
 export default function StatusChip() {
-  const { shazarrLoading, showInlineResult, recordingStatus } =
-    useShazarrProvider();
+  const { shazarrLoading, showInlineResult, recordingStatus } = useShazarrProvider();
   const { isNetworkConnected } = useConfigProvider();
 
   return (

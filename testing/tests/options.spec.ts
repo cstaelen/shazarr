@@ -2,11 +2,7 @@ import test, { expect, Page } from "@playwright/test";
 
 import { gotoWithLocalStorage, waitForImgLoaded } from "./utils/helpers";
 
-async function testExternalServiceButtons(
-  label: string,
-  url: string,
-  page: Page,
-) {
+async function testExternalServiceButtons(label: string, url: string, page: Page) {
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 
   const ctx = page.context();
@@ -25,9 +21,7 @@ async function testExternalServiceButtons(
   await expect(await capturedUrl).toEqual(url);
 }
 
-test("Options: Should see options panel and use service buttons", async ({
-  page,
-}) => {
+test("Options: Should see options panel and use service buttons", async ({ page }) => {
   await gotoWithLocalStorage("/", page);
 
   // Open config panel
@@ -40,12 +34,8 @@ test("Options: Should see options panel and use service buttons", async ({
   await page.getByText("Custom Service").click();
 
   // Fill fields and save
-  await page
-    .getByPlaceholder("Lidarr URL (http://...)")
-    .fill("http://lidarr.server.docker");
-  await page
-    .getByPlaceholder("Tidarr URL (http://...)")
-    .fill("http://tidarr.server.docker");
+  await page.getByPlaceholder("Lidarr URL (http://...)").fill("http://lidarr.server.docker");
+  await page.getByPlaceholder("Tidarr URL (http://...)").fill("http://tidarr.server.docker");
   await page
     .getByPlaceholder("Custom service (http://...?")
     .fill("http://custom.server.docker?query=");
@@ -53,9 +43,7 @@ test("Options: Should see options panel and use service buttons", async ({
 
   await page.getByRole("button", { name: "Save configuration" }).click();
 
-  await expect(
-    page.getByPlaceholder("Lidarr URL (http://...)"),
-  ).not.toBeVisible();
+  await expect(page.getByPlaceholder("Lidarr URL (http://...)")).not.toBeVisible();
 
   // Go to result page
   await page.getByRole("button", { name: "Records" }).click();
@@ -64,9 +52,9 @@ test("Options: Should see options panel and use service buttons", async ({
 
   await waitForImgLoaded(page);
   await page.waitForTimeout(1000);
-  await expect(page.getByText("Download with Lidarr")).toHaveScreenshot(
-    { maxDiffPixelRatio: 0.05 },
-  );
+  await expect(page.getByText("Download with Lidarr")).toHaveScreenshot({
+    maxDiffPixelRatio: 0.05,
+  });
 
   // Test button availability on result screen
   await testExternalServiceButtons(
@@ -92,9 +80,7 @@ test("Options: Should see options panel and use service buttons", async ({
   await expect(page.getByRole("dialog")).toHaveScreenshot();
 });
 
-test("Options: Auto-listen on launch starts recording automatically", async ({
-  page,
-}) => {
+test("Options: Auto-listen on launch starts recording automatically", async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem(
       "CapacitorStorage.com.shazarr.config",
@@ -107,9 +93,7 @@ test("Options: Auto-listen on launch starts recording automatically", async ({
   await expect(page.getByTestId("inline-result-card")).toBeVisible();
 });
 
-test("Options: Auto-listen disabled by default does not start recording", async ({
-  page,
-}) => {
+test("Options: Auto-listen disabled by default does not start recording", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.getByText("Ready")).toBeVisible();
