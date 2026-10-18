@@ -5,7 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@babel/core': '>=7.29.6'
   '@babel/runtime': '>=7.26.10 <8'
   '@xmldom/xmldom': '>=0.8.13'
   basic-ftp: '>=5.3.0'
