@@ -42,7 +42,7 @@
     "@mui/material": "^9.5.0",
     "@uidotdev/usehooks": "^2.4.1",
     "capacitor-voice-recorder": "^7.0.6",
-    "node": "^26.12.0",
+    "node": "^26.12.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "shazam-api": "^0.3.0"
@@ -56,11 +56,11 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "depcheck": "^1.4.7",
-    "oxfmt": "^0.73.0",
-    "oxlint": "^1.88.0",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
     "ts-prune": "^0.10.3",
     "typescript": "^6.0.3",
-    "vite": "^8.3.4"
+    "vite": "^8.3.5"
   },
   "browserslist": {
     "production": [
