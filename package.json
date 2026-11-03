@@ -48,7 +48,7 @@
     "shazam-api": "^0.3.0"
   },
   "devDependencies": {
-    "@capacitor/assets": "^3.0.5",
+    "@capacitor/assets": "^4.0.0",
     "@capacitor/cli": "^8.6.0",
     "@ionic/cli": "^7.2.1",
     "@playwright/test": "^1.64.1",
