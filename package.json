@@ -54,13 +54,13 @@
     "@playwright/test": "^1.65.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.2.1",
+    "@vitejs/plugin-react": "^6.3.0",
     "depcheck": "^1.4.7",
-    "oxfmt": "^0.77.0",
-    "oxlint": "^1.92.0",
+    "oxfmt": "^0.78.0",
+    "oxlint": "^1.93.0",
     "ts-prune": "^0.10.3",
     "typescript": "^7.0.2",
-    "vite": "^8.3.6"
+    "vite": "^8.3.7"
   },
   "browserslist": {
     "production": [
