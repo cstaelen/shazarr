@@ -1,22 +1,14 @@
 name: iOS Build
 
+# No `paths:` filter on the triggers: a workflow skipped by path filtering never
+# reports its checks, so a required status check from it would leave every PR
+# pending forever. Instead the trigger is unconditional and the expensive macOS
+# job is gated by a job-level `if:` — a job skipped that way reports as success.
 on:
   push:
     branches: [main]
-    paths:
-      - "ios/**"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "capacitor.config.ts"
-      - ".github/workflows/ios-build.yml"
   pull_request:
     branches: [main]
-    paths:
-      - "ios/**"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "capacitor.config.ts"
-      - ".github/workflows/ios-build.yml"
   workflow_dispatch:
 
 concurrency:
@@ -24,8 +16,39 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
+  changes:
+    name: Detect iOS changes
+    runs-on: ubuntu-latest
+    outputs:
+      ios: ${{ steps.filter.outputs.ios }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check whether anything iOS-relevant changed
+        id: filter
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "Not a pull request — building."
+            echo "ios=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed=$(git diff --name-only "$BASE_SHA" HEAD)
+          echo "Changed files:"; echo "$changed"
+          if echo "$changed" | grep -qE '^(ios/|package\.json$|pnpm-lock\.yaml$|capacitor\.config\.ts$|\.npmrc$|\.github/workflows/ios-build\.yml$)'; then
+            echo "ios=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ios=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
-    name: Build iOS app (simulator)
+    name: Build iOS app
+    needs: changes
+    if: needs.changes.outputs.ios == 'true'
     runs-on: macos-latest
     timeout-minutes: 30
     steps:
@@ -35,7 +58,6 @@ jobs:
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
-          version: 10
           run_install: false
 
       - uses: actions/setup-node@v4
@@ -50,10 +72,10 @@ jobs:
         run: pnpm run build
 
       # `copy` only, deliberately not `sync`/`update`: those rewrite the Podfile
-      # with pnpm's versioned .pnpm/ store paths, so the build would no longer
-      # test the Podfile we actually commit.
+      # from the resolved plugin paths, so the build would no longer test the
+      # Podfile we actually commit.
       - name: Capacitor copy
-        run: npx cap copy ios
+        run: pnpm exec cap copy ios
 
       # --deployment forbids touching Podfile.lock, so this goes red whenever the
       # committed lock has drifted from the committed Podfile instead of silently
@@ -62,10 +84,10 @@ jobs:
         working-directory: ./ios/App
         run: pod install --deployment
 
-      # The real compile: catches deployment-target and Swift breakage.
-      # Device destination rather than simulator: it needs no simulator runtime,
-      # so the job does not break when the runner's Xcode and CoreSimulator
-      # versions drift apart, and it builds arm64 only instead of arm64+x86_64.
+      # The real compile: catches deployment-target and Swift breakage. Device
+      # destination rather than simulator: it needs no simulator runtime, so the
+      # job does not break when the runner's Xcode and CoreSimulator versions
+      # drift apart, and it builds arm64 only instead of arm64+x86_64.
       - name: Build for device (unsigned)
         run: |
           xcodebuild \
