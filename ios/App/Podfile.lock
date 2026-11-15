@@ -1,35 +1,44 @@
 PODS:
-  - Capacitor (6.0.0):
+  - Capacitor (8.5.3):
     - CapacitorCordova
-  - CapacitorApp (6.0.0):
+  - CapacitorApp (8.1.2):
     - Capacitor
-  - CapacitorCordova (6.0.0)
-  - CapacitorDevice (6.0.0):
+  - CapacitorCordova (8.5.3)
+  - CapacitorDevice (8.0.3):
     - Capacitor
-  - CapacitorHaptics (6.0.0):
+  - CapacitorFilesystem (8.1.5):
     - Capacitor
-  - CapacitorLocalNotifications (6.0.0):
+    - IONFilesystemLib (= 2.0.1)
+  - CapacitorHaptics (8.0.2):
     - Capacitor
-  - CapacitorNetwork (6.0.0):
+  - CapacitorLocalNotifications (8.3.1):
     - Capacitor
-  - CapacitorPreferences (6.0.0):
+  - CapacitorNetwork (8.0.1):
     - Capacitor
-  - CapacitorScreenOrientation (6.0.0):
+  - CapacitorPreferences (8.0.1):
     - Capacitor
-  - CapacitorVoiceRecorder (5.0.0):
+  - CapacitorScreenOrientation (8.0.2):
     - Capacitor
+  - CapacitorVoiceRecorder (7.0.6):
+    - Capacitor
+  - IONFilesystemLib (2.0.1)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
+  - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - "CapacitorNetwork (from `../../node_modules/@capacitor/network`)"
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
   - "CapacitorScreenOrientation (from `../../node_modules/@capacitor/screen-orientation`)"
   - CapacitorVoiceRecorder (from `../../node_modules/capacitor-voice-recorder`)
+
+SPEC REPOS:
+  trunk:
+    - IONFilesystemLib
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -40,6 +49,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorDevice:
     :path: "../../node_modules/@capacitor/device"
+  CapacitorFilesystem:
+    :path: "../../node_modules/@capacitor/filesystem"
   CapacitorHaptics:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorLocalNotifications:
@@ -54,17 +65,19 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/capacitor-voice-recorder"
 
 SPEC CHECKSUMS:
-  Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
-  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
-  CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
-  CapacitorDevice: f8fd88f9edd1261c55a109f32015b09bbbfdc4a0
-  CapacitorHaptics: 9ebc9363f0e9b8eb4295088a0b474530acf1859b
-  CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
-  CapacitorNetwork: f15a94c16a33cba7c47a17814cb6bcfe3ea34ded
-  CapacitorPreferences: c9b839a80baa72e4ed4bdb117618e1950d3046b5
-  CapacitorScreenOrientation: d78ce2b710bfcd1c32d3a090d32b6686c1c95e4f
-  CapacitorVoiceRecorder: 872ea857b497ce2c71afe3e4eb5de0a74290c0db
+  Capacitor: 2f67eaeb8ed79909cd35b5e7439a5c2a9ca58e0f
+  CapacitorApp: 7b7e43debe505bc61beedb83796aa1368c86078b
+  CapacitorCordova: 0b7326439c7a09fc5d20eced5e0dab986327a493
+  CapacitorDevice: 708e742b60a61572cd593e44c809592e8f31da14
+  CapacitorFilesystem: e3bc7123acb1554df1b7b099fa5847064b9e1bd4
+  CapacitorHaptics: 296f771ecd89c7a1bd92a7b6826a7d268e2e70f5
+  CapacitorLocalNotifications: e0747a329ddde3074d52dc74a003688af90e42be
+  CapacitorNetwork: 8812ce60d11fb63d8f2e4ba51a49b2e59892ebe2
+  CapacitorPreferences: cca2021f386efb75947c850334447d9ff22b14f1
+  CapacitorScreenOrientation: 0ccb98cbbfbb1dce509da837a3e35848128417ce
+  CapacitorVoiceRecorder: 9158861be982f32d411769723a4d813d6ce46135
+  IONFilesystemLib: 306469e4c563f61de82d7bca2bbfed9e64d1b2d2
 
-PODFILE CHECKSUM: 8814b064c6a28c0f8680cac7ab4e756f5bf9c2ab
+PODFILE CHECKSUM: 440a0b9501c6cdc07869d0c0e8a3ffcbbcb49811
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.17.0

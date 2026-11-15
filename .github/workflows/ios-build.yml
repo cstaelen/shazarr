@@ -1,0 +1,84 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ios/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "capacitor.config.ts"
+      - ".github/workflows/ios-build.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "ios/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "capacitor.config.ts"
+      - ".github/workflows/ios-build.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  build:
+    name: Build iOS app (simulator)
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install ${{ github.actor == 'dependabot[bot]' && '--no-frozen-lockfile' || '--frozen-lockfile' }}
+
+      - name: Build web assets
+        run: pnpm run build
+
+      # `copy` only, deliberately not `sync`/`update`: those rewrite the Podfile
+      # with pnpm's versioned .pnpm/ store paths, so the build would no longer
+      # test the Podfile we actually commit.
+      - name: Capacitor copy
+        run: npx cap copy ios
+
+      # --deployment forbids touching Podfile.lock, so this goes red whenever the
+      # committed lock has drifted from the committed Podfile instead of silently
+      # repairing it. That drift is what broke iOS builds in issue #385.
+      - name: Install pods from committed lockfile
+        working-directory: ./ios/App
+        run: pod install --deployment
+
+      # The real compile: catches deployment-target and Swift breakage.
+      # Device destination rather than simulator: it needs no simulator runtime,
+      # so the job does not break when the runner's Xcode and CoreSimulator
+      # versions drift apart, and it builds arm64 only instead of arm64+x86_64.
+      - name: Build for device (unsigned)
+        run: |
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme Shazarr \
+            -configuration Debug \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios \
+            -quiet \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      # xcodebuild can exit 0 while erroring out and producing nothing, so assert
+      # the bundle exists rather than trusting the exit code.
+      - name: Verify app bundle was produced
+        run: test -d build/ios/Build/Products/Debug-iphoneos/Shazarr.app
