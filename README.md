@@ -1,8 +1,8 @@
-[![GitHub Stars](https://img.shields.io/github/stars/cstaelen/shazarr-app.svg?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr-app)
-[![GitHub Release](https://img.shields.io/github/release-date/cstaelen/shazarr-app?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr-app/releases)
-[![GitHub Release](https://img.shields.io/github/release/cstaelen/shazarr-app?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr-app/releases)
-![Playwright CI](https://img.shields.io/github/actions/workflow/status/cstaelen/shazarr-app/playwright.yml?label=Playwright%20CI&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)
-[![Download APK](https://img.shields.io/github/downloads/cstaelen/shazarr-app/latest/shazarr-signed.apk?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=android)](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
+[![GitHub Stars](https://img.shields.io/github/stars/cstaelen/shazarr.svg?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr)
+[![GitHub Release](https://img.shields.io/github/release-date/cstaelen/shazarr?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr/releases)
+[![GitHub Release](https://img.shields.io/github/release/cstaelen/shazarr?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr/releases)
+![Playwright CI](https://img.shields.io/github/actions/workflow/status/cstaelen/shazarr/playwright.yml?label=Playwright%20CI&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)
+[![Download APK](https://img.shields.io/github/downloads/cstaelen/shazarr/latest/shazarr-signed.apk?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=android)](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
 <a href="https://www.buymeacoffee.com/clst" target="_blank" title="Buy Me A Coffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 28px !important;width: 110px !important;" ></a>
 
 # Shazarr - Unofficial Shazam mobile app web UI
@@ -36,7 +36,7 @@ Shazarr is a mobile app (Android, iOS) providing Shazam song recognition with de
 
 Get last release :
 
-[<img src="https://github.com/cstaelen/shazarr-app/blob/4465b4d6532a4ade3a970be2b9ade3705706e50f/.github/qr-release.png" width="100" />](https://github.com/cstaelen/shazarr-app/releases/latest)
+[<img src="https://github.com/cstaelen/shazarr/blob/4465b4d6532a4ade3a970be2b9ade3705706e50f/.github/qr-release.png" width="100" />](https://github.com/cstaelen/shazarr/releases/latest)
 
 ## Configuration
 
@@ -66,12 +66,15 @@ Configure Shazarr to connect with your music automation services:
 
 > ⚠️ iOS app must be built from Xcode. There is currently no pre-built binary distribution.
 
-**Requirements**: `pnpm`, Xcode, paired iOS device
+**Requirements**: `pnpm`, Xcode, [CocoaPods](https://cocoapods.org/), paired iOS device running iOS 15.0 or later
 
 1. Clone the project
 2. In project folder, run:
    ```sh
-   pnpm run ios:build
+   pnpm install
+   pnpm run build
+   pnpm run ios:sync
+   pnpm run ios:open
    ```
 3. Xcode will open the project
 4. [Pair your iOS device](https://developer.apple.com/documentation/xcode/running-your-app-in-simulator-or-on-a-device/#Connect-real-devices-to-your-Mac)
