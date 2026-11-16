@@ -1,3 +1,11 @@
+import {
+  classifyFailure,
+  MessageRule,
+  parseErrorMessage,
+  readJsonResponse,
+  ServiceError,
+  ServiceErrorKind,
+} from "./errors";
 import { normalize } from "./utils";
 
 type TidarrConfig = {
@@ -28,11 +36,19 @@ type TidalTrack = {
 
 export type TidarrQueueResult =
   | { success: true; message?: string }
-  | { success: false; message: string };
+  | { success: false; message: string; kind?: ServiceErrorKind };
 
 export function tidalCoverUrl(cover: string): string {
   return `https://resources.tidal.com/images/${cover.replace(/-/g, "/")}/320x320.jpg`;
 }
+
+/** Tidarr's own wording, matched before the generic status handling. */
+const TIDARR_RULES: MessageRule[] = [
+  { pattern: /log ?in to tidal|tidal.*(log ?in|credential)/i, kind: "tidal-logged-out" },
+  { pattern: /invalid api key/i, kind: "bad-api-key" },
+  { pattern: /jwt secret/i, kind: "misconfigured" },
+  { pattern: /token required/i, kind: "auth-required" },
+];
 
 async function request<T>(
   config: TidarrConfig,
@@ -50,21 +66,10 @@ async function request<T>(
       },
     });
   } catch {
-    throw new Error("Tidarr unreachable");
+    throw new ServiceError("unreachable", "Could not reach Tidarr");
   }
-  if (!res.ok) {
-    const contentType = res.headers.get("content-type") ?? "";
-    if (!contentType.includes("application/json")) throw new Error("Tidarr unreachable");
-    const body = await res.text();
-    throw new Error(`Tidarr API error (${res.status})${body ? `: ${body}` : ""}`);
-  }
-  const text = await res.text();
-  if (!text) return undefined as T;
-  try {
-    return JSON.parse(text);
-  } catch {
-    return undefined as T;
-  }
+
+  return (await readJsonResponse<T>(res, TIDARR_RULES)) as T;
 }
 
 async function fetchSettings(config: TidarrConfig): Promise<TidarrSettings | null> {
@@ -101,6 +106,7 @@ async function findTrack(
 }
 
 function catchError(e: unknown, fallback: string): TidarrQueueResult {
+  if (e instanceof ServiceError) return { success: false, message: e.message, kind: e.kind };
   return { success: false, message: e instanceof Error ? e.message : fallback };
 }
 
@@ -155,7 +161,7 @@ export async function tidarrFavoriteTrack(
       },
     );
     if (!res.ok)
-      return { success: false, message: `Tidal error (${res.status}): ${await res.text()}` };
+      throw classifyFailure(res.status, parseErrorMessage(await res.text()), TIDARR_RULES);
     return { success: true, message: "Added to Tidal favorites!" };
   } catch (e) {
     return catchError(e, "Favorite failed");

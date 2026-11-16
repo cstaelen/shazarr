@@ -4,15 +4,14 @@ import { Button, CircularProgress, IconButton, Stack, Tooltip } from "@mui/mater
 
 import lidarrLogo from "../../../resources/lidarr.png";
 import { useConfigProvider } from "../../Config/useConfig";
+import { ServiceErrorKind, serviceErrorLabels } from "../api/errors";
 import { lidarrAutoSearch } from "../api/lidarr";
 
-function formatLidarrError(message: string): string {
-  if (/failed to fetch|network|networkerror/i.test(message)) return "Lidarr unreachable";
-  if (/<!doctype|not valid json|unexpected token/i.test(message)) return "Lidarr unreachable";
-  if (/401|unauthorized/i.test(message)) return "Invalid API key";
-  if (/403|forbidden/i.test(message)) return "Access denied";
-  if (/404/i.test(message)) return "Lidarr not found — check URL";
-  if (/5\d\d|service unavailable|bad gateway/i.test(message)) return "Lidarr unreachable";
+const LABELS = serviceErrorLabels("Lidarr");
+
+/** Text rules only cover failures Lidarr reports as data, not as HTTP errors. */
+function formatLidarrError(message: string, kind?: ServiceErrorKind): string {
+  if (kind && LABELS[kind]) return LABELS[kind];
   if (/album not found/i.test(message)) return "Album not found in Lidarr";
   if (/artist not found/i.test(message)) return "Artist not found";
   if (/missing/i.test(message)) return "Missing album or artist name";
@@ -65,7 +64,7 @@ export default function LidarrButton({
 
       setStatus("success");
     } else {
-      setErrorMessage(formatLidarrError(result.message));
+      setErrorMessage(formatLidarrError(result.message, result.kind));
       setStatus("error");
     }
   }

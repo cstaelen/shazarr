@@ -1,3 +1,4 @@
+import { readJsonResponse, ServiceErrorKind, toServiceError } from "./errors";
 import { getReleaseGroupsByIsrc } from "./musicbrainz";
 import { cleanAlbumTitle, normalize } from "./utils";
 
@@ -46,7 +47,7 @@ type LidarrAlbumLookup = {
 
 export type LidarrAutoSearchResult =
   | { success: true; status?: "queued" | "wanted" | "available" }
-  | { success: false; message: string };
+  | { success: false; message: string; kind?: ServiceErrorKind };
 
 async function request<T>(
   config: LidarrConfig,
@@ -66,20 +67,23 @@ async function request<T>(
       );
     }
   }
-  const res = await fetch(url.toString(), {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      "X-Api-Key": config.apiKey,
-      ...(options.headers ?? {}),
-    },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Lidarr API error (${res.status}): ${text}`);
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": config.apiKey,
+        ...(options.headers ?? {}),
+      },
+    });
+  } catch (e) {
+    // fetch rejects on a network failure; without this the raw TypeError
+    // travelled all the way to the button to be pattern-matched.
+    throw toServiceError(e);
   }
-  const text = await res.text();
-  return text ? JSON.parse(text) : (undefined as unknown as T);
+
+  return (await readJsonResponse<T>(res)) as T;
 }
 
 async function findArtistByMbid(config: LidarrConfig, mbid: string): Promise<LidarrArtist | null> {
@@ -353,6 +357,7 @@ export async function lidarrAutoSearch(
     );
     return result ?? { success: false, message: "Album not found" };
   } catch (e: unknown) {
-    return { success: false, message: e instanceof Error ? e.message : "Album download failed" };
+    const error = toServiceError(e);
+    return { success: false, message: error.message || "Album download failed", kind: error.kind };
   }
 }

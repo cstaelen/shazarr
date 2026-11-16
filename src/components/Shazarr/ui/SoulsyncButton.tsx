@@ -15,31 +15,18 @@ import {
 
 import soulsyncLogo from "../../../resources/soulsync.png";
 import { useConfigProvider } from "../../Config/useConfig";
+import { ServiceErrorKind, serviceErrorLabels } from "../api/errors";
 import {
   soulsyncAddAlbumToWishlist,
   soulsyncAddTrackToWishlist,
   SoulsyncQueueResult,
 } from "../api/soulsync";
 
-function formatSoulsyncError(message: string): string {
-  if (!message) return "Error — try manually";
+const LABELS = serviceErrorLabels("SoulSync");
 
-  // Network errors
-  if (/failed to fetch|network|networkerror/i.test(message)) return "SoulSync unreachable";
-  if (/<!doctype|not valid json|unexpected token/i.test(message)) return "SoulSync unreachable";
-
-  // Auth errors
-  if (/401|unauthorized/i.test(message)) return "Invalid credentials";
-  if (/403|forbidden/i.test(message)) return "Access denied";
-
-  // Not found
-  if (/404/i.test(message)) return "SoulSync not found — check URL";
-
-  // Server errors
-  if (/5\d\d|service unavailable|bad gateway/i.test(message)) return "SoulSync unreachable";
-
-  // Default: return the original message
-  return message;
+function formatSoulsyncError(message: string, kind?: ServiceErrorKind): string {
+  if (kind && LABELS[kind]) return LABELS[kind];
+  return message || "Error — try manually";
 }
 
 type SoulsyncStatus = "idle" | "searching" | "loading" | "success" | "error";
@@ -94,7 +81,7 @@ export default function SoulsyncButton({
   }
 
   function handleResult(result: SoulsyncQueueResult) {
-    setMessage(result.success ? result.message : formatSoulsyncError(result.message));
+    setMessage(result.success ? result.message : formatSoulsyncError(result.message, result.kind));
     setStatus(result.success ? "success" : "error");
   }
 

@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "vite dev",
-    "build": "tsc && vite build",
+    "build": "tsc -p tsconfig.app.json && tsc -p tsconfig.node.json && vite build",
     "preview": "vite preview",
     "ionic:serve": "pnpm run start",
     "ios:open": "ionic capacitor open ios",
@@ -18,11 +18,11 @@
     "quality:lint-fix": "oxlint --fix",
     "quality:format": "oxfmt",
     "quality:format-check": "oxfmt --check",
-    "testing:run": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v$(node -p \"require('@playwright/test/package.json').version\")-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && pnpm exec playwright test'",
+    "testing:run": "docker run --rm -it -v .:/srv -v /srv/node_modules -w /srv mcr.microsoft.com/playwright:v$(node -p \"require('@playwright/test/package.json').version\")-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && pnpm exec playwright test'",
     "testing:ui": "pnpm exec playwright test --ui",
-    "testing:ci": "docker run --rm -e CI=true -v .:/srv -w /srv mcr.microsoft.com/playwright:v$(node -p \"require('@playwright/test/package.json').version\")-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && pnpm exec playwright test'",
+    "testing:ci": "docker run --rm -e CI=true -v .:/srv -v /srv/node_modules -w /srv mcr.microsoft.com/playwright:v$(node -p \"require('@playwright/test/package.json').version\")-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && pnpm exec playwright test'",
     "testing:show-report": "docker run --rm -it -p 9323:9323 -v .:/srv -w /srv mcr.microsoft.com/playwright:v$(node -p \"require('@playwright/test/package.json').version\")-noble npx playwright show-report ./testing/playwright-report --host 0.0.0.0",
-    "testing:update-snapshots": "docker run --rm -it -v .:/srv -w /srv mcr.microsoft.com/playwright:v$(node -p \"require('@playwright/test/package.json').version\")-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && pnpm exec playwright test --update-snapshots'"
+    "testing:update-snapshots": "docker run --rm -it -v .:/srv -v /srv/node_modules -w /srv mcr.microsoft.com/playwright:v$(node -p \"require('@playwright/test/package.json').version\")-noble sh -c 'npm i -g pnpm@10.28.2 && pnpm install --no-frozen-lockfile && pnpm exec playwright test --update-snapshots'"
   },
   "dependencies": {
     "@capacitor/android": "^8.6.2",
