@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 import { useConfigProvider } from "../../Config/useConfig";
+import { ServiceErrorKind, serviceErrorLabels, toServiceError } from "../api/errors";
 import {
   TidalAlbum,
   tidalCoverUrl,
@@ -25,13 +26,15 @@ import {
   tidarrSearchAlbums,
 } from "../api/tidarr";
 
-function formatTidarrError(message: string): string {
-  if (/failed to fetch|network|networkerror/i.test(message)) return "Tidarr unreachable";
-  if (/<!doctype|not valid json|unexpected token/i.test(message)) return "Tidarr unreachable";
-  if (/401|unauthorized/i.test(message)) return "Invalid API key";
-  if (/403|forbidden/i.test(message)) return "Access denied";
-  if (/404/i.test(message)) return "Tidarr not found — check URL";
-  if (/5\d\d|service unavailable|bad gateway/i.test(message)) return "Tidarr unreachable";
+const LABELS = serviceErrorLabels("Tidarr");
+
+/**
+ * `kind` is set by the client, which still had the status code. The text rules
+ * only cover errors raised outside it, such as a track missing from an album it
+ * did find.
+ */
+function formatTidarrError(message: string, kind?: ServiceErrorKind): string {
+  if (kind && LABELS[kind]) return LABELS[kind];
   if (/track not found/i.test(message)) return "Track not found on Tidal";
   if (/credentials/i.test(message)) return "Tidal not logged in — check Tidarr";
   return message || "Error — try manually";
@@ -59,9 +62,14 @@ export default function TidarrButton({
 
   const apiKey = config?.tidarr_api_key;
 
-  function setError(msg: string) {
-    setErrorMessage(formatTidarrError(msg));
+  function setError(msg: string, kind?: ServiceErrorKind) {
+    setErrorMessage(formatTidarrError(msg, kind));
     setStatus("error");
+  }
+
+  function setErrorFromException(e: unknown) {
+    const error = toServiceError(e);
+    setError(error.message, error.kind);
   }
 
   async function handleClick() {
@@ -81,7 +89,7 @@ export default function TidarrButton({
       setDialogOpen(true);
       setStatus("idle");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "");
+      setErrorFromException(e);
     }
   }
 
@@ -103,10 +111,10 @@ export default function TidarrButton({
         if (result.message) setSuccessMessage(result.message);
         setStatus("success");
       } else {
-        setError(result.message);
+        setError(result.message, result.kind);
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "");
+      setErrorFromException(e);
     }
   }
 
