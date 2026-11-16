@@ -99,7 +99,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     LocalNotifications.addListener("localNotificationActionPerformed", () => {
       window.open(apkUrl ?? `https://github.com${import.meta.env.VITE_REPO_API_URL}/releases`);
     });
-    LocalNotifications.show({
+    LocalNotifications.schedule({
       notifications: [
         {
           title: `${prerelease ? "'[prerelease]" : ""} Update available !`,
@@ -107,6 +107,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           id: 1,
           largeIcon: "ic_stat_name/ic_stat_name",
           smallIcon: "ic_stat_name/ic_stat_name",
+          isExactNotification: false,
         },
       ],
     });

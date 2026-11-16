@@ -41,11 +41,20 @@ async function openYakuzaResult(page: Page) {
   await expect(page.locator(".MuiTypography-h5")).toHaveText("Yakuza");
 }
 
-function mockTidarrRoutes(page: Page, overrides: { search?: unknown; albumTracks?: unknown } = {}) {
+type RawResponse = { status: number; contentType: string; body: string };
+
+function mockTidarrRoutes(
+  page: Page,
+  overrides: { search?: unknown; albumTracks?: unknown; searchRaw?: RawResponse } = {},
+) {
   return page.route(`${TIDARR_URL}/**`, async (route) => {
     const url = route.request().url();
 
     if (url.includes("/proxy/tidal/v2/search")) {
+      if (overrides.searchRaw) {
+        await route.fulfill(overrides.searchRaw);
+        return;
+      }
       const body = overrides.search ?? { albums: { items: [MOCK_ALBUM] } };
       await route.fulfill({
         status: 200,
@@ -119,5 +128,54 @@ test("Tidarr: With API key — shows error when no albums found", async ({ page 
   await page.getByRole("button", { name: "Download with Tidarr" }).click();
   await expect(page.getByRole("button", { name: "Track not found on Tidal" })).toBeVisible({
     timeout: 10000,
+  });
+});
+
+/**
+ * Regression tests for #386: each of these used to surface as
+ * "Track not found on Tidal" or "Invalid API key", sending users to debug the
+ * wrong thing.
+ */
+async function expectTidarrError(page: Page, label: string, raw: RawResponse) {
+  await mockTidarrRoutes(page, { searchRaw: raw });
+  await gotoWithConfig(page, { tidarr_url: TIDARR_URL, tidarr_api_key: TIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await page.getByRole("button", { name: "Download with Tidarr" }).click();
+  await expect(page.getByRole("button", { name: label })).toBeVisible({ timeout: 10000 });
+}
+
+test("Tidarr: rejected API key — reports the key, not a missing track", async ({ page }) => {
+  await expectTidarrError(page, "Invalid Tidarr API key", {
+    status: 403,
+    contentType: "application/json",
+    body: JSON.stringify({ error: true, message: "Invalid API key" }),
+  });
+});
+
+test("Tidarr: not logged in to Tidal — reports Tidal, not the API key", async ({ page }) => {
+  await expectTidarrError(page, "Tidarr is not logged in to Tidal", {
+    status: 401,
+    contentType: "application/json",
+    body: JSON.stringify({
+      status: 401,
+      userMessage: "Authentication required. Please log in to Tidal.",
+    }),
+  });
+});
+
+test("Tidarr: non-JSON response — reports it instead of swallowing it", async ({ page }) => {
+  await expectTidarrError(page, "Unexpected response from Tidarr", {
+    status: 200,
+    contentType: "text/html",
+    body: "<!doctype html><html><body>Login</body></html>",
+  });
+});
+
+test("Tidarr: missing JWT_SECRET — points at Tidarr's own config", async ({ page }) => {
+  await expectTidarrError(page, "Tidarr misconfigured — check its logs", {
+    status: 403,
+    contentType: "application/json",
+    body: JSON.stringify({ error: true, message: "JWT secret key is missing." }),
   });
 });

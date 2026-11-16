@@ -1,3 +1,4 @@
+import { readJsonResponse, ServiceErrorKind, toServiceError } from "./errors";
 import { normalize } from "./utils";
 
 type SoulsyncConfig = {
@@ -8,7 +9,7 @@ type SoulsyncConfig = {
 
 export type SoulsyncQueueResult =
   | { success: true; message?: string }
-  | { success: false; message: string };
+  | { success: false; message: string; kind?: ServiceErrorKind };
 
 /**
  * Generic request for SoulSync API v1
@@ -43,30 +44,26 @@ async function request<T>(
     headers["X-Profile-Id"] = String(config.profileId);
   }
 
+  let res: Response;
   try {
-    const res = await fetch(url.toString(), {
+    res = await fetch(url.toString(), {
       ...options,
       headers,
     });
-
-    if (!res.ok) {
-      const text = await res.text();
-      try {
-        const errorData = JSON.parse(text);
-        throw new Error(`SoulSync API error (${res.status}): ${errorData.error?.message || text}`);
-      } catch {
-        throw new Error(`SoulSync API error (${res.status}): ${text}`);
-      }
-    }
-
-    const content = await res.text();
-    if (!content) return { success: true } as const;
-    return JSON.parse(content);
   } catch (e) {
-    throw new Error(`SoulSync unreachable: ${e instanceof Error ? e.message : "Unknown error"}`, {
-      cause: e,
-    });
+    // Only the fetch itself is wrapped. The previous catch also swallowed the
+    // deliberate throws below, labelling every failure "SoulSync unreachable".
+    throw toServiceError(e);
   }
+
+  const parsed = await readJsonResponse<{
+    success: boolean;
+    data?: T;
+    error?: { code: string; message: string };
+    pagination?: unknown;
+  }>(res);
+
+  return parsed ?? ({ success: true } as const);
 }
 
 /**

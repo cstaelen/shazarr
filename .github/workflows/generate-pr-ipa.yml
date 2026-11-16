@@ -1,0 +1,109 @@
+name: Build IPA
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# macOS runners are the scarcest ones: pushing twice to a PR should not leave two
+# of them queued. Not the `release-*` group — that one must never be cancelled.
+concurrency:
+  group: pr-ipa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build unsigned IPA
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set VITE_CURRENT_VERSION
+        run: echo "VITE_CURRENT_VERSION=v0.0.0-testing" >> $GITHUB_ENV
+
+      - name: Set version env vars
+        # A timestamp keeps CFBundleVersion strictly increasing across PR builds,
+        # which is what sideloaders (SideStore, AltStore) compare to offer an
+        # update rather than a reinstall.
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "CURRENT_PROJECT_VERSION=$(date +%s)" >> $GITHUB_ENV
+          echo "MARKETING_VERSION=0.0.0-pr${PR_NUMBER}" >> $GITHUB_ENV
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "pnpm"
+
+      - name: Install app dependencies
+        run: pnpm install ${{ github.actor == 'dependabot[bot]' && '--no-frozen-lockfile' || '--frozen-lockfile' }}
+
+      - name: Build project app
+        run: pnpm run build
+
+      # `copy` only, deliberately not `sync`/`update`: those rewrite the Podfile
+      # from the resolved plugin paths, so the build would no longer test the
+      # Podfile we actually commit.
+      - name: Capacitor copy
+        run: pnpm exec cap copy ios
+
+      # --deployment forbids touching Podfile.lock, so this goes red whenever the
+      # committed lock has drifted from the committed Podfile instead of silently
+      # repairing it. That drift is what broke iOS builds in issue #385, and what
+      # a dependabot bump of @capacitor/* reintroduces if nothing checks it.
+      - name: Install pods from committed lockfile
+        working-directory: ./ios/App
+        run: pod install --deployment
+
+      # MARKETING_VERSION / CURRENT_PROJECT_VERSION are hardcoded to 1.0 / 1 in
+      # project.pbxproj, so they are overridden here.
+      - name: Build unsigned Release app
+        run: |
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme Shazarr \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios \
+            -quiet \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            MARKETING_VERSION="$MARKETING_VERSION" \
+            CURRENT_PROJECT_VERSION="$CURRENT_PROJECT_VERSION" \
+            build
+
+      # xcodebuild can exit 0 while erroring out and producing nothing, so assert
+      # the bundle exists rather than trusting the exit code.
+      - name: Verify app bundle was produced
+        run: test -d build/ios/Build/Products/Release-iphoneos/Shazarr.app
+
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          mkdir -p build/ipa/Payload
+          cp -R build/ios/Build/Products/Release-iphoneos/Shazarr.app build/ipa/Payload/
+          cd build/ipa
+          zip -qry ../shazarr-unsigned.ipa Payload
+
+      - name: Verify IPA contents
+        run: |
+          set -euo pipefail
+          # A Capacitor app without its web assets installs but shows a blank screen.
+          unzip -l build/shazarr-unsigned.ipa | grep -q 'Payload/Shazarr.app/public/index.html'
+          unzip -l build/shazarr-unsigned.ipa | grep -q 'Payload/Shazarr.app/Frameworks/Capacitor.framework/Capacitor'
+          unzip -l build/shazarr-unsigned.ipa | grep -q 'Payload/Shazarr.app/capacitor.config.json'
+          ls -lh build/shazarr-unsigned.ipa
+
+      - name: Upload IPA as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-ipa
+          path: build/shazarr-unsigned.ipa
