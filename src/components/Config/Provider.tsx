@@ -107,6 +107,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           id: 1,
           largeIcon: "ic_stat_name/ic_stat_name",
           smallIcon: "ic_stat_name/ic_stat_name",
+          isExactNotification: false,
         },
       ],
     });

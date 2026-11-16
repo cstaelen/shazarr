@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "vite dev",
-    "build": "tsc -b && vite build",
+    "build": "tsc -p tsconfig.app.json && tsc -p tsconfig.node.json && vite build",
     "preview": "vite preview",
     "ionic:serve": "pnpm run start",
     "ios:open": "ionic capacitor open ios",
