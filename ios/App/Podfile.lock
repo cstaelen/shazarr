@@ -1,9 +1,9 @@
 PODS:
-  - Capacitor (8.6.0):
+  - Capacitor (8.6.2):
     - CapacitorCordova
   - CapacitorApp (8.1.2):
     - Capacitor
-  - CapacitorCordova (8.6.0)
+  - CapacitorCordova (8.6.2)
   - CapacitorDevice (8.0.3):
     - Capacitor
   - CapacitorFilesystem (8.1.5):
@@ -65,9 +65,9 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/capacitor-voice-recorder"
 
 SPEC CHECKSUMS:
-  Capacitor: 62cab4ab4ba04ea925576ddd1be188869e90d9ea
+  Capacitor: 0a406b8a50b1ddcfe49fbc5795515918d5294708
   CapacitorApp: 7b7e43debe505bc61beedb83796aa1368c86078b
-  CapacitorCordova: 922f0a94dae286165215f0c7cf16fbde662d5ee4
+  CapacitorCordova: 8e68a712e47128cf5b97e88b9c2b406b9b956b22
   CapacitorDevice: 708e742b60a61572cd593e44c809592e8f31da14
   CapacitorFilesystem: e3bc7123acb1554df1b7b099fa5847064b9e1bd4
   CapacitorHaptics: 296f771ecd89c7a1bd92a7b6826a7d268e2e70f5

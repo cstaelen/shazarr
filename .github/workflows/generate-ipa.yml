@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - v*
+  # TEMPORARY: pull request runs to validate the workflow end to end. Remove
+  # once a tagged run has produced a working IPA — a macOS job on every PR is
+  # expensive and most PRs do not touch iOS.
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 # Shared with the APK workflow so the two never call the release API at the same
@@ -11,21 +17,30 @@ on:
 # other's assets and notes. The APK workflow owns the generated release notes.
 concurrency:
   group: release-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
 jobs:
   build:
     name: Build unsigned IPA
     runs-on: macos-latest
     timeout-minutes: 30
-    if: startsWith(github.ref, 'refs/tags/')
+    # TEMPORARY: restore `if: startsWith(github.ref, 'refs/tags/')` here once the
+    # branch runs are no longer needed, otherwise every push builds for nothing.
     steps:
       - uses: actions/checkout@v4
 
       - name: Set version env vars
         run: |
-          TAG=${GITHUB_REF#refs/tags/v}
-          echo "VITE_CURRENT_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          set -euo pipefail
+          if [ "${GITHUB_REF#refs/tags/v}" != "$GITHUB_REF" ]; then
+            TAG=${GITHUB_REF#refs/tags/v}
+            echo "VITE_CURRENT_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            # TEMPORARY: a branch run has no tag to read a version from, and the
+            # arithmetic below would choke on "refs/heads/...".
+            TAG=0.0.1
+            echo "VITE_CURRENT_VERSION=ci-${GITHUB_SHA:0:7}" >> $GITHUB_ENV
+          fi
           echo "MARKETING_VERSION=${TAG}" >> $GITHUB_ENV
           MAJOR=$(echo $TAG | cut -d. -f1)
           MINOR=$(echo $TAG | cut -d. -f2)
@@ -102,7 +117,10 @@ jobs:
           name: app-ipa
           path: build/shazarr-unsigned.ipa
 
+      # Guarded because creating a release needs a tag: on a branch run this step
+      # would fail and the IPA is picked up from the artifact above instead.
       - name: Attach IPA to Github Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           prerelease: true
