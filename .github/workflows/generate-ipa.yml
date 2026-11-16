@@ -1,0 +1,116 @@
+name: IPA deployment Workflow
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+
+# Shared with the APK workflow so the two never call the release API at the same
+# time for one tag: concurrent updates to the same release can clobber each
+# other's assets and notes. The APK workflow owns the generated release notes.
+# Both workflows must agree on cancel-in-progress: a `true` on either side would
+# cancel the other one mid-upload, since they share the group.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build unsigned IPA
+    runs-on: macos-latest
+    timeout-minutes: 30
+    # A push to main runs the workflow but skips this job: only tags release.
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set version env vars
+        run: |
+          set -euo pipefail
+          TAG=${GITHUB_REF#refs/tags/v}
+          echo "VITE_CURRENT_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "MARKETING_VERSION=${TAG}" >> $GITHUB_ENV
+          MAJOR=$(echo $TAG | cut -d. -f1)
+          MINOR=$(echo $TAG | cut -d. -f2)
+          PATCH=$(echo $TAG | cut -d. -f3)
+          echo "CURRENT_PROJECT_VERSION=$((MAJOR * 10000 + MINOR * 100 + PATCH))" >> $GITHUB_ENV
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "pnpm"
+
+      - name: Install app dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project app
+        run: pnpm run build
+
+      # `copy` only, not `sync`: the release must be built from the Podfile and
+      # Podfile.lock we commit, not from ones regenerated on the runner.
+      - name: Capacitor copy
+        run: pnpm exec cap copy ios
+
+      - name: Install pods from committed lockfile
+        working-directory: ./ios/App
+        run: pod install --deployment
+
+      # MARKETING_VERSION / CURRENT_PROJECT_VERSION are hardcoded to 1.0 / 1 in
+      # project.pbxproj, so they are overridden here to match the tag.
+      - name: Build unsigned Release app
+        run: |
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme Shazarr \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios \
+            -quiet \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            MARKETING_VERSION="$MARKETING_VERSION" \
+            CURRENT_PROJECT_VERSION="$CURRENT_PROJECT_VERSION" \
+            build
+
+      # xcodebuild can exit 0 while erroring out and producing nothing.
+      - name: Verify app bundle was produced
+        run: test -d build/ios/Build/Products/Release-iphoneos/Shazarr.app
+
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          mkdir -p build/ipa/Payload
+          cp -R build/ios/Build/Products/Release-iphoneos/Shazarr.app build/ipa/Payload/
+          cd build/ipa
+          zip -qry ../shazarr-unsigned.ipa Payload
+
+      - name: Verify IPA contents
+        run: |
+          set -euo pipefail
+          # A Capacitor app without its web assets installs but shows a blank screen.
+          unzip -l build/shazarr-unsigned.ipa | grep -q 'Payload/Shazarr.app/public/index.html'
+          unzip -l build/shazarr-unsigned.ipa | grep -q 'Payload/Shazarr.app/Frameworks/Capacitor.framework/Capacitor'
+          unzip -l build/shazarr-unsigned.ipa | grep -q 'Payload/Shazarr.app/capacitor.config.json'
+          ls -lh build/shazarr-unsigned.ipa
+
+      - name: Upload IPA as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-ipa
+          path: build/shazarr-unsigned.ipa
+
+      - name: Attach IPA to Github Release
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          files: build/shazarr-unsigned.ipa
+
+      - run: echo Build status report=${{ job.status }}

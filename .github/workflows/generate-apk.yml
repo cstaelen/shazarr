@@ -9,6 +9,12 @@ on:
     tags:
       - v*
 
+# Shared with the IPA workflow so the two never update the same release
+# concurrently. This workflow owns the generated release notes.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 # Job 1 - Build Signed AAB
 
 jobs:

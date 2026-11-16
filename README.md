@@ -3,6 +3,7 @@
 [![GitHub Release](https://img.shields.io/github/release/cstaelen/shazarr?color=013b51&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/cstaelen/shazarr/releases)
 ![Playwright CI](https://img.shields.io/github/actions/workflow/status/cstaelen/shazarr/playwright.yml?label=Playwright%20CI&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)
 [![Download APK](https://img.shields.io/github/downloads/cstaelen/shazarr/latest/shazarr-signed.apk?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=android)](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
+[![Download IPA](https://img.shields.io/github/downloads/cstaelen/shazarr/latest/shazarr-unsigned.ipa?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=apple)](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-unsigned.ipa)
 <a href="https://www.buymeacoffee.com/clst" target="_blank" title="Buy Me A Coffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 28px !important;width: 110px !important;" ></a>
 
 # Shazarr - Unofficial Shazam mobile app web UI
@@ -32,7 +33,7 @@ Shazarr is a mobile app (Android, iOS) providing Shazam song recognition with de
 ## Get started
 
 - **Android**: ✅ Download APK [here](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
-- **iOS**: ⚠️ Build from Xcode only (requires Xcode and paired device)
+- **iOS**: ⚠️ Download unsigned IPA [here](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-unsigned.ipa) — must be signed on your side, see [iOS](#ios)
 
 Get last release :
 
@@ -62,9 +63,23 @@ Configure Shazarr to connect with your music automation services:
 
 ---
 
-## iOS (Build from source only)
+## iOS
 
-> ⚠️ iOS app must be built from Xcode. There is currently no pre-built binary distribution.
+> ⚠️ There is no App Store build: the App Store and TestFlight both require a paid
+> Apple Developer account, and an unofficial Shazam API would not pass review.
+> Shazarr ships an **unsigned IPA** that you sign yourself instead.
+
+### Option 1 — Sideload the unsigned IPA
+
+**Requirements**: an iOS device running iOS 15.0 or later, an Apple ID, and a sideloading tool — [SideStore](https://sidestore.io/) or [Sideloadly](https://sideloadly.io/)
+
+1. Download `shazarr-unsigned.ipa` from the [latest release](https://github.com/cstaelen/shazarr/releases/latest)
+2. Install it with your sideloading tool, signing with your own Apple ID
+3. ⚠️ A **free** Apple ID certificate is only valid for **7 days**, so the app has
+   to be refreshed weekly. SideStore can do this on-device automatically. A paid
+   Apple Developer account extends it to one year.
+
+### Option 2 — Build from source
 
 **Requirements**: `pnpm`, Xcode, [CocoaPods](https://cocoapods.org/), paired iOS device running iOS 15.0 or later
 
@@ -87,7 +102,7 @@ Configure Shazarr to connect with your music automation services:
 - [x] Record history: access last shazamed songs
 - [x] Offline record: record without API access, recognize song later
 - [x] Update notifications
-- [ ] iOS app: find a way to distribute packaged app without using app store and without have to clone and build it
+- [x] iOS app: distribute a packaged app without the app store and without having to clone and build it
 
 ## Development
 
