@@ -16,6 +16,38 @@ const MOCK_ALBUM = {
 
 const MOCK_TRACK = { id: 999, title: "Yakuza", url: "", artists: [{ id: 1, name: "Szymon" }] };
 
+/**
+ * The search is made on the track, and Tidal answers with the track carrying
+ * its album — without a track count, which is why the dialog hides that field.
+ */
+const MOCK_SEARCH_TRACK = {
+  id: MOCK_TRACK.id,
+  title: MOCK_TRACK.title,
+  artists: MOCK_ALBUM.artists,
+  album: {
+    id: MOCK_ALBUM.id,
+    title: MOCK_ALBUM.title,
+    cover: MOCK_ALBUM.cover,
+    releaseDate: MOCK_ALBUM.releaseDate,
+  },
+};
+
+/** Five further releases carrying the same track, to exercise the collapse. */
+const MANY_SEARCH_TRACKS = [
+  MOCK_SEARCH_TRACK,
+  ...Array.from({ length: 5 }, (_, i) => ({
+    id: MOCK_TRACK.id,
+    title: MOCK_TRACK.title,
+    artists: MOCK_ALBUM.artists,
+    album: {
+      id: 100 + i,
+      title: `Compilation ${i + 1}`,
+      cover: MOCK_ALBUM.cover,
+      releaseDate: `20${10 + i}-01-01`,
+    },
+  })),
+];
+
 const MOCK_SETTINGS = {
   tiddl_config: {
     auth: { country_code: "FR", user_id: "12345" },
@@ -55,15 +87,23 @@ function mockTidarrRoutes(
         await route.fulfill(overrides.searchRaw);
         return;
       }
-      const body = overrides.search ?? { albums: { items: [MOCK_ALBUM] } };
+      const body = overrides.search ?? { tracks: { items: [MOCK_SEARCH_TRACK] } };
       await route.fulfill({
         status: 200,
         contentType: "application/json",
         body: JSON.stringify(body),
       });
     } else if (url.includes("/proxy/tidal/v1/pages/album")) {
+      // Shaped like a real album page: the tracks are the ALBUM_ITEMS module,
+      // and the recommendation lists that sit beside it carry their entries
+      // without the `item` wrapper. Selecting by position instead of by type
+      // used to pick one of those.
       const body = overrides.albumTracks ?? {
-        rows: [null, { modules: [{ pagedList: { items: [{ item: MOCK_TRACK }] } }] }],
+        rows: [
+          { modules: [{ type: "ALBUM_HEADER" }] },
+          { modules: [{ type: "ALBUM_ITEMS", pagedList: { items: [{ item: MOCK_TRACK }] } }] },
+          { modules: [{ type: "ALBUM_LIST", pagedList: { items: [{ id: 99, title: "Other" }] } }] },
+        ],
       };
       await route.fulfill({
         status: 200,
@@ -117,11 +157,10 @@ test("Tidarr: With API key — shows album modal", async ({ page }) => {
   await expect(dialog.getByText("Blue Coloured Mountain")).toBeVisible();
   await expect(dialog.getByText("Szymon")).toBeVisible();
   await expect(dialog.getByText("2017")).toBeVisible();
-  await expect(dialog.getByText("10 tracks")).toBeVisible();
 });
 
-test("Tidarr: With API key — shows error when no albums found", async ({ page }) => {
-  await mockTidarrRoutes(page, { search: { albums: { items: [] } } });
+test("Tidarr: With API key — shows error when the track is nowhere", async ({ page }) => {
+  await mockTidarrRoutes(page, { search: { tracks: { items: [] } } });
   await gotoWithConfig(page, { tidarr_url: TIDARR_URL, tidarr_api_key: TIDARR_API_KEY });
   await openYakuzaResult(page);
 
@@ -129,6 +168,47 @@ test("Tidarr: With API key — shows error when no albums found", async ({ page 
   await expect(page.getByRole("button", { name: "Track not found on Tidal" })).toBeVisible({
     timeout: 10000,
   });
+});
+
+test("Tidarr: keeps extra albums behind Show more, and scrolls on a small screen", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 560 });
+  await mockTidarrRoutes(page, { search: { tracks: { items: MANY_SEARCH_TRACKS } } });
+  await gotoWithConfig(page, { tidarr_url: TIDARR_URL, tidarr_api_key: TIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await page.getByRole("button", { name: "Download with Tidarr" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible({ timeout: 10000 });
+
+  // The best match leads alone — one card, so one "Album" download button.
+  await expect(dialog.getByText("Blue Coloured Mountain")).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Album", exact: true })).toHaveCount(1);
+  await expect(dialog.getByText("Compilation 1")).toHaveCount(0);
+
+  await dialog.getByRole("button", { name: "Show 5 more albums" }).click();
+  await expect(dialog.getByRole("button", { name: "Album", exact: true })).toHaveCount(6);
+  await expect(dialog.getByText("Compilation 5")).toBeVisible();
+  await expect(dialog.getByRole("button", { name: /Show \d+ more/ })).toHaveCount(0);
+
+  // Six cards overflow this screen, so the content must scroll inside the
+  // dialog instead of pushing the dialog past the viewport.
+  const content = dialog.locator(".MuiDialogContent-root");
+  const overflow = await content.evaluate((el) => ({
+    scrollable: el.scrollHeight > el.clientHeight + 1,
+    canReachBottom: el.scrollHeight - el.clientHeight,
+  }));
+  expect(overflow.scrollable).toBe(true);
+
+  await content.evaluate((el) => el.scrollTo(0, el.scrollHeight));
+  const scrolledBy = await content.evaluate((el) => el.scrollTop);
+  expect(scrolledBy).toBeGreaterThan(0);
+  expect(scrolledBy).toBe(overflow.canReachBottom);
+
+  const box = (await dialog.boundingBox())!;
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y + box.height).toBeLessThanOrEqual(560);
 });
 
 /**
