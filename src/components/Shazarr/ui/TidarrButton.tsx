@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Album, Download, Favorite, OpenInNew } from "@mui/icons-material";
+import { Album, Download, ExpandMore, Favorite, OpenInNew } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -58,6 +58,8 @@ export default function TidarrButton({
   const [successMessage, setSuccessMessage] = useState("Added to Tidarr!");
   const [errorMessage, setErrorMessage] = useState("Error — try manually");
   const [albums, setAlbums] = useState<TidalAlbum[]>([]);
+  const [fromOtherAlbum, setFromOtherAlbum] = useState(false);
+  const [showAllAlbums, setShowAllAlbums] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const apiKey = config?.tidarr_api_key;
@@ -80,12 +82,23 @@ export default function TidarrButton({
 
     setStatus("loading");
     try {
-      const results = await tidarrSearchAlbums(url, apiKey, artistName, albumTitle, trackTitle);
+      const { albums: results, fromOtherAlbum: otherAlbum } = await tidarrSearchAlbums(
+        url,
+        apiKey,
+        artistName,
+        albumTitle,
+        trackTitle,
+      );
       if (results.length === 0) {
+        // Honest now: the search was for the track itself, not for its album.
         setError("Track not found on Tidal");
         return;
       }
+      setFromOtherAlbum(!!otherAlbum);
       setAlbums(results);
+      // Collapsed on every search: the best match leads, the rest stay out of
+      // the way until asked for. A previous search may have left it expanded.
+      setShowAllAlbums(false);
       setDialogOpen(true);
       setStatus("idle");
     } catch (e) {
@@ -162,10 +175,12 @@ export default function TidarrButton({
       </Stack>
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Choose an album</DialogTitle>
+        <DialogTitle>
+          {fromOtherAlbum ? `Not on "${albumTitle}" — found here` : "Choose an album"}
+        </DialogTitle>
         <DialogContent sx={{ padding: 1 }}>
           <Stack spacing={1}>
-            {albums.map((album) => (
+            {(showAllAlbums ? albums : albums.slice(0, 1)).map((album) => (
               <Box
                 key={album.id}
                 sx={{
@@ -201,7 +216,8 @@ export default function TidarrButton({
                       noWrap
                       sx={{ display: "block" }}
                     >
-                      {album.releaseDate?.slice(0, 4)} · {album.numberOfTracks} tracks
+                      {album.releaseDate?.slice(0, 4)}
+                      {album.numberOfTracks ? ` · ${album.numberOfTracks} tracks` : ""}
                     </Typography>
                   </Box>
                 </Box>
@@ -246,6 +262,16 @@ export default function TidarrButton({
                 </Stack>
               </Box>
             ))}
+            {!showAllAlbums && albums.length > 1 && (
+              <Button
+                size="small"
+                variant="text"
+                endIcon={<ExpandMore fontSize="small" />}
+                onClick={() => setShowAllAlbums(true)}
+              >
+                {`Show ${albums.length - 1} more ${albums.length > 2 ? "albums" : "album"}`}
+              </Button>
+            )}
           </Stack>
         </DialogContent>
       </Dialog>

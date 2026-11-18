@@ -9,6 +9,8 @@
 .pnpm-store
 /docs
 
+AndroidManifest.xml.orig
+
 # production
 /build
 /dist
