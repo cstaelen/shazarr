@@ -4,6 +4,17 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.3.8
+
+### 🚀 Added
+
+- API unsigned iOS package available to download #384
+
+### 🐛 Fixed
+
+- Fix Tidarr errors handler #386
+- Fix iOS build #385
+
 ## 📦 0.3.7
 
 ### 🖍 Changed
