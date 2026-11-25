@@ -1,19 +1,125 @@
-name: Build IPA
+name: Pull request
 
 on:
   pull_request:
     branches:
       - main
 
-# macOS runners are the scarcest ones: pushing twice to a PR should not leave two
-# of them queued. Not the `release-*` group — that one must never be cancelled.
+# One run per PR: pushing again supersedes the run in flight. macOS runners are
+# the scarcest ones, so nothing redundant should ever sit in the queue.
 concurrency:
-  group: pr-ipa-${{ github.ref }}
+  group: pr-${{ github.ref }}
   cancel-in-progress: true
 
+# Reusable workflows cannot ask for more than their caller grants, so this is the
+# ceiling for the called jobs too. Nothing here needs to write.
+permissions:
+  contents: read
+
 jobs:
-  build:
+  # oxlint + oxfmt, from their own workflow so `push` on main keeps running them.
+  quality:
+    uses: ./.github/workflows/oxlint.yml
+
+  test:
+    uses: ./.github/workflows/playwright.yml
+
+  # The two builds are the expensive half of the PR (Gradle, and a macOS runner
+  # for Xcode). `needs` is a hard gate: a red lint, a bad format or a failing
+  # Playwright run means they are never started, so a broken PR costs minutes
+  # instead of a full build matrix.
+  apk:
+    name: Build Signed APK
+    needs: [quality, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set VITE_CURRENT_VERSION
+        run: echo "VITE_CURRENT_VERSION=v0.0.0-testing" >> $GITHUB_ENV
+
+      - name: Set VERSION_CODE
+        # A timestamp keeps versionCode strictly increasing across PR builds so
+        # Android allows installing over an existing release without requiring
+        # an uninstall first (Android rejects installs with a lower versionCode).
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "VERSION_CODE=$(date +%s)" >> $GITHUB_ENV
+          echo "VERSION_NAME=0.0.0-pr${PR_NUMBER}" >> $GITHUB_ENV
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+
+      - name: Install app dependencies
+        run: pnpm install ${{ github.actor == 'dependabot[bot]' && '--no-frozen-lockfile' || '--frozen-lockfile' }}
+
+      - name: Build project app
+        run: pnpm run build
+
+      - name: Capacitor copy
+        run: npx cap copy android
+
+      - name: Capacitor update
+        run: npx cap update android
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Make gradlew executable
+        working-directory: ./android
+        run: chmod +x gradlew
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Execute Gradle build
+        working-directory: ./android
+        run: ./gradlew build --scan
+
+      - name: Sign APK
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          KS_PASS: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          KEY_PASS: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 --decode > /tmp/keystore.jks
+          $ANDROID_SDK_ROOT/build-tools/$BUILD_TOOL_VERSION/apksigner sign \
+            --ks /tmp/keystore.jks \
+            --ks-key-alias "$KEY_ALIAS" \
+            --ks-pass "pass:$KS_PASS" \
+            --key-pass "pass:$KEY_PASS" \
+            --out android/app/build/outputs/apk/release/shazarr-signed.apk \
+            android/app/build/outputs/apk/release/app-release-unsigned.apk
+          rm /tmp/keystore.jks
+
+      - name: Upload app apk as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-bundle
+          path: android/app/build/outputs/apk/release/shazarr-signed.apk
+
+  ipa:
     name: Build unsigned IPA
+    needs: [quality, test]
     runs-on: macos-latest
     timeout-minutes: 30
     steps:

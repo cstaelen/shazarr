@@ -47,7 +47,7 @@ export default function HistoryCard({ item }: { item: HistoryItem }) {
         </CardMedia>
         <CardContent sx={{ padding: "0.3rem 0.5rem", flex: "1 1 0" }}>
           <ButtonBase
-            sx={{ alignItems: "flex-start", flexDirection: "column" }}
+            sx={{ alignItems: "flex-start", textAlign: "left", flexDirection: "column" }}
             onClick={handleClickItem}
           >
             <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
