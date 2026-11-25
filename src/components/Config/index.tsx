@@ -63,7 +63,7 @@ const SERVICE_GROUPS = [
   },
 ];
 
-const SETTINGS_FIELDS = ["auto_listen_on_launch"];
+const SETTINGS_FIELDS = ["auto_listen_on_launch", "hide_requested_by_default"];
 
 export default function Config({ open, onClose }: Props) {
   const { recordingStatus } = useShazarrProvider();
@@ -100,6 +100,7 @@ export default function Config({ open, onClose }: Props) {
       custom_service_url: data.get("custom_service_url")?.toString() || "",
       custom_service_name: data.get("custom_service_name")?.toString() || "",
       auto_listen_on_launch: data.get("auto_listen_on_launch") === "on",
+      hide_requested_by_default: data.get("hide_requested_by_default") === "on",
     });
     onClose();
   }

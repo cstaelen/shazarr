@@ -3,9 +3,9 @@ import { Preferences } from "@capacitor/preferences";
 
 import { HISTORY_STORE_KEY } from "../../constant";
 
-import { HistoryContext, HistoryItem } from "./context";
+import { HistoryContext, HistoryItem, SentService } from "./context";
 
-export type { HistoryItem } from "./context";
+export type { HistoryItem, SentService } from "./context";
 
 export function HistoryProvider({ children }: { children: ReactNode }) {
   const [history, setHistory] = useState<HistoryItem[]>();
@@ -47,10 +47,20 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
       const merged: HistoryItem = {
         ...item,
         previousDates: [existing.date, ...(existing.previousDates || [])],
+        // Tagging a song again must not forget we already sent it
+        sentTo: existing.sentTo,
       };
 
       return [...list.slice(0, existingIndex), ...list.slice(existingIndex + 1), merged];
     });
+  }
+
+  function markItemAsSent(date: number, service: SentService) {
+    setHistory((prev) =>
+      (prev || []).map((item) =>
+        item.date === date ? { ...item, sentTo: { ...item.sentTo, [service]: Date.now() } } : item,
+      ),
+    );
   }
 
   function deleteHistoryItem(date: number) {
@@ -62,6 +72,7 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
     actions: {
       addItemToHistory,
       deleteHistoryItem,
+      markItemAsSent,
     },
   };
 

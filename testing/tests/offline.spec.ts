@@ -19,9 +19,9 @@ test("Offline: Should save record for further recognition", async ({ page }) => 
   // Open history panel
   await page.getByRole("button", { name: "Records" }).click();
   await expect(page.getByTestId("history-item")).toHaveCount(1);
-  await expect(
-    page.getByTestId("history-item").locator("div").filter({ hasText: "Offline record - Not" }),
-  ).toHaveCount(1);
+  const offlineCard = page.getByTestId("history-item").filter({ hasText: "Offline record" });
+  await expect(offlineCard).toHaveCount(1);
+  await expect(offlineCard).toContainText("Not discovered");
 
   // Set online
   await page.context().setOffline(false);

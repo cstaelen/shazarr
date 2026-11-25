@@ -68,14 +68,13 @@ const TIDARR_RULES: MessageRule[] = [
   { pattern: /token required/i, kind: "auth-required" },
 ];
 
-async function request<T>(
+async function call(
   config: TidarrConfig,
   path: string,
   options: RequestInit = {},
-): Promise<T> {
-  let res: Response;
+): Promise<Response> {
   try {
-    res = await fetch(`${config.url.replace(/\/$/, "")}${path}`, {
+    return await fetch(`${config.url.replace(/\/$/, "")}${path}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
@@ -86,8 +85,26 @@ async function request<T>(
   } catch {
     throw new ServiceError("unreachable", "Could not reach Tidarr");
   }
+}
 
-  return (await readJsonResponse<T>(res, TIDARR_RULES)) as T;
+/** For the reads: the body is the answer, so it has to be JSON. */
+async function request<T>(
+  config: TidarrConfig,
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
+  return (await readJsonResponse<T>(await call(config, path, options), TIDARR_RULES)) as T;
+}
+
+/**
+ * For writes whose body we ignore: only the status matters. `/api/save` answers
+ * 201 through Express' `sendStatus`, which sends the status text "Created" as a
+ * text/plain body — parsing that as JSON reported a download Tidarr had really
+ * queued as "Unexpected response from Tidarr".
+ */
+async function write(config: TidarrConfig, path: string, options: RequestInit): Promise<void> {
+  const res = await call(config, path, options);
+  if (!res.ok) throw classifyFailure(res.status, parseErrorMessage(await res.text()), TIDARR_RULES);
 }
 
 async function fetchSettings(config: TidarrConfig): Promise<TidarrSettings | null> {
@@ -235,19 +252,15 @@ export async function tidarrFavoriteTrack(
       return { success: false, message: "Could not get Tidal credentials from Tidarr settings" };
     const track = await findTrack(config, albumId, trackTitle);
     if (!track) return { success: false, message: "Track not found in album" };
-    const res = await fetch(
-      `${config.url.replace(/\/$/, "")}/proxy/tidal/v1/users/${settings.auth.user_id}/favorites/tracks?countryCode=${settings.auth.country_code}`,
+    await write(
+      config,
+      `/proxy/tidal/v1/users/${settings.auth.user_id}/favorites/tracks?countryCode=${settings.auth.country_code}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-Api-Key": config.apiKey,
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `trackId=${track.id}`,
       },
     );
-    if (!res.ok)
-      throw classifyFailure(res.status, parseErrorMessage(await res.text()), TIDARR_RULES);
     return { success: true, message: "Added to Tidal favorites!" };
   } catch (e) {
     return catchError(e, "Favorite failed");
@@ -263,7 +276,7 @@ export async function tidarrQueueAlbum(
   const config: TidarrConfig = { url, apiKey };
   try {
     const settings = await fetchSettings(config);
-    await request(config, "/api/save", {
+    await write(config, "/api/save", {
       method: "POST",
       body: JSON.stringify({
         item: {
@@ -296,7 +309,7 @@ export async function tidarrQueueTrack(
       findTrack(config, albumId, trackTitle),
     ]);
     if (!track) return { success: false, message: "Track not found in album" };
-    await request(config, "/api/save", {
+    await write(config, "/api/save", {
       method: "POST",
       body: JSON.stringify({
         item: {

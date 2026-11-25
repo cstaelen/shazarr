@@ -47,11 +47,13 @@ export default function TidarrButton({
   trackTitle,
   artistName,
   url,
+  onSent,
 }: {
   albumTitle: string;
   trackTitle: string;
   artistName: string;
   url: string;
+  onSent: () => void;
 }) {
   const { isNetworkConnected, config } = useConfigProvider();
   const [status, setStatus] = useState<TidarrStatus>("idle");
@@ -123,6 +125,7 @@ export default function TidarrButton({
       if (result.success) {
         if (result.message) setSuccessMessage(result.message);
         setStatus("success");
+        onSent();
       } else {
         setError(result.message, result.kind);
       }

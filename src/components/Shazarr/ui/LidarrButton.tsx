@@ -25,11 +25,13 @@ export default function LidarrButton({
   artistName,
   url,
   isrc,
+  onSent,
 }: {
   albumTitle: string;
   artistName: string;
   url: string;
   isrc?: string;
+  onSent: () => void;
 }) {
   const { isNetworkConnected, config } = useConfigProvider();
   const [status, setStatus] = useState<LidarrStatus>("idle");
@@ -63,6 +65,7 @@ export default function LidarrButton({
       }
 
       setStatus("success");
+      onSent();
     } else {
       setErrorMessage(formatLidarrError(result.message, result.kind));
       setStatus("error");

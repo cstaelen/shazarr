@@ -41,11 +41,13 @@ export default function SoulsyncButton({
   trackTitle,
   artistName,
   url,
+  onSent,
 }: {
   albumTitle: string;
   trackTitle: string;
   artistName: string;
   url: string;
+  onSent: () => void;
 }) {
   const { isNetworkConnected, config } = useConfigProvider();
   const [status, setStatus] = useState<SoulsyncStatus>("idle");
@@ -83,6 +85,7 @@ export default function SoulsyncButton({
   function handleResult(result: SoulsyncQueueResult) {
     setMessage(result.success ? result.message : formatSoulsyncError(result.message, result.kind));
     setStatus(result.success ? "success" : "error");
+    if (result.success) onSent();
   }
 
   function handleClick() {

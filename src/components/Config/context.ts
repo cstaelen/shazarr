@@ -11,6 +11,7 @@ export type ConfigStoreType = {
   custom_service_url: string;
   custom_service_name: string;
   auto_listen_on_launch: boolean;
+  hide_requested_by_default: boolean;
 };
 
 type storeKeysType = keyof ConfigStoreType;
