@@ -43,12 +43,15 @@ test("Critical: Should be able to record, recognize and display result", async (
   // Open history drawer
   await page.getByRole("button", { name: "Records" }).click();
   await expect(page.getByTestId("history-item")).toBeVisible();
-  await expect(page.getByTestId("history-item")).toContainText("Chillin' - Modjo");
+  await expect(page.getByTestId("history-item")).toContainText("Chillin'");
+  await expect(page.getByTestId("history-item")).toContainText("Modjo");
 
   // Click history item to open Result drawer
   await page.getByTestId("history-item").getByRole("button").first().click();
+  // Both appear twice: once on the card behind the drawer — where the artist
+  // now has a line of its own — and once in the result.
   await expect(page.getByText("Chillin'")).toHaveCount(2);
-  await expect(page.getByText("Modjo", { exact: true })).toBeVisible();
+  await expect(page.getByText("Modjo", { exact: true })).toHaveCount(2);
   await expect(page).toHaveScreenshot();
 
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));

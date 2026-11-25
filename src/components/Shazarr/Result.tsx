@@ -1,9 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { App } from "@capacitor/app";
-import { Close } from "@mui/icons-material";
+import { Check, Close } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Chip,
   Divider,
   Drawer,
   Stack,
@@ -12,11 +13,13 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import { ShazamProvider } from "shazam-api/dist/types";
 
 import { useConfigProvider } from "../Config/useConfig";
+import { SENT_SERVICE_LABELS, SentService } from "../History/context";
 import { useHistoryProvider } from "../History/useHistory";
 
 import ButtonLyrics from "./ui/ButtonLyrics";
@@ -36,12 +39,21 @@ export default function ShazarrResults() {
     openResultDate,
     actions: { setOpenResultDate },
   } = useShazarrProvider();
-  const { history } = useHistoryProvider();
+  const {
+    history,
+    actions: { markItemAsSent },
+  } = useHistoryProvider();
 
   const onClose = () => setOpenResultDate(undefined);
   const historyItem = history?.find((item) => item.date === openResultDate);
   const data = historyItem?.data;
   const previousDates = historyItem?.previousDates || [];
+  const sentEntries = Object.entries(historyItem?.sentTo || {}) as [SentService, number][];
+
+  function markSent(service: SentService) {
+    if (!historyItem) return;
+    markItemAsSent(historyItem.date, service);
+  }
 
   const albumName = data?.sections?.[0]?.metadata?.filter(
     (m: { title: string }) => m?.title === "Album",
@@ -66,11 +78,11 @@ export default function ShazarrResults() {
   return (
     <Drawer anchor="bottom" open={!!data} onClose={onClose}>
       <Box sx={{ p: 2, display: "flex", gap: 2, flexDirection: isLandscape ? "row" : "column" }}>
-        <Box sx={{ flex: "1 1 0" }}>
+        <Box>
           <CardResult data={data} onClose={onClose} />
         </Box>
         <Box sx={{ flex: "1 1 0" }}>
-          <Stack spacing={2} sx={{ marginBottom: 2, maxWidth: 360 }}>
+          <Stack spacing={2} sx={{ marginBottom: 2 }}>
             <TableContainer>
               <Table>
                 <TableBody>
@@ -91,7 +103,28 @@ export default function ShazarrResults() {
               <TagHistory currentDate={historyItem.date} previousDates={previousDates} />
             )}
 
-            {previousDates && previousDates.length > 0 && <Divider />}
+            {sentEntries.length > 0 && (
+              <Stack sx={{ gap: 0.5 }}>
+                {sentEntries.map(([service, sentDate]) => (
+                  <Stack key={service} direction="row" sx={{ alignItems: "center", gap: 0.5 }}>
+                    {/* Same chip as the history card, so one glance reads the same in both places */}
+                    <Chip
+                      size="small"
+                      variant="outlined"
+                      color="success"
+                      icon={<Check />}
+                      label={SENT_SERVICE_LABELS[service]}
+                      aria-label={`Requested from ${SENT_SERVICE_LABELS[service]}`}
+                    />
+                    <Typography variant="caption" color="text.secondary">
+                      {`requested on ${new Date(sentDate).toLocaleString()}`}
+                    </Typography>
+                  </Stack>
+                ))}
+              </Stack>
+            )}
+
+            {!!historyItem?.date && <Divider />}
 
             {config?.lidarr_url && (
               <LidarrButton
@@ -100,6 +133,7 @@ export default function ShazarrResults() {
                 artistName={data.subtitle}
                 url={config.lidarr_url as string}
                 isrc={(data as { isrc?: string }).isrc}
+                onSent={() => markSent("lidarr")}
               />
             )}
             {config?.tidarr_url && (
@@ -109,6 +143,7 @@ export default function ShazarrResults() {
                 trackTitle={data.title}
                 artistName={data.subtitle}
                 url={config.tidarr_url as string}
+                onSent={() => markSent("tidarr")}
               />
             )}
             {config?.soulsync_url && (
@@ -118,6 +153,7 @@ export default function ShazarrResults() {
                 trackTitle={data.title}
                 artistName={data.subtitle}
                 url={config.soulsync_url as string}
+                onSent={() => markSent("soulsync")}
               />
             )}
             {config?.custom_service_url && config?.custom_service_name && (

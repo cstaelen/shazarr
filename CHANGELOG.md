@@ -4,6 +4,14 @@ Shazarr notable changes.
 
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) format.
 
+## 📦 0.3.9
+
+### 🚀 Added
+
+- Already requested tag on history items #394
+- Already requested filter on history panel #394
+- Parameter toggle to show/hide already requested item in history panel #394
+
 ## 📦 0.3.8
 
 ### 🚀 Added

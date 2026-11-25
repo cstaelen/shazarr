@@ -101,3 +101,21 @@ test("Options: Auto-listen disabled by default does not start recording", async 
   await expect(page.getByText("Ready")).toBeVisible();
   await expect(page.getByTestId("inline-result-card")).not.toBeVisible();
 });
+
+test("Options: Hide requested items by default is saved and reloaded", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByText("Ready")).toBeVisible();
+
+  await page.getByRole("button", { name: "Configuration" }).click();
+
+  const toggle = page.getByLabel("Hide requested items by default");
+  await expect(toggle).not.toBeChecked();
+  await toggle.check();
+  await page.getByRole("button", { name: "Save configuration" }).click();
+
+  await page.reload();
+  await page.getByRole("button", { name: "Configuration" }).click();
+  await expect(page.getByLabel("Hide requested items by default")).toBeChecked();
+  // The other setting is untouched by the new one.
+  await expect(page.getByLabel("Auto-listen on app launch")).not.toBeChecked();
+});

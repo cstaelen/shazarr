@@ -1,6 +1,7 @@
 import test, { expect, Page } from "@playwright/test";
 
 import historyFixtures from "./fixtures/history.json";
+import { HISTORY_KEY } from "./utils/helpers";
 
 const TIDARR_URL = "http://tidarr.server.docker";
 const TIDARR_API_KEY = "test-tidarr-api-key";
@@ -75,9 +76,18 @@ async function openYakuzaResult(page: Page) {
 
 type RawResponse = { status: number; contentType: string; body: string };
 
+type SavedItem = {
+  item: { id: string; type: string; title: string; artist: string; quality?: string; url: string };
+};
+
 function mockTidarrRoutes(
   page: Page,
-  overrides: { search?: unknown; albumTracks?: unknown; searchRaw?: RawResponse } = {},
+  overrides: {
+    search?: unknown;
+    albumTracks?: unknown;
+    searchRaw?: RawResponse;
+    onSave?: (body: SavedItem) => void;
+  } = {},
 ) {
   return page.route(`${TIDARR_URL}/**`, async (route) => {
     const url = route.request().url();
@@ -117,6 +127,10 @@ function mockTidarrRoutes(
         body: JSON.stringify(MOCK_SETTINGS),
       });
     } else if (url.includes("/api/save") && route.request().method() === "POST") {
+      overrides.onSave?.(route.request().postDataJSON() as SavedItem);
+      // Exactly what Tidarr answers: Express' `sendStatus(201)` sends the status
+      // text as a text/plain body. Parsing that as JSON reported a download it
+      // had really queued as "Unexpected response from Tidarr".
       await route.fulfill({ status: 201, body: "Created" });
     } else if (url.includes("/proxy/tidal/v1/users/12345/favorites/tracks")) {
       await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
@@ -257,5 +271,115 @@ test("Tidarr: missing JWT_SECRET — points at Tidarr's own config", async ({ pa
     status: 403,
     contentType: "application/json",
     body: JSON.stringify({ error: true, message: "JWT secret key is missing." }),
+  });
+});
+
+/**
+ * Regression tests for the queue itself: Tidarr answers `/api/save` with
+ * `201 Created` and the status text as its body, which the client used to parse
+ * as JSON. The download was really queued, yet the button turned to
+ * "Unexpected response from Tidarr" — so the queue path needs a test that goes
+ * all the way to the success state, not just to the album dialog.
+ */
+async function queueFromDialog(page: Page, action: "Album" | "Track") {
+  await page.getByRole("button", { name: "Download with Tidarr" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible({ timeout: 10000 });
+  await dialog.getByRole("button", { name: action, exact: true }).click();
+}
+
+test("Tidarr: queueing an album reports success and flags the record", async ({ page }) => {
+  const saved: SavedItem[] = [];
+  await mockTidarrRoutes(page, { onSave: (body) => saved.push(body) });
+  await gotoWithConfig(page, { tidarr_url: TIDARR_URL, tidarr_api_key: TIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await queueFromDialog(page, "Album");
+
+  await expect(page.getByRole("button", { name: "Added to Tidarr!" })).toBeVisible({
+    timeout: 10000,
+  });
+  expect(saved).toHaveLength(1);
+  expect(saved[0].item).toMatchObject({
+    id: String(MOCK_ALBUM.id),
+    type: "album",
+    title: MOCK_ALBUM.title,
+    artist: "Szymon",
+    quality: "high",
+  });
+
+  // The record is flagged...
+  await page.getByRole("button", { name: "Close" }).click();
+  const card = page.getByTestId("history-item").filter({ hasText: "Yakuza" });
+  await expect(card.getByLabel("Requested from Tidarr")).toBeVisible();
+
+  // ...and written to the store, so it is still there next time. Checked in
+  // place rather than after a reload: `gotoWithConfig` seeds the store through
+  // addInitScript, which runs again on every navigation and would overwrite it.
+  const stored = await page.evaluate(
+    (key) =>
+      JSON.parse(window.localStorage.getItem(key) || "[]") as {
+        title: string;
+        sentTo?: Record<string, number>;
+      }[],
+    HISTORY_KEY,
+  );
+  expect(stored.find((item) => item.title === "Yakuza")?.sentTo?.tidarr).toBeGreaterThan(0);
+});
+
+test("Tidarr: queueing a single track sends the track, not the album", async ({ page }) => {
+  const saved: SavedItem[] = [];
+  await mockTidarrRoutes(page, { onSave: (body) => saved.push(body) });
+  await gotoWithConfig(page, { tidarr_url: TIDARR_URL, tidarr_api_key: TIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await queueFromDialog(page, "Track");
+
+  await expect(page.getByRole("button", { name: "Added to Tidarr!" })).toBeVisible({
+    timeout: 10000,
+  });
+  expect(saved).toHaveLength(1);
+  expect(saved[0].item).toMatchObject({
+    id: String(MOCK_TRACK.id),
+    type: "track",
+    title: MOCK_TRACK.title,
+    url: `https://listen.tidal.com/track/${MOCK_TRACK.id}`,
+  });
+});
+
+test("Tidarr: a track missing from the chosen album says so", async ({ page }) => {
+  await mockTidarrRoutes(page, {
+    albumTracks: {
+      rows: [{ modules: [{ type: "ALBUM_ITEMS", pagedList: { items: [] } }] }],
+    },
+  });
+  await gotoWithConfig(page, { tidarr_url: TIDARR_URL, tidarr_api_key: TIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await queueFromDialog(page, "Track");
+
+  await expect(page.getByRole("button", { name: "Track not found on Tidal" })).toBeVisible({
+    timeout: 10000,
+  });
+  // Nothing was queued, so nothing is flagged either.
+  await page.getByRole("button", { name: "Close" }).click();
+  await expect(
+    page.getByTestId("history-item").filter({ hasText: "Yakuza" }).getByLabel("Requested from"),
+  ).toHaveCount(0);
+});
+
+test("Tidarr: the favorite button answers on its own wording", async ({ page }) => {
+  await mockTidarrRoutes(page);
+  await gotoWithConfig(page, { tidarr_url: TIDARR_URL, tidarr_api_key: TIDARR_API_KEY });
+  await openYakuzaResult(page);
+
+  await page.getByRole("button", { name: "Download with Tidarr" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible({ timeout: 10000 });
+  // The heart has no label of its own: it is the third action on the card.
+  await dialog.locator(".MuiButton-colorSecondary").click();
+
+  await expect(page.getByRole("button", { name: "Added to Tidal favorites!" })).toBeVisible({
+    timeout: 10000,
   });
 });

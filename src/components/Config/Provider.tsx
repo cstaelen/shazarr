@@ -64,6 +64,11 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
         placeholder: "Auto-listen on app launch",
         type: "checkbox",
       },
+      hide_requested_by_default: {
+        value: currentConfig.hide_requested_by_default ?? false,
+        placeholder: "Hide requested items by default",
+        type: "checkbox",
+      },
     });
   }, []);
 

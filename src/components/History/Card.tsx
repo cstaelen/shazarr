@@ -1,5 +1,5 @@
-import { DeleteForever, RemoveRedEye, Search } from "@mui/icons-material";
-import { ButtonBase, CardActions, CardMedia, IconButton } from "@mui/material";
+import { Check, DeleteForever, RemoveRedEye, Search } from "@mui/icons-material";
+import { ButtonBase, CardActions, CardMedia, Chip, IconButton, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { ImageWithFallback } from "../Common/ImageWithFallback";
 import { useShazarrProvider } from "../Shazarr/useShazarr";
 
-import { HistoryItem } from "./context";
+import { HistoryItem, SENT_SERVICE_LABELS, SentService } from "./context";
 import { useHistoryProvider } from "./useHistory";
 
 export default function HistoryCard({ item }: { item: HistoryItem }) {
@@ -18,8 +18,8 @@ export default function HistoryCard({ item }: { item: HistoryItem }) {
     actions: { deleteHistoryItem },
   } = useHistoryProvider();
 
-  const date = new Date(item.date).toUTCString();
-  const dateRecord = new Date(date).toLocaleString();
+  const tagCount = (item.previousDates?.length || 0) + 1;
+  const sentServices = Object.keys(item.sentTo || {}) as SentService[];
 
   function handleClickItem() {
     if (item?.data) {
@@ -38,23 +38,48 @@ export default function HistoryCard({ item }: { item: HistoryItem }) {
         <CardMedia sx={{ lineHeight: 0 }}>
           <ButtonBase onClick={handleClickItem}>
             <ImageWithFallback
-              height="60"
-              width="60"
+              height="72"
+              width="72"
               alt=""
               src={item?.data?.images?.coverart || ""}
             />
           </ButtonBase>
         </CardMedia>
         <CardContent sx={{ padding: "0.3rem 0.5rem", flex: "1 1 0" }}>
-          <ButtonBase sx={{ textAlign: "left" }} onClick={handleClickItem}>
+          <ButtonBase
+            sx={{ alignItems: "flex-start", flexDirection: "column" }}
+            onClick={handleClickItem}
+          >
             <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
-              <strong>{item.title}</strong> {`- ${item.artist}`}
-              <br />
-              <small>
-                <i>{dateRecord}</i>
-              </small>
+              <strong>{item.title}</strong>
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.2 }}>
+              {item.artist}
             </Typography>
           </ButtonBase>
+          {(tagCount > 1 || sentServices.length > 0) && (
+            <Stack direction="row" sx={{ gap: 0.5, flexWrap: "wrap", marginTop: 0.5 }}>
+              {tagCount > 1 && (
+                <Chip
+                  size="small"
+                  variant="outlined"
+                  label={`×${tagCount}`}
+                  aria-label={`Tagged ${tagCount} times`}
+                />
+              )}
+              {sentServices.map((service) => (
+                <Chip
+                  key={service}
+                  size="small"
+                  variant="outlined"
+                  color="success"
+                  icon={<Check />}
+                  label={SENT_SERVICE_LABELS[service]}
+                  aria-label={`Requested from ${SENT_SERVICE_LABELS[service]}`}
+                />
+              ))}
+            </Stack>
+          )}
         </CardContent>
         <CardActions>
           <IconButton onClick={handleClickItem}>
