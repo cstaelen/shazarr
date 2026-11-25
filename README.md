@@ -4,7 +4,7 @@
 ![Playwright CI](https://img.shields.io/github/actions/workflow/status/cstaelen/shazarr/playwright.yml?label=Playwright%20CI&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)
 [![Download APK](https://img.shields.io/github/downloads/cstaelen/shazarr/latest/shazarr-signed.apk?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=android)](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-signed.apk)
 [![Download IPA](https://img.shields.io/github/downloads/cstaelen/shazarr/latest/shazarr-unsigned.ipa?color=a2c438&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=apple)](https://github.com/cstaelen/shazarr/releases/latest/download/shazarr-unsigned.ipa)
-<a href="https://www.buymeacoffee.com/clst" target="_blank" title="Buy Me A Coffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 28px !important;width: 110px !important;" ></a>
+<a href="https://www.buymeacoffee.com/clst" target="_blank" title="Buy Me A Coffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="28" width="110" style="height: 28px !important;width: 110px !important;" ></a>
 
 # Shazarr - Unofficial Shazam mobile app web UI
 
