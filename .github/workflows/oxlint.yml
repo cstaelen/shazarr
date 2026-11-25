@@ -8,8 +8,9 @@ name: Oxc (oxlint + oxfmt)
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  # Called by the "Pull request" workflow, which gates the APK/IPA builds behind
+  # these jobs. Running on `pull_request` as well would duplicate every PR run.
+  workflow_call:
 
 jobs:
   oxlint:
@@ -17,8 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write
-      actions: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4

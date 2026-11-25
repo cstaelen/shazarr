@@ -2,11 +2,12 @@ name: Playwright Tests
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
-concurrency:
-  group: ${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  # Called by the "Pull request" workflow, which gates the APK/IPA builds behind
+  # these jobs. Running on `pull_request` as well would duplicate every PR run.
+  workflow_call:
+permissions:
+  contents: read
+
 jobs:
   test:
     timeout-minutes: 60
